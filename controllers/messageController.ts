@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addMessage, deleteMessage, editMessage, getAllMessages, getOneMessage } from "../services/messageService";
 
-const messageRouter = express.Router();
+export const messageRouter = express.Router();
 
 messageRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
     res.json(getAllMessages());

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addRoom, deleteRoom, editRoom, getAllRooms, getOneRoom } from "../services/roomService";
 
-const roomRouter = express.Router();
+export const roomRouter = express.Router();
 
 roomRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
     res.json(getAllRooms());

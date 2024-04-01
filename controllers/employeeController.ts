@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addEmployee, deleteEmployee, editEmployee, getAllEmployees, getOneEmployee } from "../services/employeeService";
 
-const employeeRouter = express.Router();
+export const employeeRouter = express.Router();
 
 employeeRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
     res.json(getAllEmployees());
