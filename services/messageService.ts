@@ -1,21 +1,54 @@
-import { Message } from "../interfaces/Message";
+import { readFromDataFromFile, writeFromDataFromFile } from "../helpers/dataFromFile";
+import { messageFile } from "../helpers/fileNames";
+import { ParseResponse, parseResponse } from "../helpers/parseResponse";
+import { Message } from './../interfaces/Message';
 
-const getAllMessages = (): Message[] =>  {
-    return [];
+const dataMessage = readFromDataFromFile(messageFile) as Message[];
+
+export const getAllMessages = (): Message[] | ParseResponse =>  {
+    if(dataMessage.length === 0) {
+        return parseResponse('Messages not found');
+    }
+    return dataMessage;
 }
 
-const getOneMessage = (id: number): Message => {
-    return {} as Message;
+export const getOneMessage = (id: number): Message | ParseResponse => {
+    const message = dataMessage.find(messageIt => messageIt.id === id);
+    if(message === undefined) {
+        return parseResponse('Message not found');
+    }
+    return message;
 }
 
-const addMessage = (data: Message): void => {
-
+export const addMessage = (data: Message): ParseResponse => {
+    if(data !== null || data !== undefined) {
+        const existMessage = dataMessage.findIndex(message => message.id === data.id);
+        if(existMessage === -1) {
+            dataMessage.push(data);
+            writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
+            return parseResponse('Message #' + data.id + ' successfully added', 200);
+        }
+    }
+    return parseResponse('Error on adding a Message');
 }
 
-const editMessage = (id: number, data: Message): void => {
-
+export const editMessage = (id: number, data: Message): ParseResponse => {
+    const MessageToDelete = dataMessage.findIndex(Message => Message.id === id);
+    console.log(data);
+    if(MessageToDelete === -1 || data === null || data === undefined) {
+        return parseResponse('Error on delete edit, Message or edited data not exist');
+    }
+    dataMessage.splice(MessageToDelete, 1, data);
+    writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
+    return parseResponse('Message #' + id + ' successfully edited', 200);
 }
 
-const deleteMessage = (id: number): void => {
-
+export const deleteMessage = (id: number): ParseResponse => {
+    const MessageToDelete = dataMessage.findIndex(Message => Message.id === id);
+    if(MessageToDelete === -1) {
+        return parseResponse('Error on delete Message, Message not exist');
+    }
+    dataMessage.splice(MessageToDelete, 1);
+    writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
+    return parseResponse('Message #' + id +' deleted successfully', 200);
 }
