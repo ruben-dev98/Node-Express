@@ -5,20 +5,25 @@ const employeeRouter = express.Router();
 
 employeeRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
     res.json(getAllEmployees());
+    return;
 });
 
 employeeRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
     res.json(getOneEmployee(Number(req.params.id)));
+    return;
 });
 
-employeeRouter.post('/', (req: Request, _res: Response, _next: NextFunction) => {
-    addEmployee(req.body);
+employeeRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
+    res.json(addEmployee(req.body));
+    return;
 });
 
-employeeRouter.put('/:id', (req: Request, _res: Response, _next: NextFunction) => {
-    editEmployee(Number(req.params.id), req.body);
+employeeRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
+    res.json(editEmployee(Number(req.params.id), req.body));
+    return;
 });
 
-employeeRouter.delete('/:id', (req: Request, _res: Response, _next: NextFunction) => {
-    deleteEmployee(Number(req.params.id));
+employeeRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
+    res.json(deleteEmployee(Number(req.params.id)));
+    return;
 })

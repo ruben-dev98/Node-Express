@@ -5,20 +5,25 @@ const messageRouter = express.Router();
 
 messageRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
     res.json(getAllMessages());
+    return;
 });
 
 messageRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
     res.json(getOneMessage(Number(req.params.id)));
+    return;
 });
 
-messageRouter.post('/', (req: Request, _res: Response, _next: NextFunction) => {
-    addMessage(req.body);
+messageRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
+    res.json(addMessage(req.body));
+    return;
 });
 
-messageRouter.put('/:id', (req: Request, _res: Response, _next: NextFunction) => {
-    editMessage(Number(req.params.id), req.body);
+messageRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
+    res.json(editMessage(Number(req.params.id), req.body));
+    return;
 });
 
-messageRouter.delete('/:id', (req: Request, _res: Response, _next: NextFunction) => {
-    deleteMessage(Number(req.params.id));
+messageRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
+    res.json(deleteMessage(Number(req.params.id)));
+    return;
 })
