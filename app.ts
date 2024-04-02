@@ -15,11 +15,10 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/user", loginRouter);
+app.use("/login", loginRouter);
 app.use("/bookings", bookingRouter);
 app.use("/rooms", roomRouter);
 app.use("/employees", employeeRouter);
 app.use("/messages", messageRouter);
-
 
 app.use("/", mainRouter);
