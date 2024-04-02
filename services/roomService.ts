@@ -1,53 +1,54 @@
 import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
 import { roomFile } from "../util/fileNames";
-import { ParseResponse, parseResponse } from "../util/parseResponse";
+import { parseResponse } from "../util/parseResponse";
 import { Room } from './../interfaces/Room';
+import { Response } from "express";
 
 const dataRoom = readFromDataFromFile(roomFile) as Room[];
 
-export const getAllRooms = (): Room[] | ParseResponse =>  {
+export const getAllRooms = (res: Response): void =>  {
     if(dataRoom.length === 0) {
-        return parseResponse('Rooms not found');
+        parseResponse('Rooms not found', res);
     }
-    return dataRoom;
+    parseResponse(dataRoom, res, 200);
 }
 
-export const getOneRoom = (id: number): Room | ParseResponse => {
+export const getOneRoom = (id: number, res: Response): void => {
     const room = dataRoom.find(roomIt => roomIt.id === id);
     if(room === undefined) {
-        return parseResponse('Room not found');
+        parseResponse('Room not found', res);
     }
-    return room;
+    parseResponse(room, res, 200);
 }
 
-export const addRoom = (data: Room): ParseResponse => {
+export const addRoom = (data: Room, res: Response): void => {
     if(data !== null || data !== undefined) {
         const existRoom = dataRoom.findIndex(room => room.id === data.id);
         if(existRoom === -1) {
             dataRoom.push(data);
             writeFromDataFromFile(roomFile, JSON.stringify(dataRoom));
-            return parseResponse('Room #' + data.id + ' successfully added', 200);
+            parseResponse('Room #' + data.id + ' successfully added', res, 200);
         }
     }
-    return parseResponse('Error on adding a Room');
+    parseResponse('Error on adding a Room', res);
 }
 
-export const editRoom = (id: number, data: Room): ParseResponse => {
+export const editRoom = (id: number, data: Room, res: Response): void => {
     const roomToDelete = dataRoom.findIndex(room => room.id === id);
     if(roomToDelete === -1 || data === null || data === undefined) {
-        return parseResponse('Error on delete edit, Room or edited data not exist');
+        parseResponse('Error on delete edit, Room or edited data not exist', res);
     }
     dataRoom.splice(roomToDelete, 1, data);
     writeFromDataFromFile(roomFile, JSON.stringify(dataRoom));
-    return parseResponse('Room #' + id + ' successfully edited', 200);
+    parseResponse('Room #' + id + ' successfully edited', res, 200);
 }
 
-export const deleteRoom = (id: number): ParseResponse => {
+export const deleteRoom = (id: number, res: Response): void => {
     const roomToDelete = dataRoom.findIndex(room => room.id === id);
     if(roomToDelete === -1) {
-        return parseResponse('Error on delete Room, Room not exist');
+        parseResponse('Error on delete Room, Room not exist', res);
     }
     dataRoom.splice(roomToDelete, 1);
     writeFromDataFromFile(roomFile, JSON.stringify(dataRoom));
-    return parseResponse('Room #' + id +' deleted successfully', 200);
+    parseResponse('Room #' + id +' deleted successfully', res, 200);
 }

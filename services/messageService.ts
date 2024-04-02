@@ -1,54 +1,55 @@
 import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
 import { messageFile } from "../util/fileNames";
-import { ParseResponse, parseResponse } from "../util/parseResponse";
+import { parseResponse } from "../util/parseResponse";
 import { Message } from './../interfaces/Message';
+import { Response } from "express";
 
 const dataMessage = readFromDataFromFile(messageFile) as Message[];
 
-export const getAllMessages = (): Message[] | ParseResponse =>  {
+export const getAllMessages = (res: Response): void =>  {
     if(dataMessage.length === 0) {
-        return parseResponse('Messages not found');
+        parseResponse('Messages not found', res);
     }
-    return dataMessage;
+    parseResponse(dataMessage, res, 200);
 }
 
-export const getOneMessage = (id: number): Message | ParseResponse => {
+export const getOneMessage = (id: number, res: Response): void => {
     const message = dataMessage.find(messageIt => messageIt.id === id);
     if(message === undefined) {
-        return parseResponse('Message not found');
+        parseResponse('Message not found', res);
     }
-    return message;
+    parseResponse(message, res, 200);
 }
 
-export const addMessage = (data: Message): ParseResponse => {
+export const addMessage = (data: Message, res: Response): void => {
     if(data !== null || data !== undefined) {
         const existMessage = dataMessage.findIndex(message => message.id === data.id);
         if(existMessage === -1) {
             dataMessage.push(data);
             writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
-            return parseResponse('Message #' + data.id + ' successfully added', 200);
+            parseResponse('Message #' + data.id + ' successfully added', res, 200);
         }
     }
-    return parseResponse('Error on adding a Message');
+    parseResponse('Error on adding a Message', res);
 }
 
-export const editMessage = (id: number, data: Message): ParseResponse => {
+export const editMessage = (id: number, data: Message, res: Response): void => {
     const MessageToDelete = dataMessage.findIndex(Message => Message.id === id);
     console.log(data);
     if(MessageToDelete === -1 || data === null || data === undefined) {
-        return parseResponse('Error on delete edit, Message or edited data not exist');
+        parseResponse('Error on delete edit, Message or edited data not exist', res);
     }
     dataMessage.splice(MessageToDelete, 1, data);
     writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
-    return parseResponse('Message #' + id + ' successfully edited', 200);
+    parseResponse('Message #' + id + ' successfully edited', res, 200);
 }
 
-export const deleteMessage = (id: number): ParseResponse => {
+export const deleteMessage = (id: number, res: Response): void => {
     const MessageToDelete = dataMessage.findIndex(Message => Message.id === id);
     if(MessageToDelete === -1) {
-        return parseResponse('Error on delete Message, Message not exist');
+        parseResponse('Error on delete Message, Message not exist', res);
     }
     dataMessage.splice(MessageToDelete, 1);
     writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
-    return parseResponse('Message #' + id +' deleted successfully', 200);
+    parseResponse('Message #' + id +' deleted successfully', res, 200);
 }

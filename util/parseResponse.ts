@@ -1,11 +1,7 @@
-export interface ParseResponse {
-    status: number,
-    message: string
-}
+import { Response } from 'express';
 
-export const parseResponse = (message: string, status = 404): ParseResponse => {
-    return {
-        status: status,
-        message: message
-    }
+export const parseResponse = (data: any, res: Response, status = 404): void => {
+    res.status(status).json({
+        data: data
+    });
 }

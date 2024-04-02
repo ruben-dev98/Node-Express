@@ -5,28 +5,23 @@ import { authToken } from "../middleware/auth";
 export const employeeRouter = express.Router();
 
 employeeRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
-    res.json(getAllEmployees());
-    return;
+    getAllEmployees(res);
 });
 
 employeeRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(getOneEmployee(Number(req.params.id)));
-    return;
+    getOneEmployee(Number(req.params.id), res);
 });
 
 employeeRouter.use(authToken);
 
 employeeRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(addEmployee(req.body));
-    return;
+    addEmployee(req.body, res);
 });
 
 employeeRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(editEmployee(Number(req.params.id), req.body));
-    return;
+    editEmployee(Number(req.params.id), req.body, res);
 });
 
 employeeRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(deleteEmployee(Number(req.params.id)));
-    return;
+    deleteEmployee(Number(req.params.id), res);
 })

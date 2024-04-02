@@ -5,28 +5,23 @@ import { authToken } from "../middleware/auth";
 export const messageRouter = express.Router();
 
 messageRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
-    res.json(getAllMessages());
-    return;
+    getAllMessages(res);
 });
 
 messageRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(getOneMessage(Number(req.params.id)));
-    return;
+    getOneMessage(Number(req.params.id), res);
 });
 
 messageRouter.use(authToken);
 
 messageRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(addMessage(req.body));
-    return;
+    addMessage(req.body, res);
 });
 
 messageRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(editMessage(Number(req.params.id), req.body));
-    return;
+    editMessage(Number(req.params.id), req.body, res);
 });
 
 messageRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(deleteMessage(Number(req.params.id)));
-    return;
+    deleteMessage(Number(req.params.id), res);
 })

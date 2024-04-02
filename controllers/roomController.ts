@@ -5,28 +5,23 @@ import { authToken } from "../middleware/auth";
 export const roomRouter = express.Router();
 
 roomRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
-    res.json(getAllRooms());
-    return;
+    getAllRooms(res);
 });
 
 roomRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(getOneRoom(Number(req.params.id)));
-    return;
+    getOneRoom(Number(req.params.id), res);
 });
 
 roomRouter.use(authToken);
 
 roomRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(addRoom(req.body));
-    return;
+    addRoom(req.body, res);
 });
 
 roomRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(editRoom(Number(req.params.id), req.body));
-    return;
+    editRoom(Number(req.params.id), req.body, res);
 });
 
 roomRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(deleteRoom(Number(req.params.id)));
-    return;
+    deleteRoom(Number(req.params.id), res);
 })

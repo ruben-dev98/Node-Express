@@ -5,28 +5,23 @@ import { authToken } from "../middleware/auth";
 export const bookingRouter = express.Router();
 
 bookingRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
-    res.json(getAllBookings());
-    return;
+    getAllBookings(res);
 });
 
 bookingRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(getOneBooking(Number(req.params.id)));
-    return;
+    getOneBooking(Number(req.params.id), res);
 });
 
 bookingRouter.use(authToken);
 
 bookingRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(addBooking(req.body));
-    return;
+    addBooking(req.body, res);
 });
 
 bookingRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(editBooking(Number(req.params.id), req.body));
-    return;
+    editBooking(Number(req.params.id), req.body, res);
 });
 
 bookingRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    res.json(deleteBooking(Number(req.params.id)));
-    return;
+    deleteBooking(Number(req.params.id), res);
 })
