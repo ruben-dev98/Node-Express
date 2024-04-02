@@ -1,6 +1,6 @@
-import { readFromDataFromFile, writeFromDataFromFile } from "../helpers/dataFromFile";
-import { roomFile } from "../helpers/fileNames";
-import { ParseResponse, parseResponse } from "../helpers/parseResponse";
+import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
+import { roomFile } from "../util/fileNames";
+import { ParseResponse, parseResponse } from "../util/parseResponse";
 import { Room } from './../interfaces/Room';
 
 const dataRoom = readFromDataFromFile(roomFile) as Room[];

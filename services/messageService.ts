@@ -1,6 +1,6 @@
-import { readFromDataFromFile, writeFromDataFromFile } from "../helpers/dataFromFile";
-import { messageFile } from "../helpers/fileNames";
-import { ParseResponse, parseResponse } from "../helpers/parseResponse";
+import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
+import { messageFile } from "../util/fileNames";
+import { ParseResponse, parseResponse } from "../util/parseResponse";
 import { Message } from './../interfaces/Message';
 
 const dataMessage = readFromDataFromFile(messageFile) as Message[];

@@ -1,6 +1,6 @@
-import { readFromDataFromFile, writeFromDataFromFile } from "../helpers/dataFromFile";
-import { ParseResponse, parseResponse } from "../helpers/parseResponse";
-import { employeeFile } from "../helpers/fileNames";
+import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
+import { ParseResponse, parseResponse } from "../util/parseResponse";
+import { employeeFile } from "../util/fileNames";
 import { Employee } from './../interfaces/Employee';
 
 const dataEmployee = readFromDataFromFile(employeeFile) as Employee[];

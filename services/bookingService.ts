@@ -1,6 +1,6 @@
-import { readFromDataFromFile, writeFromDataFromFile } from "../helpers/dataFromFile";
-import { parseResponse, ParseResponse } from "../helpers/parseResponse";
-import { bookingFile } from "../helpers/fileNames";
+import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
+import { parseResponse, ParseResponse } from "../util/parseResponse";
+import { bookingFile } from "../util/fileNames";
 import { Booking } from "../interfaces/Booking";
 
 const dataBookings = readFromDataFromFile(bookingFile) as Booking[];
