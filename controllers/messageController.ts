@@ -1,27 +1,39 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addMessage, deleteMessage, editMessage, getAllMessages, getOneMessage } from "../services/messageService";
 import { authToken } from "../middleware/auth";
+import { parseResponse } from "../util/parseResponse";
 
 export const messageRouter = express.Router();
 
 messageRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
-    getAllMessages(res);
+    const messages = getAllMessages();
+    if(messages.length === 0) {
+        parseResponse('Messages not found', res);
+    }
+    parseResponse(messages, res, 200);
 });
 
 messageRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    getOneMessage(Number(req.params.id), res);
+    const message = getOneMessage(Number(req.params.id));
+    if(!message) {
+        parseResponse('Message not found', res);
+    }
+    parseResponse(message, res, 200);
 });
 
 messageRouter.use(authToken);
 
 messageRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
-    addMessage(req.body, res);
+    const responseData =  addMessage(req.body);
+    parseResponse(responseData.message, res, responseData.status);
 });
 
 messageRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    editMessage(Number(req.params.id), req.body, res);
+    const responseData =  editMessage(Number(req.params.id), req.body);
+    parseResponse(responseData.message, res, responseData.status);
 });
 
 messageRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    deleteMessage(Number(req.params.id), res);
+    const responseData =  deleteMessage(Number(req.params.id));
+    parseResponse(responseData.message, res, responseData.status);
 })

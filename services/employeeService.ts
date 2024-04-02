@@ -1,56 +1,64 @@
+import { ResponseStatus } from "../interfaces/ResponseStatus";
 import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { parseResponse } from "../util/parseResponse";
 import { employeeFile } from "../util/fileNames";
 import { Employee } from './../interfaces/Employee';
-import { Response } from "express";
 
 const dataEmployee = readFromDataFromFile(employeeFile) as Employee[];
 
-export const getAllEmployees = (res: Response): void =>  {
-    if(dataEmployee.length === 0) {
-        parseResponse('Employees not found', res);
-    }
-    parseResponse(dataEmployee, res, 200);
+export const getAllEmployees = (): Employee[]  =>  {
+    return dataEmployee;
 }
 
-export const getOneEmployee = (id: number, res: Response): void => {
-    const employee = dataEmployee.find(employeeIt => employeeIt.id === id);
-    if(employee === undefined) {
-        parseResponse('Employee not found', res);
-    }
-    parseResponse(employee, res, 200);
+export const getOneEmployee = (id: number): Employee | undefined => {
+    return dataEmployee.find(employee => employee.id === id);
 }
 
-export const addEmployee = (data: Employee, res: Response): void => {
-    
-    if(data !== null || data !== undefined) {
-        const existEmployee = dataEmployee.findIndex(employee => employee.id === data.id);
-        if(existEmployee === -1) {
+export const addEmployee = (data: Employee): ResponseStatus => {
+    if(data) {
+        const existBooking = dataEmployee.findIndex(employee => employee.id === data.id);
+        if(existBooking === -1) {
             dataEmployee.push(data);
             writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-            parseResponse('Employee #' + data.id + ' successfully added', res, 200);
+            return {
+                status: 200,
+                message: 'Employee #' + data.id + ' successfully added'
+            }
         }
     }
-    parseResponse('Error on adding a Employee', res);
+    return {
+        status: 404,
+        message: 'Error on adding employee'
+    }
 }
 
-export const editEmployee = (id: number, data: Employee, res: Response): void => {
-    const employeeToDelete = dataEmployee.findIndex(employee => employee.id === id);
-    console.log(data);
-    if(employeeToDelete === -1 || data === null || data === undefined) {
-        parseResponse('Error on delete edit, Employee or edited data not exist', res);
+export const editEmployee = (id: number, data: Employee): ResponseStatus => {
+    const bookingToDelete = dataEmployee.findIndex(employee => employee.id === id);
+    if(bookingToDelete === -1 || !data) {
+        return {
+            status: 404,
+            message: 'Error on edit employee, employee or edited data not exist'
+        }
     }
-    dataEmployee.splice(employeeToDelete, 1, data);
+    dataEmployee.splice(bookingToDelete, 1, data);
     writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    parseResponse('Employee #' + id + ' successfully edited', res, 200);
+    return {
+        status: 200,
+        message: 'Employee #' + id + ' successfully edited'
+    }
 }
 
-export const deleteEmployee = (id: number, res: Response): void => {
-    const employeeToDelete = dataEmployee.findIndex(employee => employee.id === id);
-    if(employeeToDelete === -1) {
-        parseResponse('Error on delete Employee, Employee not exist', res);
+export const deleteEmployee = (id: number): ResponseStatus => {
+    const bookingToDelete = dataEmployee.findIndex(employee => employee.id === id);
+    if(bookingToDelete === -1) {
+        return {
+            status: 404,
+            message: 'Error on delete employee, employee not exist'
+        }
     }
-    dataEmployee.splice(employeeToDelete, 1);
+    dataEmployee.splice(bookingToDelete, 1);
     writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    parseResponse('Employee #' + id +' deleted successfully', res, 200);
+    return {
+        status: 200,
+        message: 'Employee #' + id + ' deleted successfully'
+    }
 }

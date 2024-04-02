@@ -14,7 +14,7 @@ export const authToken = (req: RequestUser, res: Response, next: NextFunction) =
 
     jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
         console.log(err);
-        if (err) parseResponse('Forbidden. The server understood the request but refused to authorize it.', res, 403);
+        if (err) return parseResponse('Forbidden. The server understood the request but refused to authorize it.', res, 403);
         req.user = user;
         next();
     })
