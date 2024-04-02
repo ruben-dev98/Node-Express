@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { SECRET_KEY } from './getSecretKey';
 
 export const generateAccessToken = (username: string) => {
-    return jwt.sign(username, process.env.TOKEN_SECRET as string, { expiresIn: '10y' });
+    console.log(SECRET_KEY);
+    return jwt.sign({username}, SECRET_KEY, { expiresIn: '10y' });
 }
