@@ -10,14 +10,12 @@ export interface RequestUser extends Request {
 export const authToken = (req: RequestUser, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    if(token === undefined || token === null) return parseResponse('Unauthorized. The request lacks basic authentication', res, 401);
+    if (!token) return parseResponse('Unauthorized. The request lacks basic authentication', res, 401);
 
     jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
         console.log(err);
-        if(err) return parseResponse('Forbidden. The server understood the request but refused to authorize it.', res, 403);
-
+        if (err) parseResponse('Forbidden. The server understood the request but refused to authorize it.', res, 403);
         req.user = user;
-
         next();
     })
 }
