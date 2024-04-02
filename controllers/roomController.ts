@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addRoom, deleteRoom, editRoom, getAllRooms, getOneRoom } from "../services/roomService";
+import { authToken } from "../middleware/auth";
 
 export const roomRouter = express.Router();
 
@@ -12,6 +13,8 @@ roomRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
     res.json(getOneRoom(Number(req.params.id)));
     return;
 });
+
+roomRouter.use(authToken);
 
 roomRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
     res.json(addRoom(req.body));

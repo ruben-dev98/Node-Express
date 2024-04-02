@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addMessage, deleteMessage, editMessage, getAllMessages, getOneMessage } from "../services/messageService";
+import { authToken } from "../middleware/auth";
 
 export const messageRouter = express.Router();
 
@@ -12,6 +13,8 @@ messageRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => 
     res.json(getOneMessage(Number(req.params.id)));
     return;
 });
+
+messageRouter.use(authToken);
 
 messageRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
     res.json(addMessage(req.body));

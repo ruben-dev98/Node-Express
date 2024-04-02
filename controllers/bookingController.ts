@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addBooking, deleteBooking, editBooking, getAllBookings, getOneBooking } from "../services/bookingService";
+import { authToken } from "../middleware/auth";
 
 export const bookingRouter = express.Router();
 
@@ -12,6 +13,8 @@ bookingRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => 
     res.json(getOneBooking(Number(req.params.id)));
     return;
 });
+
+bookingRouter.use(authToken);
 
 bookingRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
     res.json(addBooking(req.body));
