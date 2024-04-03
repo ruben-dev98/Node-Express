@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../app';
 
-const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzEyMDU5NTQzLCJleHAiOjIwMjc2MzU1NDN9.GZZuriKAYAvaxTlFPthw2Sx1qBC_wk-vSB5DXeR20Ds';
+const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJwYXNzd29yZCI6ImFkbWluIiwiaWF0IjoxNzEyMTM3MzI1LCJleHAiOjIwMjc3MTMzMjV9.-xNu5itJ_xikRYJww8zXuJwEagVdp1xj13iD_97g0Ks';
 const token_mal_formatted = 'Bearer eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzEyMDU5NTQzLCJleHAiOjIwMjc2MzU1NDN9.GZZuriKAYAvaxTlFPthw2Sx1qBC_wk-vSB5DXeR20Ds';
 
 describe('Booking Tests', () => {
