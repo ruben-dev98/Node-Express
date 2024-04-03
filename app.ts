@@ -6,6 +6,7 @@ import { employeeRouter } from "./controllers/employeeController";
 import { messageRouter } from "./controllers/messageController";
 import { mainRouter } from "./controllers/mainController";
 import { loginRouter } from "./controllers/loginController";
+import { authToken } from "./middleware/auth";
 
 dotenv.config();
 
@@ -16,9 +17,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/login", loginRouter);
+app.use("/", mainRouter);
+
+app.use(authToken);
+
 app.use("/bookings", bookingRouter);
 app.use("/rooms", roomRouter);
 app.use("/employees", employeeRouter);
 app.use("/messages", messageRouter);
-
-app.use("/", mainRouter);

@@ -1,6 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addMessage, deleteMessage, editMessage, getAllMessages, getOneMessage } from "../services/messageService";
-import { authToken } from "../middleware/auth";
 import { parseResponse } from "../util/parseResponse";
 
 export const messageRouter = express.Router();
@@ -20,8 +19,6 @@ messageRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => 
     }
     parseResponse(message, res, 200);
 });
-
-messageRouter.use(authToken);
 
 messageRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
     const responseData =  addMessage(req.body);

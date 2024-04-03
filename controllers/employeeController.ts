@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from "express";
-import { authToken } from "../middleware/auth";
 import { parseResponse } from "../util/parseResponse";
 import { addEmployee, deleteEmployee, editEmployee, getAllEmployees, getOneEmployee } from "../services/employeeService";
 
@@ -20,8 +19,6 @@ employeeRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) =>
     }
     parseResponse(booking, res, 200);
 });
-
-employeeRouter.use(authToken);
 
 employeeRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
     const responseData = addEmployee(req.body);

@@ -1,6 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addBooking, deleteBooking, editBooking, getAllBookings, getOneBooking } from "../services/bookingService";
-import { authToken } from "../middleware/auth";
 import { parseResponse } from "../util/parseResponse";
 
 export const bookingRouter = express.Router();
@@ -20,8 +19,6 @@ bookingRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => 
     }
     parseResponse(booking, res, 200);
 });
-
-bookingRouter.use(authToken);
 
 bookingRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
     const responseData = addBooking(req.body);
