@@ -12,16 +12,20 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Bookings",
+      "name": "booking",
       "description": "Everything about Bookings"
     },
     {
-      "name": "Rooms",
+      "name": "room",
       "description": "Everything about Rooms"
     },
     {
-      "name": "Miranda Dashboard",
-      "description": "Access to Dashboard orders"
+        "name": "employee",
+        "description": "Everything about Employees"
+    },
+    {
+        "name": "message",
+        "description": "Everything about Messages"
     }
   ],
   "schemes": ["http"],
