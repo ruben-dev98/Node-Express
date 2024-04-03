@@ -13,7 +13,11 @@
   "tags": [
     {
       "name": "Bookings",
-      "description": "Everything about your Bookings"
+      "description": "Everything about Bookings"
+    },
+    {
+      "name": "Rooms",
+      "description": "Everything about Rooms"
     },
     {
       "name": "Miranda Dashboard",
@@ -30,7 +34,7 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Successful Operation",
             "schema": {
               "$ref": "#/definitions/Bookings"
             }
@@ -90,7 +94,7 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
+            "description": "Successful Operation",
             "schema": {
               "$ref": "#/definitions/Bookings"
             }
@@ -160,7 +164,426 @@
           }
         }
       }
-    }
+    },
+    "/rooms": {
+      "get": {
+        "tags": ["room"],
+        "summary": "Get all rooms",
+        "description": "Get all rooms",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/Rooms"
+            }
+          },
+          "404": {
+            "description": "Room not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "post": {
+        "tags": ["room"],
+        "summary": "Add a new Room to the dashboard",
+        "description": "",
+        "operationId": "addRoom",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Room object that needs to be added to the dashboard",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Rooms"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Data"
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The request lacks basic authentication"
+        }
+      }
+    },
+    "/rooms/{roomId}": {
+      "get": {
+        "tags": ["room"],
+        "summary": "Find room by ID",
+        "description": "Returns a single room",
+        "operationId": "getRoomById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "RoomId",
+            "in": "path",
+            "description": "ID of Room to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/Rooms"
+            }
+          },
+          "404": {
+            "description": "Room not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "put": {
+        "tags": ["room"],
+        "summary": "Updates a Room with an object of Room",
+        "description": "",
+        "operationId": "updateRoom",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "ID of Room that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Room not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["room"],
+        "summary": "Deletes a Room",
+        "description": "",
+        "operationId": "deleteRoom",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "Room id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Room not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      }
+    },
+    "/employees": {
+      "get": {
+        "tags": ["employee"],
+        "summary": "Get all Employees",
+        "description": "Get all Employees",
+        "operationId": "getAllEmployees",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/Employees"
+            }
+          },
+          "404": {
+            "description": "Employee not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "post": {
+        "tags": ["employee"],
+        "summary": "Add a new employee to the dashboard",
+        "description": "",
+        "operationId": "addEmployee",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "employee object that needs to be added to the dashboard",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Employees"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Data"
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The request lacks basic authentication"
+        }
+      }
+    },
+    "/employees/{employeeId}": {
+      "get": {
+        "tags": ["employee"],
+        "summary": "Find employee by ID",
+        "description": "Returns a single employee",
+        "operationId": "getEmployeeById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "description": "ID of Employee to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "$ref": "#/definitions/Messages"
+            }
+          },
+          "404": {
+            "description": "employee not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "put": {
+        "tags": ["employee"],
+        "summary": "Updates a employee with an object of employee",
+        "description": "",
+        "operationId": "updateEmployee",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "employeeId",
+            "in": "path",
+            "description": "ID of Employee that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Employee not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["employee"],
+        "summary": "Deletes a Employee",
+        "description": "",
+        "operationId": "deleteEmployee",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "employeeId",
+            "in": "path",
+            "description": "Employee id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Employee not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      }
+    },
+    "/messages": {
+        "get": {
+          "tags": ["message"],
+          "summary": "Get all Messages",
+          "description": "Get all Messages",
+          "operationId": "getAllMessages",
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "Successful Operation",
+              "schema": {
+                "$ref": "#/definitions/Messages"
+              }
+            },
+            "404": {
+              "description": "Message not found"
+            },
+            "401": {
+              "description": "Unauthorized. The request lacks basic authentication"
+            }
+          }
+        },
+        "post": {
+          "tags": ["message"],
+          "summary": "Add a new message to the dashboard",
+          "description": "",
+          "operationId": "addMessage",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Message object that needs to be added to the dashboard",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Messages"
+              }
+            }
+          ],
+          "responses": {
+            "400": {
+              "description": "Invalid Data"
+            }
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "/messages/{messageId}": {
+        "get": {
+          "tags": ["message"],
+          "summary": "Find Message by ID",
+          "description": "Returns a single message",
+          "operationId": "getMessageById",
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "messageId",
+              "in": "path",
+              "description": "ID of message to return",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful Operation",
+              "schema": {
+                "$ref": "#/definitions/Messages"
+              }
+            },
+            "404": {
+              "description": "Message not found"
+            },
+            "401": {
+              "description": "Unauthorized. The request lacks basic authentication"
+            }
+          }
+        },
+        "put": {
+          "tags": ["message"],
+          "summary": "Updates a Message with an object of Message",
+          "description": "",
+          "operationId": "updateMessage",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "messageId",
+              "in": "path",
+              "description": "ID of message that needs to be updated",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+            }
+          ],
+          "responses": {
+            "404": {
+              "description": "Message not found"
+            },
+            "401": {
+              "description": "Unauthorized. The request lacks basic authentication"
+            }
+          }
+        },
+        "delete": {
+          "tags": ["message"],
+          "summary": "Deletes a message",
+          "description": "",
+          "operationId": "deletemessage",
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "token",
+              "in": "header",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "messageId",
+              "in": "path",
+              "description": "Message id to delete",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+            }
+          ],
+          "responses": {
+            "404": {
+              "description": "Message not found"
+            },
+            "401": {
+              "description": "Unauthorized. The request lacks basic authentication"
+            }
+          }
+        }
+      }
   },
   "securityDefinitions": {
     "dashboard_auth": {
@@ -247,6 +670,183 @@
           "example": "algo@gmail.com"
         }
       }
-    }
+    },
+    "Rooms": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": 100
+        },
+        "foto": {
+          "type": "string",
+          "format": "string",
+          "example": "algun enlace de foto"
+        },
+        "type": {
+          "type": "string",
+          "format": "string",
+          "example": "Single Bed"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int64",
+          "example": 133
+        },
+        "description": {
+          "type": "string",
+          "format": "string",
+          "example": "LOREM_IPSUM"
+        },
+        "offer": {
+          "type": "boolean",
+          "example": true
+        },
+        "price": {
+          "type": "integer",
+          "format": "int64",
+          "example": 255
+        },
+        "cancellation": {
+          "type": "string",
+          "format": "string",
+          "example": "LOREM_IPSUM"
+        },
+        "amenities": {
+          "type": "array",
+          "example": "[Expert Team]"
+        },
+        "discount": {
+          "type": "number",
+          "format": "int64",
+          "example": 25
+        },
+        "status": {
+          "type": "string",
+          "format": "string",
+          "example": "Available"
+        }
+      }
+    },
+    "Employees": {
+      "type": "object",
+      "properties": {
+        "foto": {
+          "type": "string",
+          "format": "string",
+          "example": "algun enlace de foto"
+        },
+        "full_name": {
+          "type": "string",
+          "format": "string",
+          "example": "Jefferson Fernandez"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "string",
+          "example": "algo@gmail.com"
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2022/09/02"
+        },
+        "description": {
+          "type": "string",
+          "format": "string",
+          "example": "LOREM_IPSUM"
+        },
+        "job": {
+          "type": "string",
+          "format": "string",
+          "example": "Manager"
+        },
+
+        "contact": {
+          "type": "string",
+          "format": "string",
+          "example": "222-222-222"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int64",
+          "example": 255
+        },
+        "status": {
+          "type": "boolean",
+          "example": true
+        },
+        "password": {
+          "type": "string",
+          "default": "string",
+          "example": "contraseña encriptada"
+        }
+      }
+    },
+    "Messages": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 100
+              },
+          
+          "full_name": {
+            "type": "string",
+            "format": "string",
+            "example": "Jefferson Fernandez"
+          },
+          "email": {
+            "type": "string",
+            "format": "string",
+            "example": "algo@gmail.com"
+          },
+          "phone": {
+            "type": "string",
+            "format": "string",
+            "example": "222-222-222"
+          },
+          "subject": {
+            "type": "string",
+            "format": "string",
+            "example": "LOREM_IPSUM"
+          },
+          "message": {
+            "type": "string",
+            "format": "string",
+            "example": "LOREM_IPSUM"
+          },
+          "date": {
+            "type": "number",
+            "format": "int64",
+            "example": 201548720112
+          },
+          "read": {
+            "type": "boolean",
+            "example": true
+          },
+          "archived": {
+            "type": "boolean",
+            "example": true
+          },
+          "foto": {
+            "type": "string",
+            "format": "string",
+            "example": "algun enlace de foto"
+          },
+          "time_passed": {
+            "type": "string",
+            "default": "string",
+            "example": "4 mins ago"
+          }
+        }
+      }
   }
 }
