@@ -7,7 +7,7 @@
     "start": "",
     "dev": "nodemon",
     "test": "jest",
-    "build": "tsc && npm build",
+    "build": "tsc --build ./dist",
     "deploy": "npm run build && serverless deploy"
   },
   "author": "Ruben Dopico Novo",
