@@ -6,9 +6,12 @@ package:
     - "package.json"
     - "node_modules/**"
     - "dist/**"
+    - "data/**"
+    - "public/**"
 provider:
   name: aws
   region: eu-west-3
+  environment:
   runtime: nodejs18.x
 functions:
   app:

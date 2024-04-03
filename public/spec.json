@@ -1,0 +1,252 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an API for miranda dashboard",
+    "version": "1.0.0",
+    "title": "Miranda Api Node Express",
+    "contact": {
+      "email": "ruben.dopico.dev@gmail.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Bookings",
+      "description": "Everything about your Bookings"
+    },
+    {
+      "name": "Miranda Dashboard",
+      "description": "Access to Dashboard orders"
+    }
+  ],
+  "schemes": ["http"],
+  "paths": {
+    "/bookings": {
+      "get": {
+        "tags": ["booking"],
+        "summary": "Get all bookings",
+        "description": "Get all bookings",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Bookings"
+            }
+          },
+          "404": {
+            "description": "Booking not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "post": {
+        "tags": ["booking"],
+        "summary": "Add a new booking to the dashboard",
+        "description": "",
+        "operationId": "addBooking",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Booking object that needs to be added to the dashboard",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Bookings"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid Data"
+          }
+        },
+        "401": {
+          "description": "Unauthorized. The request lacks basic authentication"
+        }
+      }
+    },
+    "/bookings/{bookingId}": {
+      "get": {
+        "tags": ["booking"],
+        "summary": "Find booking by ID",
+        "description": "Returns a single booking",
+        "operationId": "getBookingById",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "ID of booking to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/Bookings"
+            }
+          },
+          "404": {
+            "description": "Booking not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "put": {
+        "tags": ["booking"],
+        "summary": "Updates a booking with an object of booking",
+        "description": "",
+        "operationId": "updateBooking",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "ID of booking that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Booking not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["booking"],
+        "summary": "Deletes a booking",
+        "description": "",
+        "operationId": "deleteBooking",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "bookingId",
+            "in": "path",
+            "description": "Booking id to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Booking not found"
+          },
+          "401": {
+            "description": "Unauthorized. The request lacks basic authentication"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "dashboard_auth": {
+      "type": "oauth2",
+      "authorizationUrl": "/login"
+    }
+  },
+  "definitions": {
+    "Bookings": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": 100
+        },
+        "full_name": {
+          "type": "string",
+          "format": "string",
+          "example": "Jefferson Fernandez"
+        },
+        "order_date": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1445577888
+        },
+        "check_in": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1445577888
+        },
+        "check_out": {
+          "type": "integer",
+          "format": "int64",
+          "example": 1445577888
+        },
+        "special_request": {
+          "type": "string",
+          "format": "string",
+          "example": "LOREM_IPSUM"
+        },
+        "number": {
+          "type": "integer",
+          "format": "int64",
+          "example": 133
+        },
+        "type": {
+          "type": "string",
+          "format": "string",
+          "example": "Single Bed"
+        },
+        "status": {
+          "type": "string",
+          "format": "string",
+          "example": "Check In"
+        },
+        "amenities": {
+          "type": "array",
+          "example": "[Expert Team]"
+        },
+        "room_status": {
+          "type": "string",
+          "format": "string",
+          "example": "Booked"
+        },
+        "foto": {
+          "type": "string",
+          "format": "string",
+          "example": "algun enlace de foto"
+        },
+        "description": {
+          "type": "string",
+          "format": "string",
+          "example": "LOREM_IPSUM"
+        },
+        "phone": {
+          "type": "number",
+          "format": "int64",
+          "example": 222333555
+        },
+        "email": {
+          "type": "string",
+          "format": "string",
+          "example": "algo@gmail.com"
+        }
+      }
+    }
+  }
+}
