@@ -8,7 +8,7 @@
       "email": "ruben.dopico.dev@gmail.com"
     }
   },
-  "host": "localhost:3000",
+  "host": "9fa3bmerkd.execute-api.eu-west-3.amazonaws.com/dev/",
   "basePath": "/",
   "tags": [
     {
@@ -28,7 +28,7 @@
         "description": "Everything about Messages"
     }
   ],
-  "schemes": ["http"],
+  "schemes": ["https"],
   "paths": {
     "/bookings": {
       "get": {
@@ -36,11 +36,22 @@
         "summary": "Get all bookings",
         "description": "Get all bookings",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Operation",
             "schema": {
-              "$ref": "#/definitions/Bookings"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Bookings"
+              }
             }
           },
           "404": {
@@ -59,6 +70,12 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
           {
             "in": "body",
             "name": "body",
@@ -87,6 +104,12 @@
         "operationId": "getBookingById",
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
           {
             "name": "bookingId",
             "in": "path",
@@ -120,6 +143,12 @@
         "produces": ["application/json"],
         "parameters": [
           {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "bookingId",
             "in": "path",
             "description": "ID of booking that needs to be updated",
@@ -145,7 +174,7 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "required": false,
             "type": "string"
@@ -175,11 +204,22 @@
         "summary": "Get all rooms",
         "description": "Get all rooms",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Operation",
             "schema": {
-              "$ref": "#/definitions/Rooms"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Rooms"
+              }
             }
           },
           "404": {
@@ -198,6 +238,12 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
           {
             "in": "body",
             "name": "body",
@@ -227,7 +273,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "RoomId",
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "roomId",
             "in": "path",
             "description": "ID of Room to return",
             "required": true,
@@ -259,6 +311,12 @@
         "produces": ["application/json"],
         "parameters": [
           {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "roomId",
             "in": "path",
             "description": "ID of Room that needs to be updated",
@@ -284,7 +342,7 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "token",
+            "name": "Authorization",
             "in": "header",
             "required": false,
             "type": "string"
@@ -315,11 +373,22 @@
         "description": "Get all Employees",
         "operationId": "getAllEmployees",
         "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Operation",
             "schema": {
-              "$ref": "#/definitions/Employees"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Employees"
+              }
             }
           },
           "404": {
@@ -338,6 +407,12 @@
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
           {
             "in": "body",
             "name": "body",
@@ -366,6 +441,12 @@
         "operationId": "getEmployeeById",
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
           {
             "name": "employeeId",
             "in": "path",
@@ -399,6 +480,12 @@
         "produces": ["application/json"],
         "parameters": [
           {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
             "name": "employeeId",
             "in": "path",
             "description": "ID of Employee that needs to be updated",
@@ -423,6 +510,12 @@
         "operationId": "deleteEmployee",
         "produces": ["application/json"],
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
           {
             "name": "token",
             "in": "header",
@@ -455,11 +548,22 @@
           "description": "Get all Messages",
           "operationId": "getAllMessages",
           "produces": ["application/json"],
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": false,
+              "type": "string"
+            }
+          ],
           "responses": {
             "200": {
               "description": "Successful Operation",
               "schema": {
-                "$ref": "#/definitions/Messages"
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Messages"
+                }
               }
             },
             "404": {
@@ -478,6 +582,12 @@
           "consumes": ["application/json"],
           "produces": ["application/json"],
           "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": false,
+              "type": "string"
+            },
             {
               "in": "body",
               "name": "body",
@@ -506,6 +616,12 @@
           "operationId": "getMessageById",
           "produces": ["application/json"],
           "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": false,
+              "type": "string"
+            },
             {
               "name": "messageId",
               "in": "path",
@@ -539,6 +655,12 @@
           "produces": ["application/json"],
           "parameters": [
             {
+              "name": "Authorization",
+              "in": "header",
+              "required": false,
+              "type": "string"
+            },
+            {
               "name": "messageId",
               "in": "path",
               "description": "ID of message that needs to be updated",
@@ -560,11 +682,11 @@
           "tags": ["message"],
           "summary": "Deletes a message",
           "description": "",
-          "operationId": "deletemessage",
+          "operationId": "deleteMessage",
           "produces": ["application/json"],
           "parameters": [
             {
-              "name": "token",
+              "name": "Authorization",
               "in": "header",
               "required": false,
               "type": "string"
@@ -592,7 +714,7 @@
   "securityDefinitions": {
     "dashboard_auth": {
       "type": "oauth2",
-      "authorizationUrl": "/login"
+      "AuthorizAtionUrl": "/login"
     }
   },
   "definitions": {
