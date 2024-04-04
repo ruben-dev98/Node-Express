@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is an API for miranda dashboard",
+    "description": "This is an API for miranda dashboard that use node and express to make a request and receives a response you can view the code: https://github.com/ruben-dev98/Node-Express",
     "version": "1.0.0",
     "title": "Miranda Api Node Express",
     "contact": {
@@ -710,12 +710,6 @@
           }
         }
       }
-  },
-  "securityDefinitions": {
-    "dashboard_auth": {
-      "type": "oauth2",
-      "AuthorizAtionUrl": "/login"
-    }
   },
   "definitions": {
     "Bookings": {
