@@ -26,7 +26,7 @@ export const addRoom = (data: Room): ResponseStatus => {
         }
     }
     return {
-        status: 404,
+        status: 400,
         message: 'Error on adding room'
     }
 }

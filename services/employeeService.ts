@@ -26,7 +26,7 @@ export const addEmployee = (data: Employee): ResponseStatus => {
         }
     }
     return {
-        status: 404,
+        status: 400,
         message: 'Error on adding employee'
     }
 }

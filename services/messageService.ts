@@ -26,7 +26,7 @@ export const addMessage = (data: Message): ResponseStatus => {
         }
     }
     return {
-        status: 404,
+        status: 400,
         message: 'Error on adding message'
     }
 }
