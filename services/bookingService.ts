@@ -1,64 +1,51 @@
 import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { bookingFile } from "../util/fileNames";
+import { bookingFile, dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
 import { Booking } from "../interfaces/Booking";
-import { ResponseStatus } from "../interfaces/ResponseStatus";
+import { ApiError } from "../class/ApiError";
 
-const dataBookings = readFromDataFromFile(bookingFile) as Booking[];
+const getAllDataFromFileBookings = () => readFromDataFromFile(bookingFile) as Booking[];
 
 export const getAllBookings = (): Booking[]  =>  {
-    return dataBookings;
+    return getAllDataFromFileBookings();
 }
 
 export const getOneBooking = (id: number): Booking | undefined => {
-    return dataBookings.find(bookingIt => bookingIt.id === id);
+    return getAllDataFromFileBookings().find(bookingIt => bookingIt.id === id);
 }
 
-export const addBooking = (data: Booking): ResponseStatus => {
-    if(data) {
-        const existBooking = dataBookings.findIndex(booking => booking.id === data.id);
-        if(existBooking === -1) {
-            dataBookings.push(data);
-            writeFromDataFromFile(bookingFile, JSON.stringify(dataBookings));
-            return {
-                status: 200,
-                message: 'Booking #' + data.id + ' successfully added'
-            }
-        }
+export const addBooking = (data: Booking): Booking => {
+    const dataBookings = getAllDataFromFileBookings();
+    const existBooking = dataBookings.findIndex(booking => booking.id === data.id);
+    if(!data) {
+        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
+    } else if(existBooking > -1) {
+        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
     }
-    return {
-        status: 400,
-        message: 'Error on adding booking'
-    }
-}
-
-export const editBooking = (id: number, data: Booking): ResponseStatus => {
-    const bookingToDelete = dataBookings.findIndex(booking => booking.id === id);
-    if(bookingToDelete === -1 || !data) {
-        return {
-            status: 404,
-            message: 'Error on edit booking, booking or edited data not exist'
-        }
-    }
-    dataBookings.splice(bookingToDelete, 1, data);
+    dataBookings.push(data);
     writeFromDataFromFile(bookingFile, JSON.stringify(dataBookings));
-    return {
-        status: 200,
-        message: 'Booking #' + id + ' successfully edited'
-    }
+    return data;
 }
 
-export const deleteBooking = (id: number): ResponseStatus => {
+export const editBooking = (id: number, data: Booking): Booking => {
+    const dataBookings = getAllDataFromFileBookings();
+    const bookingToEdit = dataBookings.findIndex(booking => booking.id === id);
+    if(bookingToEdit === -1 ) {
+        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    } else if (!data) {
+        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
+    }
+    dataBookings.splice(bookingToEdit, 1, data);
+    writeFromDataFromFile(bookingFile, JSON.stringify(dataBookings));
+    return data;
+}
+
+export const deleteBooking = (id: number): string => {
+    const dataBookings = getAllDataFromFileBookings();
     const bookingToDelete = dataBookings.findIndex(booking => booking.id === id);
     if(bookingToDelete === -1) {
-        return {
-            status: 404,
-            message: 'Error on delete booking, booking not exist'
-        }
+        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
     }
     dataBookings.splice(bookingToDelete, 1);
     writeFromDataFromFile(bookingFile, JSON.stringify(dataBookings));
-    return {
-        status: 200,
-        message: 'Booking #' + id + ' deleted successfully'
-    }
+    return 'Success';
 }

@@ -1,64 +1,53 @@
-import { ResponseStatus } from "../interfaces/ResponseStatus";
+import { ApiError } from "../class/ApiError";
 import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { employeeFile } from "../util/fileNames";
+import { dataNotFoundError, employeeFile, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
 import { Employee } from './../interfaces/Employee';
 
-const dataEmployee = readFromDataFromFile(employeeFile) as Employee[];
+const getAllDataFromFileEmployees = () => readFromDataFromFile(employeeFile) as Employee[];
 
-export const getAllEmployees = (): Employee[]  =>  {
-    return dataEmployee;
+export const getAllEmployees = (): Employee[] => {
+    return getAllDataFromFileEmployees();
 }
 
 export const getOneEmployee = (id: number): Employee | undefined => {
-    return dataEmployee.find(employee => employee.id === id);
+    return getAllDataFromFileEmployees().find(employee => employee.id === id);
 }
 
-export const addEmployee = (data: Employee): ResponseStatus => {
-    if(data) {
-        const existBooking = dataEmployee.findIndex(employee => employee.id === data.id);
-        if(existBooking === -1) {
-            dataEmployee.push(data);
-            writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-            return {
-                status: 200,
-                message: 'Employee #' + data.id + ' successfully added'
-            }
-        }
+export const addEmployee = (data: Employee): Employee => {
+    const dataEmployee = getAllDataFromFileEmployees();
+    const existEmployee = dataEmployee.findIndex(employee => employee.id === data.id);
+    if (!data) {
+        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+    } else if (existEmployee > -1) {
+        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
-    return {
-        status: 400,
-        message: 'Error on adding employee'
-    }
-}
-
-export const editEmployee = (id: number, data: Employee): ResponseStatus => {
-    const bookingToDelete = dataEmployee.findIndex(employee => employee.id === id);
-    if(bookingToDelete === -1 || !data) {
-        return {
-            status: 404,
-            message: 'Error on edit employee, employee or edited data not exist'
-        }
-    }
-    dataEmployee.splice(bookingToDelete, 1, data);
+    dataEmployee.push(data);
     writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return {
-        status: 200,
-        message: 'Employee #' + id + ' successfully edited'
-    }
+    return data;
+
+    throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
 }
 
-export const deleteEmployee = (id: number): ResponseStatus => {
-    const bookingToDelete = dataEmployee.findIndex(employee => employee.id === id);
-    if(bookingToDelete === -1) {
-        return {
-            status: 404,
-            message: 'Error on delete employee, employee not exist'
-        }
+export const editEmployee = (id: number, data: Employee): Employee => {
+    const dataEmployee = getAllDataFromFileEmployees();
+    const employeeToEdit = dataEmployee.findIndex(employee => employee.id === id);
+    if (employeeToEdit === -1) {
+        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    } else if (!data) {
+        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
-    dataEmployee.splice(bookingToDelete, 1);
+    dataEmployee.splice(employeeToEdit, 1, data);
     writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return {
-        status: 200,
-        message: 'Employee #' + id + ' deleted successfully'
+    return data;
+}
+
+export const deleteEmployee = (id: number): string => {
+    const dataEmployee = getAllDataFromFileEmployees();
+    const employeeToDelete = dataEmployee.findIndex(employee => employee.id === id);
+    if (employeeToDelete === -1) {
+        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
     }
+    dataEmployee.splice(employeeToDelete, 1);
+    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
+    return 'Success';
 }

@@ -1,36 +1,55 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addMessage, deleteMessage, editMessage, getAllMessages, getOneMessage } from "../services/messageService";
 import { parseResponse } from "../util/parseResponse";
+import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
+import { ApiError } from "../class/ApiError";
 
 export const messageRouter = express.Router();
 
-messageRouter.get('/', (_req: Request, res: Response, _next: NextFunction) => {
-    const messages = getAllMessages();
-    if(messages.length === 0) {
-        parseResponse('Messages not found', res);
+messageRouter.get('/', (_req: Request, res: Response, next: NextFunction) => {
+    try {
+        const messages = getAllMessages();
+        parseResponse(messages, res, statusCodeOk);
+    } catch (error: any) {
+        next(error);
     }
-    parseResponse(messages, res, 200);
 });
 
-messageRouter.get('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    const message = getOneMessage(Number(req.params.id));
-    if(!message) {
-        parseResponse('Message not found', res);
+messageRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const message = getOneMessage(Number(req.params.id));
+        if (!message) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        }
+        parseResponse(message, res, statusCodeOk);
+    } catch (error: any) {
+        next(error);
     }
-    parseResponse(message, res, 200);
 });
 
-messageRouter.post('/', (req: Request, res: Response, _next: NextFunction) => {
-    const responseData =  addMessage(req.body);
-    parseResponse(responseData.message, res, responseData.status);
+messageRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const message = addMessage(req.body);
+        parseResponse(message, res, statusCodeCreated);
+    } catch (error: any) {
+        next(error);
+    }
 });
 
-messageRouter.put('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    const responseData =  editMessage(Number(req.params.id), req.body);
-    parseResponse(responseData.message, res, responseData.status);
+messageRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const message = editMessage(Number(req.params.id), req.body);
+        parseResponse(message, res, statusCodeOk);
+    } catch (error: any) {
+        next(error);
+    }
 });
 
-messageRouter.delete('/:id', (req: Request, res: Response, _next: NextFunction) => {
-    const responseData =  deleteMessage(Number(req.params.id));
-    parseResponse(responseData.message, res, responseData.status);
+messageRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const message = deleteMessage(Number(req.params.id));
+        parseResponse(message, res, statusCodeOk);
+    } catch (error: any) {
+        next(error);
+    }
 })

@@ -1,64 +1,51 @@
-import { ResponseStatus } from "../interfaces/ResponseStatus";
+import { ApiError } from "../class/ApiError";
 import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { messageFile } from "../util/fileNames";
+import { dataNotFoundError, invalidDataError, messageFile, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
 import { Message } from './../interfaces/Message';
 
-const dataMessage = readFromDataFromFile(messageFile) as Message[];
+const getAllDataFromFileMessages = () => readFromDataFromFile(messageFile) as Message[];
 
-export const getAllMessages = (): Message[]  =>  {
-    return dataMessage;
+export const getAllMessages = (): Message[] => {
+    return getAllDataFromFileMessages();
 }
 
 export const getOneMessage = (id: number): Message | undefined => {
-    return dataMessage.find(message => message.id === id);
+    return getAllDataFromFileMessages().find(message => message.id === id);
 }
 
-export const addMessage = (data: Message): ResponseStatus => {
-    if(data) {
-        const existBooking = dataMessage.findIndex(message => message.id === data.id);
-        if(existBooking === -1) {
-            dataMessage.push(data);
-            writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
-            return {
-                status: 200,
-                message: 'Message #' + data.id + ' successfully added'
-            }
-        }
+export const addMessage = (data: Message): Message => {
+    const dataMessage = getAllDataFromFileMessages();
+    const existMessage = dataMessage.findIndex(message => message.id === data.id);
+    if (!data) {
+        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+    } else if (existMessage > -1) {
+        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
-    return {
-        status: 400,
-        message: 'Error on adding message'
-    }
-}
-
-export const editMessage = (id: number, data: Message): ResponseStatus => {
-    const bookingToDelete = dataMessage.findIndex(message => message.id === id);
-    if(bookingToDelete === -1 || !data) {
-        return {
-            status: 404,
-            message: 'Error on edit message, message or edited data not exist'
-        }
-    }
-    dataMessage.splice(bookingToDelete, 1, data);
+    dataMessage.push(data);
     writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
-    return {
-        status: 200,
-        message: 'Message #' + id + ' successfully edited'
-    }
+    return data;
 }
 
-export const deleteMessage = (id: number): ResponseStatus => {
-    const bookingToDelete = dataMessage.findIndex(message => message.id === id);
-    if(bookingToDelete === -1) {
-        return {
-            status: 404,
-            message: 'Error on delete message, message not exist'
-        }
+export const editMessage = (id: number, data: Message): Message => {
+    const dataMessage = getAllDataFromFileMessages();
+    const messageToEdit = dataMessage.findIndex(message => message.id === id);
+    if (messageToEdit === -1) {
+        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    } else if (!data) {
+        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
-    dataMessage.splice(bookingToDelete, 1);
+    dataMessage.splice(messageToEdit, 1, data);
     writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
-    return {
-        status: 200,
-        message: 'Message #' + id + ' deleted successfully'
+    return data;
+}
+
+export const deleteMessage = (id: number): string => {
+    const dataMessage = getAllDataFromFileMessages();
+    const messageToDelete = dataMessage.findIndex(message => message.id === id);
+    if (messageToDelete === -1) {
+        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
     }
+    dataMessage.splice(messageToDelete, 1);
+    writeFromDataFromFile(messageFile, JSON.stringify(dataMessage));
+    return 'Success';
 }
