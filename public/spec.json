@@ -60,19 +60,6 @@
               }
             }
           },
-          "404": {
-            "description": "Booking not found",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "string",
-                  "example": "Bookings not found"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized. The request lacks basic authentication",
             "schema": {
@@ -456,19 +443,6 @@
               }
             }
           },
-          "404": {
-            "description": "Rooms not found",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "string",
-                  "example": "Rooms not found"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Unauthorized. The request lacks basic authentication",
             "schema": {
@@ -848,19 +822,6 @@
                   "items": {
                     "$ref": "#/definitions/Employees"
                   }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Employees not found",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "string",
-                  "example": "Employees not found"
                 }
               }
             }
@@ -1250,19 +1211,6 @@
                   "items": {
                     "$ref": "#/definitions/Messages"
                   }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Messages not found",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "data": {
-                  "type": "string",
-                  "format": "string",
-                  "example": "Messages not found"
                 }
               }
             }
