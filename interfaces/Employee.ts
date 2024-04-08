@@ -9,6 +9,6 @@ export interface IEmployee {
     description: string,
     job: string,
     contact: string,
-    status: string,
+    status: boolean,
     password: string
 }

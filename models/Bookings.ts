@@ -1,8 +1,7 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { IBooking } from "../interfaces/Booking";
 
 const bookingSchema = new Schema<IBooking>({
-    _id: Types.ObjectId,
     full_name: { type: String, required: true},
     order_date: { type: String, required: true},
     check_in: { type: String, required: true},
@@ -12,6 +11,6 @@ const bookingSchema = new Schema<IBooking>({
     phone: { type: String, required: true},
     email: { type: String, required: true},
     room: {type: Schema.Types.ObjectId, ref: 'Rooms'}
-});
+}, {timestamps: true});
 
 export const Booking = model<IBooking>('Booking', bookingSchema);

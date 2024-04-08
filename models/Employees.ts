@@ -1,8 +1,7 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { IEmployee } from './../interfaces/Employee';
 
 const employeeSchema = new Schema<IEmployee>({
-    _id: Types.ObjectId,
     full_name: { type: String, required: true},
     photo: { type: String, required: true},
     email: { type: String, required: true, unique: true},
@@ -10,8 +9,8 @@ const employeeSchema = new Schema<IEmployee>({
     job: { type: String, required: true},
     start_date: { type: String, required: true},
     description: { type: String, required: true},
-    status: { type: String, required: true},
+    status: { type: Boolean, required: true},
     password: { type: String, required: true},
-});
+}, {timestamps: true});
 
 export const Employee = model<IEmployee>('Employee', employeeSchema);

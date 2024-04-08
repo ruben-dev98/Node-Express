@@ -1,7 +1,6 @@
 import { Types } from "mongoose";
 
 export interface IRoom {
-    _id: Types.ObjectId,
     photo: Array<string>,
     type: string,
     number: number,

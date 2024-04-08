@@ -1,8 +1,7 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { IMessage } from './../interfaces/Message';
 
 const messageSchema = new Schema<IMessage>({
-    _id: Types.ObjectId,
     full_name: { type: String, required: true},
     photo: { type: String, required: true},
     email: { type: String, required: true},
@@ -13,6 +12,6 @@ const messageSchema = new Schema<IMessage>({
     read: { type: Boolean, required: true},
     archived: { type: Boolean, required: true},
     time_passed: { type: String, required: true},
-});
+}, {timestamps: true});
 
 export const Message = model<IMessage>('Booking', messageSchema);
