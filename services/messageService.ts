@@ -30,7 +30,7 @@ export const addMessage = async (data: IMessage): Promise<IMessage> => {
 
 export const editMessage = async (id: any, data: IMessage): Promise<IMessage | null> => {
     try {
-        return await Message.findByIdAndUpdate(id, data);
+        return await Message.findByIdAndUpdate(id, data, {new: true});
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }

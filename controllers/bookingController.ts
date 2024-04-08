@@ -19,7 +19,7 @@ bookingRouter.get('/', async (_req: Request, res: Response, next: NextFunction) 
 bookingRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const booking = await getOneBooking(req.params.id);
-        if (!booking) {
+        if (booking === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
         parseResponse(booking, res, statusCodeOk);
@@ -40,6 +40,9 @@ bookingRouter.post('/', async (req: Request, res: Response, next: NextFunction) 
 bookingRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const booking = await editBooking(req.params.id, req.body);
+        if (booking === null) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        }
         parseResponse(booking, res, statusCodeOk);
     } catch (error: any) {
         next(error);

@@ -29,7 +29,7 @@ export const addRoom = async (data: IRoom): Promise<IRoom> => {
 
 export const editRoom = async (id: any, data: IRoom): Promise<IRoom | null> => {
     try {
-        return await Room.findByIdAndUpdate(id, data);
+        return await Room.findByIdAndUpdate(id, data, {new: true});
     } catch (error) {
         throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
     }

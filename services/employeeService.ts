@@ -32,7 +32,7 @@ export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
 
 export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee | null> => {
     try {
-        return await Employee.findByIdAndUpdate(id, data);
+        return await Employee.findByIdAndUpdate(id, data, {new: true});
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }

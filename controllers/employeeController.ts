@@ -6,19 +6,19 @@ import { ApiError } from "../class/ApiError";
 
 export const employeeRouter = express.Router();
 
-employeeRouter.get('/', (_req: Request, res: Response, next: NextFunction) => {
+employeeRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        const employees = getAllEmployees();
+        const employees = await getAllEmployees();
         parseResponse(employees, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-employeeRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+employeeRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = getOneEmployee(Number(req.params.id));
-        if (!employee) {
+        const employee = await getOneEmployee(Number(req.params.id));
+        if (employee === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
         parseResponse(employee, res, statusCodeOk);
@@ -27,27 +27,30 @@ employeeRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => 
     }
 });
 
-employeeRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+employeeRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = addEmployee(req.body);
+        const employee = await addEmployee(req.body);
         parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-employeeRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+employeeRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = editEmployee(Number(req.params.id), req.body);
+        const employee = await editEmployee(Number(req.params.id), req.body);
+        if (employee === null) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        }
         parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-employeeRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+employeeRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const message = deleteEmployee(Number(req.params.id));
+        const message = await deleteEmployee(Number(req.params.id));
         parseResponse(message, res, statusCodeOk);
     } catch (error: any) {
         next(error);

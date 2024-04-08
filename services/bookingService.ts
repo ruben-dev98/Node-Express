@@ -29,7 +29,7 @@ export const addBooking = async (data: IBooking): Promise<IBooking> => {
 
 export const editBooking = async (id: any, data: IBooking): Promise<IBooking | null> => {
     try {
-        return await (Booking.findByIdAndUpdate(id, data)).populate('room');
+        return await (Booking.findByIdAndUpdate(id, data, {new: true})).populate('room');
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }
