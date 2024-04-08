@@ -1,5 +1,7 @@
-export interface Message {
-    id: number,
+import { Types } from "mongoose";
+
+export interface IMessage {
+    _id: Types.ObjectId,
     full_name: string,
     email: string,
     phone: string,
@@ -8,6 +10,6 @@ export interface Message {
     date: string,
     read: boolean,
     archived: boolean,
-    foto: string,
+    photo: string,
     time_passed: string
 }

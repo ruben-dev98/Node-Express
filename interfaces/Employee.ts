@@ -1,12 +1,14 @@
-export interface Employee {
-    foto: string,
+import { Types } from "mongoose";
+
+export interface IEmployee {
+    _id: Types.ObjectId,
+    photo: string,
     full_name: string,
-    id: number,
     email: string,
     start_date: string,
     description: string,
     job: string,
     contact: string,
-    status: boolean | string,
+    status: string,
     password: string
 }
