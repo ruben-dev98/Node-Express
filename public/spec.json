@@ -1514,10 +1514,10 @@
           "example": "algo@gmail.com"
         },
         "room": {
-          "type": "object",
-          "schema": {
-            "$ref": "#/definitions/Rooms"
-          }
+          "type": "string",
+          "format": "string",
+          "example": "6613dcf2f0a615a3fcb5b78b"
+          
         }
       }
     },

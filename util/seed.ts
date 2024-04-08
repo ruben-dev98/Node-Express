@@ -13,26 +13,30 @@ import { hashPassword } from "./cryptPassword";
 
 type data = IMessage | IRoom | IEmployee | IBooking;
 
-const connect = () => {
+const connect = async () => {
     const uri = "mongodb://localhost:27017";
     const client = new MongoClient(uri);
+    try {
+        await client.connect();
+    } catch(error) {
+        console.error(error)
+    }
     return client;
 }
 
 const createCollection = async (client: MongoClient, collectionName: string, dataToCreate: data[]) => {
     try {
-        await client.connect();
-        const collection = client.db('miranda-dashboard').collection(collectionName);
-        collection.drop();
-        collection.insertMany(dataToCreate);
+        const collection = await client.db('miranda-dashboard').collection(collectionName);
+        await collection.drop();
+        await collection.insertMany(dataToCreate);
     } catch (error) {
         console.error(error);
     }
 }
 
-/*const close = (client: MongoClient) => {
+const close = (client: MongoClient) => {
     client.close();
-}*/
+}
 
 const randomRoomId = (rooms: IRoom[]) => {
     const randomNumber = Math.round(Math.random() * (rooms.length - 1));
@@ -145,7 +149,7 @@ const createMessagesToSeed = () => {
 }
 
 const main = async () => {
-    const client = connect();
+    const client = await connect();
     try {
         const aRooms = createRoomsToSeed();
         await createCollection(client, nameCollectionRooms, aRooms);
@@ -154,10 +158,9 @@ const main = async () => {
         await createCollection(client, nameCollectionEmployees, createEmployeesToSeed());
         await createCollection(client, nameCollectionBookings, createBookingsToSeed(aRooms));
         
+        close(client);
     } catch (error) {
         console.error(error);
-    } finally {
-        //close(client);
     }
 }
 
