@@ -1120,7 +1120,6 @@
         "description": "Get all Messages",
         "operationId": "getAllMessages",
         "produces": ["application/json"],
-        ,
         "responses": {
           "200": {
             "description": "Successful Operation",
