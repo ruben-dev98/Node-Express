@@ -6,7 +6,7 @@ import { employeeRouter } from "./controllers/employeeController";
 import { messageRouter } from "./controllers/messageController";
 import { mainRouter } from "./controllers/mainController";
 import { loginRouter } from "./controllers/loginController";
-//import { authTokenMiddleware } from "./middleware/auth";
+import { authTokenMiddleware } from "./middleware/auth";
 import { parseResponse } from "./util/parseResponse";
 import mongoose from "mongoose";
 
@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/login", loginRouter);
 app.use("/", mainRouter);
 
-//app.use(authTokenMiddleware);
+app.use(authTokenMiddleware);
 
 app.use("/bookings", bookingRouter);
 app.use("/rooms", roomRouter);
