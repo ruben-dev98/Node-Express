@@ -38,10 +38,9 @@ export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee 
     }
 }
 
-export const deleteEmployee = (id: any): string => {
+export const deleteEmployee = async (id: any): Promise<IEmployee | null> => {
     try {
-        Employee.findByIdAndDelete(id);
-    return 'Success';
+        return await Employee.findByIdAndDelete(id);
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }

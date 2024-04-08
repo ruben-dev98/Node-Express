@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addRoom, deleteRoom, editRoom, getAllRooms, getOneRoom } from "../services/roomService";
 import { parseResponse } from "../util/parseResponse";
-import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
+import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk, successMessage } from "../util/varToUse";
 import { ApiError } from "../class/ApiError";
 
 export const roomRouter = express.Router();
@@ -17,7 +17,7 @@ roomRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => 
 
 roomRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const room = await getOneRoom(Number(req.params.id));
+        const room = await getOneRoom(req.params.id);
         if (room === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
@@ -38,7 +38,7 @@ roomRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
 
 roomRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const room = await editRoom(Number(req.params.id), req.body);
+        const room = await editRoom(req.params.id, req.body);
         if (room === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
@@ -50,8 +50,11 @@ roomRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) =
 
 roomRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const message = await deleteRoom(Number(req.params.id));
-        parseResponse(message, res, statusCodeOk);
+        const room = await deleteRoom(req.params.id);
+        if (room === null) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        }
+        parseResponse(successMessage, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }

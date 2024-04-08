@@ -37,10 +37,9 @@ export const editMessage = async (id: any, data: IMessage): Promise<IMessage | n
     
 }
 
-export const deleteMessage = (id: any): string => {
+export const deleteMessage = async (id: any): Promise<IMessage | null> => {
     try {
-        Message.findByIdAndDelete(id);
-        return 'Success';
+        return await Message.findByIdAndDelete(id);
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }

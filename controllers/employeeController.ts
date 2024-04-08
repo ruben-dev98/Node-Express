@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { parseResponse } from "../util/parseResponse";
 import { addEmployee, deleteEmployee, editEmployee, getAllEmployees, getOneEmployee } from "../services/employeeService";
-import { dataNotFoundError, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
+import { dataNotFoundError, statusCodeErrorNotFound, statusCodeOk, successMessage } from "../util/varToUse";
 import { ApiError } from "../class/ApiError";
 
 export const employeeRouter = express.Router();
@@ -17,7 +17,7 @@ employeeRouter.get('/', async (_req: Request, res: Response, next: NextFunction)
 
 employeeRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = await getOneEmployee(Number(req.params.id));
+        const employee = await getOneEmployee(req.params.id);
         if (employee === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
@@ -38,7 +38,7 @@ employeeRouter.post('/', async (req: Request, res: Response, next: NextFunction)
 
 employeeRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = await editEmployee(Number(req.params.id), req.body);
+        const employee = await editEmployee(req.params.id, req.body);
         if (employee === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
@@ -50,8 +50,11 @@ employeeRouter.put('/:id', async (req: Request, res: Response, next: NextFunctio
 
 employeeRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const message = await deleteEmployee(Number(req.params.id));
-        parseResponse(message, res, statusCodeOk);
+        const employee = await deleteEmployee(req.params.id);
+        if (employee === null) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        }
+        parseResponse(successMessage, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }

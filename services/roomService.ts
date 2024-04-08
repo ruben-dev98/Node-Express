@@ -35,10 +35,9 @@ export const editRoom = async (id: any, data: IRoom): Promise<IRoom | null> => {
     }
 }
 
-export const deleteRoom = (id: any): string => {
+export const deleteRoom = async (id: any): Promise<IRoom | null> => {
     try {
-        Room.findByIdAndDelete(id);
-        return 'Success';
+        return await Room.findByIdAndDelete(id);
     } catch (error) {
         throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
     }
