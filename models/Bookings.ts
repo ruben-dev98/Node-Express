@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, model } from "mongoose";
 import { IBooking } from "../interfaces/Booking";
 
 const bookingSchema = new Schema<IBooking>({
@@ -10,7 +10,7 @@ const bookingSchema = new Schema<IBooking>({
     status: { type: String, required: true},
     phone: { type: String, required: true},
     email: { type: String, required: true},
-    room: {type: Schema.Types.ObjectId, ref: 'Rooms'}
+    room: {type: Schema.Types.ObjectId, ref: 'rooms'}
 }, {timestamps: true});
 
-export const Booking = model<IBooking>('Booking', bookingSchema);
+export const Booking = model<IBooking, Model<IBooking>>('bookings', bookingSchema);

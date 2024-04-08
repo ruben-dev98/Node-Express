@@ -8,7 +8,7 @@
       "email": "ruben.dopico.dev@gmail.com"
     }
   },
-  "host": "9fa3bmerkd.execute-api.eu-west-3.amazonaws.com/dev/",
+  "host": "localhost:3000",
   "basePath": "/",
   "tags": [
     {
@@ -28,7 +28,7 @@
       "description": "Everything about Messages"
     }
   ],
-  "schemes": ["https"],
+  "schemes": ["http"],
   "paths": {
     "/bookings": {
       "get": {
@@ -121,7 +121,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Booking #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Bookings"
+                  }
                 }
               }
             }
@@ -187,9 +189,9 @@
             "in": "path",
             "description": "ID of Booking to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11bdbe487b9a51d75dd"
           }
         ],
         "responses": {
@@ -265,9 +267,9 @@
             "in": "path",
             "description": "ID of Booking that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11bdbe487b9a51d75dd"
           },
           {
             "in": "body",
@@ -288,7 +290,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Booking #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Bookings"
+                  }
                 }
               }
             }
@@ -352,9 +356,9 @@
             "in": "path",
             "description": "Booking id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11bdbe487b9a51d75dd"
           }
         ],
         "responses": {
@@ -366,7 +370,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Booking #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -504,7 +508,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Room #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Rooms"
+                  }
                 }
               }
             }
@@ -570,9 +576,9 @@
             "in": "path",
             "description": "ID of Room to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613dcf2f0a615a3fcb5b78b"
           }
         ],
         "responses": {
@@ -648,9 +654,9 @@
             "in": "path",
             "description": "ID of Room that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613dcf2f0a615a3fcb5b78b"
           },
           {
             "in": "body",
@@ -671,7 +677,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Room #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Rooms"
+                  }
                 }
               }
             }
@@ -735,9 +743,9 @@
             "in": "path",
             "description": "Room id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613dcf2f0a615a3fcb5b78b"
           }
         ],
         "responses": {
@@ -749,7 +757,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Room #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -887,7 +895,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Employee #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Employees"
+                  }
                 }
               }
             }
@@ -953,9 +963,9 @@
             "in": "path",
             "description": "ID of Employee to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75d3"
           }
         ],
         "responses": {
@@ -1031,9 +1041,9 @@
             "in": "path",
             "description": "ID of Employee that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75d3"
           },
           {
             "in": "body",
@@ -1054,7 +1064,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Employee #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Employees"
+                  }
                 }
               }
             }
@@ -1124,9 +1136,9 @@
             "in": "path",
             "description": "Employee id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75d3"
           }
         ],
         "responses": {
@@ -1138,7 +1150,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Employee #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -1276,7 +1288,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Message #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Messages"
+                  }
                 }
               }
             }
@@ -1342,9 +1356,9 @@
             "in": "path",
             "description": "ID of message to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75c9"
           }
         ],
         "responses": {
@@ -1420,9 +1434,9 @@
             "in": "path",
             "description": "ID of Message that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75c9"
           },
           {
             "in": "body",
@@ -1443,7 +1457,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Message #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Messages"
+                  }
                 }
               }
             }
@@ -1507,9 +1523,9 @@
             "in": "path",
             "description": "Message id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75c9"
           }
         ],
         "responses": {
@@ -1521,7 +1537,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Message #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -1573,11 +1589,6 @@
     "Bookings": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
-        },
         "full_name": {
           "type": "string",
           "format": "string",
@@ -1627,7 +1638,7 @@
           "format": "string",
           "example": "Booked"
         },
-        "foto": {
+        "photo": {
           "type": "string",
           "format": "string",
           "example": "algun enlace de foto"
@@ -1646,18 +1657,19 @@
           "type": "string",
           "format": "string",
           "example": "algo@gmail.com"
+        },
+        "room": {
+          "type": "object",
+          "schema": {
+            "$ref": "#/definitions/Rooms"
+          }
         }
       }
     },
     "Rooms": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
-        },
-        "foto": {
+        "photo": {
           "type": "string",
           "format": "string",
           "example": "algun enlace de foto"
@@ -1710,7 +1722,7 @@
     "Employees": {
       "type": "object",
       "properties": {
-        "foto": {
+        "photo": {
           "type": "string",
           "format": "string",
           "example": "algun enlace de foto"
@@ -1719,11 +1731,6 @@
           "type": "string",
           "format": "string",
           "example": "Jefferson Fernandez"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
         },
         "email": {
           "type": "string",
@@ -1770,12 +1777,6 @@
     "Messages": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
-        },
-
         "full_name": {
           "type": "string",
           "format": "string",
@@ -1814,7 +1815,7 @@
           "type": "boolean",
           "example": true
         },
-        "foto": {
+        "photo": {
           "type": "string",
           "format": "string",
           "example": "algun enlace de foto"

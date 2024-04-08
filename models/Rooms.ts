@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, model } from "mongoose";
 import { IRoom } from './../interfaces/Room';
 
 const roomSchema = new Schema<IRoom>({
@@ -14,4 +14,4 @@ const roomSchema = new Schema<IRoom>({
     status: { type: String, required: true},
 });
 
-export const Room = model<IRoom>('Room', roomSchema);
+export const Room = model<IRoom, Model<IRoom>>('rooms', roomSchema);

@@ -6,18 +6,19 @@ import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCo
 
 export const bookingRouter = express.Router();
 
-bookingRouter.get('/', (_req: Request, res: Response, next: NextFunction) => {
+bookingRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        const bookings = getAllBookings();
+        const bookings = await getAllBookings();
+        console.log(bookings);
         parseResponse(bookings, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-bookingRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+bookingRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const booking = getOneBooking(Number(req.params.id));
+        const booking = await getOneBooking(req.params.id);
         if (!booking) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
@@ -27,27 +28,27 @@ bookingRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-bookingRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+bookingRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const booking = addBooking(req.body);
+        const booking = await addBooking(req.body);
         parseResponse(booking, res, statusCodeCreated);
     } catch (error: any) {
         next(error);
     }
 });
 
-bookingRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+bookingRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const booking = editBooking(Number(req.params.id), req.body);
+        const booking = await editBooking(req.params.id, req.body);
         parseResponse(booking, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-bookingRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+bookingRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const message = deleteBooking(Number(req.params.id));
+        const message = await deleteBooking(req.params.id);
         parseResponse(message, res, statusCodeOk);
     } catch (error: any) {
         next(error);

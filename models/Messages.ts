@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, model } from "mongoose";
 import { IMessage } from './../interfaces/Message';
 
 const messageSchema = new Schema<IMessage>({
@@ -14,4 +14,4 @@ const messageSchema = new Schema<IMessage>({
     time_passed: { type: String, required: true},
 }, {timestamps: true});
 
-export const Message = model<IMessage>('Message', messageSchema);
+export const Message = model<IMessage, Model<IMessage>>('messages', messageSchema);
