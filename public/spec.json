@@ -1498,39 +1498,10 @@
           "format": "string",
           "example": "LOREM_IPSUM"
         },
-        "number": {
-          "type": "integer",
-          "format": "int64",
-          "example": 133
-        },
-        "type": {
-          "type": "string",
-          "format": "string",
-          "example": "Single Bed"
-        },
         "status": {
           "type": "string",
           "format": "string",
           "example": "Check In"
-        },
-        "amenities": {
-          "type": "array",
-          "example": "[Expert Team]"
-        },
-        "room_status": {
-          "type": "string",
-          "format": "string",
-          "example": "Booked"
-        },
-        "photo": {
-          "type": "string",
-          "format": "string",
-          "example": "algun enlace de foto"
-        },
-        "description": {
-          "type": "string",
-          "format": "string",
-          "example": "LOREM_IPSUM"
         },
         "phone": {
           "type": "number",
