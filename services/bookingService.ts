@@ -1,26 +1,45 @@
-/*import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { bookingFile, dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";*/
+import { ApiError } from "../class/ApiError";
 import { IBooking } from "../interfaces/Booking";
-//import { ApiError } from "../class/ApiError";
 import { Booking } from "../models/Bookings";
+import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
 
 export const getAllBookings = async (): Promise<IBooking[]>  =>  {
-    return await Booking.find({}).populate('room');
+    try {
+        return await Booking.find({}).populate('room');
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    }
 }
 
 export const getOneBooking = async (id: any): Promise<IBooking | null> => {
-    return await Booking.findById(id).populate('room');
+    try {
+        return await Booking.findById(id).populate('room');
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    }
 }
 
 export const addBooking = async (data: IBooking): Promise<IBooking> => {
-    return (await Booking.create(data)).populate('room');
+    try {
+        return (await Booking.create(data)).populate('room');
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    }
 }
 
 export const editBooking = async (id: any, data: IBooking): Promise<IBooking | null> => {
-    return await (Booking.findByIdAndUpdate(id, data)).populate('room');
+    try {
+        return await (Booking.findByIdAndUpdate(id, data)).populate('room');
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    }
 }
 
 export const deleteBooking = (id: any): string => {
-    Booking.findByIdAndDelete(id);
-    return 'Success';
+    try {
+        Booking.findByIdAndDelete(id);
+        return 'Success';
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    }
 }

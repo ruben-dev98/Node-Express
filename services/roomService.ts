@@ -1,23 +1,45 @@
+import { ApiError } from "../class/ApiError";
 import { IRoom } from "../interfaces/Room";
 import { Room } from "../models/Rooms";
+import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
 
 export const getAllRooms = async (): Promise<IRoom[]> => {
-    return await Room.find({});
+    try {
+        return await Room.find({});
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
+    }
 }
 
 export const getOneRoom = async (id: any): Promise<IRoom | null> => {
-    return await Room.findById(id);
+    try {
+        return await Room.findById(id);
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
+    }
 }
 
 export const addRoom = async (data: IRoom): Promise<IRoom> => {
-    return await Room.create(data);
+    try {
+        return await Room.create(data);
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
+    }
 }
 
 export const editRoom = async (id: any, data: IRoom): Promise<IRoom | null> => {
-    return await Room.findByIdAndUpdate(id, data);
+    try {
+        return await Room.findByIdAndUpdate(id, data);
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
+    }
 }
 
 export const deleteRoom = (id: any): string => {
-    Room.findByIdAndDelete(id);
-    return 'Success';
+    try {
+        Room.findByIdAndDelete(id);
+        return 'Success';
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
+    }
 }
