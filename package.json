@@ -8,7 +8,8 @@
     "dev": "nodemon",
     "test": "jest",
     "build": "tsc --build",
-    "deploy": "npm run build && serverless deploy"
+    "deploy": "npm run build && serverless deploy",
+    "seed": "ts-node ./util/seed.ts"
   },
   "author": "Ruben Dopico Novo",
   "license": "ISC",

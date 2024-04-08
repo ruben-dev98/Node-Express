@@ -1,67 +1,78 @@
-import  { MongoClient } from "mongodb";
+import { MongoClient } from "mongodb";
 import { faker } from '@faker-js/faker';
 import { Booking } from "../models/Bookings"
 import { Employee } from "../models/Employees";
 import { Room } from "../models/Rooms";
 import { Message } from "../models/Messages";
+import { IBooking } from "../interfaces/Booking";
+import { IRoom } from './../interfaces/Room';
+import { IMessage } from "../interfaces/Message";
+import { IEmployee } from "../interfaces/Employee";
+import { nameCollectionBookings, nameCollectionEmployees, nameCollectionMessages, nameCollectionRooms } from "./varToUse";
+import { hashPassword } from "./cryptPassword";
 
-type data = typeof Message & typeof Room & typeof Employee & typeof Booking;
+type data = IMessage | IRoom | IEmployee | IBooking;
 
-const connectToSeed = async (collectionName: string, dataToCreate: data) => {
+const connect = () => {
     const uri = "mongodb://localhost:27017";
     const client = new MongoClient(uri);
+    return client;
+}
 
+const createCollection = async (client: MongoClient, collectionName: string, dataToCreate: data[]) => {
     try {
         await client.connect();
         const collection = client.db('miranda-dashboard').collection(collectionName);
         collection.drop();
-        const dataSeed: data = ;
-        collection.insertMany(dataSeed);
-        for(let i = 0; i < 10; i++) {
-
-        }
-        client.close();
-    } catch(error) {
+        collection.insertMany(dataToCreate);
+    } catch (error) {
         console.error(error);
     }
 }
- 
 
-export const createNewBooking = () => {
-    const booking = new Booking({
+/*const close = (client: MongoClient) => {
+    client.close();
+}*/
+
+const randomRoomId = (rooms: IRoom[]) => {
+    const randomNumber = Math.round(Math.random() * (rooms.length - 1));
+    return rooms[randomNumber]._id;
+}
+
+const createNewBooking = (aRooms: IRoom[]): IBooking => {
+    const roomId = randomRoomId(aRooms);
+    return new Booking({
         _id: faker.string.uuid(),
-        order_date: faker.date.past(),
-        check_in: faker.date.past(),
-        check_out: faker.date.past(),
+        order_date: faker.date.past().getTime(),
+        check_in: faker.date.past().getTime(),
+        check_out: faker.date.past().getTime(),
         email: faker.internet.email(),
         phone: faker.phone.number(),
         full_name: faker.person.fullName(),
         special_request: faker.lorem.sentences(2),
         status: 'In Progress',
-        room: {}
+        room: roomId
     });
-
-    
 }
 
-export const createNewEmployee = async () => {
-
-    const employee = new Employee({
+const createNewEmployee = (): IEmployee => {
+    let passwordHash = hashPassword('admin');
+    return new Employee({
         _id: faker.string.uuid(),
         full_name: faker.person.fullName(),
         photo: faker.image.avatar(),
         email: faker.internet.email(),
         contact: faker.phone.number(),
         job: 'Manager',
-        start_date: faker.date.past(),
+        start_date: faker.date.past().getTime(),
         description: faker.lorem.sentences(2),
         status: true,
-        password: '',
+        password: passwordHash
     });
 }
 
-export const createNewRoom = () => {
-    const room = new Room({
+const createNewRoom = (): IRoom => {
+    return new Room({
         _id: faker.string.uuid(),
         photo: [
             "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
@@ -69,10 +80,10 @@ export const createNewRoom = () => {
             "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
         ],
         type: 'Single Bed',
-        number: faker.number.int(),
+        number: faker.number.int({ min: 1, max: 100}),
         description: faker.lorem.sentences(2),
         offer: true,
-        price: faker.number.int(),
+        price: faker.number.int({ min: 100, max: 1500}),
         cancellation: faker.lorem.sentences(2),
         amenities: [
             "Shop near",
@@ -80,14 +91,13 @@ export const createNewRoom = () => {
             "Shower",
             "Towels",
             "Smart Security"],
-        discount: faker.number.int(),
+        discount: faker.number.int({ min: 0, max: 50}),
         status: 'Available'
     });
 }
 
-
-export const createNewMessage = () => {
-    const message = new Message({
+const createNewMessage = (): IMessage => {
+    return new Message({
         _id: faker.string.uuid(),
         full_name: faker.person.fullName(),
         photo: faker.image.avatar(),
@@ -98,7 +108,57 @@ export const createNewMessage = () => {
         messages: faker.lorem.sentences(2),
         read: false,
         archived: true,
-        time_passed: { type: String, required: true},
+        time_passed: '4 mins ago',
     });
 }
 
+const createBookingsToSeed = (aRooms: IRoom[]) => {
+    const aData = [];
+    for (let i = 0; i < 10; i++) {
+        aData.push(createNewBooking(aRooms));
+    }
+    return aData;
+}
+
+const createRoomsToSeed = () => {
+    const aData = [];
+    for (let i = 0; i < 10; i++) {
+        aData.push(createNewRoom());
+    }
+    return aData;
+}
+
+const createEmployeesToSeed = () => {
+    const aData = [];
+    for (let i = 0; i < 10; i++) {
+        aData.push(createNewEmployee());
+    }
+    return aData;
+}
+
+const createMessagesToSeed = () => {
+    const aData = [];
+    for (let i = 0; i < 10; i++) {
+        aData.push(createNewMessage());
+    }
+    return aData;
+}
+
+const main = async () => {
+    const client = connect();
+    try {
+        const aRooms = createRoomsToSeed();
+        await createCollection(client, nameCollectionRooms, aRooms);
+
+        await createCollection(client, nameCollectionMessages, createMessagesToSeed());
+        await createCollection(client, nameCollectionEmployees, createEmployeesToSeed());
+        await createCollection(client, nameCollectionBookings, createBookingsToSeed(aRooms));
+        
+    } catch (error) {
+        console.error(error);
+    } finally {
+        //close(client);
+    }
+}
+
+main();

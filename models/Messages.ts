@@ -14,4 +14,4 @@ const messageSchema = new Schema<IMessage>({
     time_passed: { type: String, required: true},
 }, {timestamps: true});
 
-export const Message = model<IMessage>('Booking', messageSchema);
+export const Message = model<IMessage>('Message', messageSchema);

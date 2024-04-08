@@ -18,3 +18,8 @@ export const statusCodeCreated = 201;
 export const statusCodeOk = 200;
 
 export const statusCodeInternalServerError = 500;
+
+export const nameCollectionRooms = 'rooms';
+export const nameCollectionBookings = 'bookings';
+export const nameCollectionEmployees = 'employees';
+export const nameCollectionMessages = 'messages';
