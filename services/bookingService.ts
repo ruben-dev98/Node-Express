@@ -1,51 +1,25 @@
-import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { bookingFile, dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
-import { Booking } from "../interfaces/Booking";
-import { ApiError } from "../class/ApiError";
-
-const getAllDataFromFileBookings = () => readFromDataFromFile(bookingFile) as Booking[];
-
-export const getAllBookings = (): Booking[]  =>  {
-    return getAllDataFromFileBookings();
+/*import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
+import { bookingFile, dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";*/
+import { IBooking } from "../interfaces/Booking";
+//import { ApiError } from "../class/ApiError";
+import { Booking } from "../models/Bookings";
+export const getAllBookings = async (): Promise<IBooking[]>  =>  {
+    return await Booking.find({});
 }
 
-export const getOneBooking = (id: number): Booking | undefined => {
-    return getAllDataFromFileBookings().find(bookingIt => bookingIt.id === id);
+export const getOneBooking = async (id: any): Promise<IBooking | null> => {
+    return await Booking.findById(id);
 }
 
-export const addBooking = (data: Booking): Booking => {
-    const dataBookings = getAllDataFromFileBookings();
-    const existBooking = dataBookings.findIndex(booking => booking.id === data.id);
-    if(!data) {
-        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
-    } else if(existBooking > -1) {
-        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
-    }
-    dataBookings.push(data);
-    writeFromDataFromFile(bookingFile, JSON.stringify(dataBookings));
-    return data;
+export const addBooking = async (data: IBooking): Promise<IBooking> => {
+    return await Booking.create(data);
 }
 
-export const editBooking = (id: number, data: Booking): Booking => {
-    const dataBookings = getAllDataFromFileBookings();
-    const bookingToEdit = dataBookings.findIndex(booking => booking.id === id);
-    if(bookingToEdit === -1 ) {
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
-    } else if (!data) {
-        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
-    }
-    dataBookings.splice(bookingToEdit, 1, data);
-    writeFromDataFromFile(bookingFile, JSON.stringify(dataBookings));
-    return data;
+export const editBooking = async (id: any, data: IBooking): Promise<IBooking | null> => {
+    return await Booking.findByIdAndUpdate(id, data);
 }
 
-export const deleteBooking = (id: number): string => {
-    const dataBookings = getAllDataFromFileBookings();
-    const bookingToDelete = dataBookings.findIndex(booking => booking.id === id);
-    if(bookingToDelete === -1) {
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
-    }
-    dataBookings.splice(bookingToDelete, 1);
-    writeFromDataFromFile(bookingFile, JSON.stringify(dataBookings));
+export const deleteBooking = (id: any): string => {
+    Booking.findByIdAndDelete(id);
     return 'Success';
 }

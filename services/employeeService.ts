@@ -1,53 +1,23 @@
-import { ApiError } from "../class/ApiError";
-import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { dataNotFoundError, employeeFile, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
-import { Employee } from './../interfaces/Employee';
+import { IEmployee } from "../interfaces/Employee";
+import { Employee } from "../models/Employees";
 
-const getAllDataFromFileEmployees = () => readFromDataFromFile(employeeFile) as Employee[];
-
-export const getAllEmployees = (): Employee[] => {
-    return getAllDataFromFileEmployees();
+export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
+    return await Employee.find({});
 }
 
-export const getOneEmployee = (id: number): Employee | undefined => {
-    return getAllDataFromFileEmployees().find(employee => employee.id === id);
+export const getOneEmployee = async (id: any): Promise<IEmployee | null> => {
+    return await Employee.findById(id);
 }
 
-export const addEmployee = (data: Employee): Employee => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const existEmployee = dataEmployee.findIndex(employee => employee.id === data.id);
-    if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    } else if (existEmployee > -1) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    }
-    dataEmployee.push(data);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return data;
-
-    throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
+    return await Employee.create(data);
 }
 
-export const editEmployee = (id: number, data: Employee): Employee => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const employeeToEdit = dataEmployee.findIndex(employee => employee.id === id);
-    if (employeeToEdit === -1) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    } else if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    }
-    dataEmployee.splice(employeeToEdit, 1, data);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return data;
+export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee | null> => {
+    return await Employee.findByIdAndUpdate(id, data);
 }
 
-export const deleteEmployee = (id: number): string => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const employeeToDelete = dataEmployee.findIndex(employee => employee.id === id);
-    if (employeeToDelete === -1) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    }
-    dataEmployee.splice(employeeToDelete, 1);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
+export const deleteEmployee = (id: any): string => {
+    Employee.findByIdAndDelete(id);
     return 'Success';
 }
