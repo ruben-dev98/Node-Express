@@ -11,7 +11,7 @@ const createNewEmployee = (): IEmployee => {
         photo: faker.image.avatar(),
         email: faker.internet.email(),
         contact: faker.phone.number(),
-        job: faker.helpers.arrayElement(['', '', '']),
+        job: faker.helpers.arrayElement(['Manager', 'Recepción', 'Servicio de Habitaciones']),
         start_date: faker.date.past().getTime(),
         description: faker.lorem.sentences(2),
         status: true,
