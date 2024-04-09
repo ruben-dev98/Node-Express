@@ -1,7 +1,8 @@
 import request from 'supertest';
 import { app } from '../app';
-import { Booking } from '../interfaces/Booking';
+import { IBooking } from '../interfaces/Booking';
 import { generateAccessToken } from '../util/generateToken';
+import { Types } from 'mongoose';
 
 const token = `Bearer ${generateAccessToken('user', 'admin')}`;
 const token_mal_formatted = 'Bearer AAA';
@@ -126,23 +127,16 @@ describe('Booking Tests', () => {
     });
 
     it('should create a new booking and show a 201 status with a successfully message', async () => {
-        const booking: Booking = {
-            id: 31,
+        const booking: IBooking = {
             full_name: "Jacobo Disbrey",
             order_date: "1706788932000",
             check_in: "1677100679000",
             check_out: "1680520915000",
             special_request: "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo.",
-            number: 51,
-            price: 477.7,
-            type: "Double Bed",
             status: "In Progress",
-            amenities: ["Expert Team", "Smart Security", "Shower"],
-            room_status: "Booked",
-            foto: "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
-            description: "Etiam faucibus cursus urna. Ut tellus.",
             phone: "999888777",
-            email: "ghma@gmail.com"
+            email: "ghma@gmail.com",
+            room: new Types.ObjectId()
         };
         const res = await request(app)
             .post('/bookings')
