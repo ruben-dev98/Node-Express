@@ -12,8 +12,8 @@ const createNewMessage = (): IMessage => {
         date: new Date().getTime(),
         subject: faker.lorem.sentences(2),
         messages: faker.lorem.sentences(2),
-        read: false,
-        archived: true,
+        read: faker.helpers.arrayElement([true, false]),
+        archived: faker.helpers.arrayElement([true, false]),
         time_passed: '4 mins ago',
     });
 }

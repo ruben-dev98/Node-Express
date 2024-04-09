@@ -1,6 +1,7 @@
 import { ApiError } from "../class/ApiError";
 import { IEmployee } from "../interfaces/Employee";
 import { Employee } from "../models/Employees";
+import { hashPassword } from "../util/cryptPassword";
 import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
 
 export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
@@ -23,7 +24,8 @@ export const getOneEmployee = async (id: any): Promise<IEmployee | null> => {
 
 export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
     try {
-        return await Employee.create(data);
+        const passwordHash = hashPassword(data.password);
+        return await Employee.create({...data, password: passwordHash});
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }
