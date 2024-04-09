@@ -538,7 +538,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613dcf2f0a615a3fcb5b78b"
+            "example": "6614fc74e5fc8cdf34605b39"
           }
         ],
         "responses": {
@@ -610,7 +610,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613dcf2f0a615a3fcb5b78b"
+            "example": "6614fc74e5fc8cdf34605b39"
           },
           {
             "in": "body",
@@ -693,7 +693,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613dcf2f0a615a3fcb5b78b"
+            "example": "6614fc74e5fc8cdf34605b39"
           }
         ],
         "responses": {
@@ -1516,7 +1516,7 @@
         "room": {
           "type": "string",
           "format": "string",
-          "example": "6613dcf2f0a615a3fcb5b78b"
+          "example": "6614fc74e5fc8cdf34605b39"
           
         }
       }
@@ -1525,9 +1525,8 @@
       "type": "object",
       "properties": {
         "photo": {
-          "type": "string",
-          "format": "string",
-          "example": "algun enlace de foto"
+          "type": "array",
+          "example": "[algun enlace de foto, otro enlace, el ultimo enlace]"
         },
         "type": {
           "type": "string",
