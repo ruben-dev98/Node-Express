@@ -9,7 +9,6 @@ export const bookingRouter = express.Router();
 bookingRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const bookings = await getAllBookings();
-        console.log(bookings);
         parseResponse(bookings, res, statusCodeOk);
     } catch (error: any) {
         next(error);

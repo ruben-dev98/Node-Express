@@ -13,8 +13,8 @@ import mongoose from "mongoose";
 dotenv.config();
 
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/miranda-dashboard');
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
+    await mongoose.connect(`mongodb://${process.env.HOST}/${process.env.DB_NAME}`);
+  // use 'await mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DB_NAME}`);' if your database has auth enabled
 }
 
 main().catch(err => console.log(err));

@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import { MongoClient } from "mongodb";
 import { faker } from '@faker-js/faker';
 import { Booking } from "../models/Bookings"
@@ -11,10 +12,12 @@ import { IEmployee } from "../interfaces/Employee";
 import { nameCollectionBookings, nameCollectionEmployees, nameCollectionMessages, nameCollectionRooms } from "./varToUse";
 import { hashPassword } from "./cryptPassword";
 
+dotenv.config();
+
 type data = IMessage | IRoom | IEmployee | IBooking;
 
 const connect = async () => {
-    const uri = "mongodb://localhost:27017";
+    const uri = `mongodb://${process.env.HOST}`;
     const client = new MongoClient(uri);
     try {
         await client.connect();
@@ -26,7 +29,7 @@ const connect = async () => {
 
 const createCollection = async (client: MongoClient, collectionName: string, dataToCreate: data[]) => {
     try {
-        const collection = await client.db('miranda-dashboard').collection(collectionName);
+        const collection = await client.db(process.env.DB_NAME).collection(collectionName);
         await collection.drop();
         await collection.insertMany(dataToCreate);
     } catch (error) {
