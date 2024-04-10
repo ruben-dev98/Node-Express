@@ -12,7 +12,7 @@ import { connection } from "./util/connection";
 
 dotenv.config();
 
-connection().catch(err => console.log(err));
+connection(true).catch(err => console.log(err));
 
 export const app: Express = express();
 
