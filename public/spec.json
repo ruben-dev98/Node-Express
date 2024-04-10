@@ -48,7 +48,6 @@
         "BearerAuth": []
       }
     ],
-  "schemes": ["http"],
   "paths": {
     "/bookings": {
       "get": {
@@ -191,7 +190,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613e11bdbe487b9a51d75dd"
+            "example": "661656210739da49670b4681"
           }
         ],
         "responses": {
@@ -263,7 +262,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613e11bdbe487b9a51d75dd"
+            "example": "661656210739da49670b4681"
           },
           {
             "in": "body",
@@ -346,7 +345,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613e11bdbe487b9a51d75dd"
+            "example": "661656210739da49670b4681"
           }
         ],
         "responses": {
@@ -546,7 +545,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6614fc74e5fc8cdf34605b39"
+            "example": "661656200739da49670b4663"
           }
         ],
         "responses": {
@@ -618,7 +617,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6614fc74e5fc8cdf34605b39"
+            "example": "661656200739da49670b4663"
           },
           {
             "in": "body",
@@ -901,7 +900,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613e11adbe487b9a51d75d3"
+            "example": "661656200739da49670b4677"
           }
         ],
         "responses": {
@@ -973,7 +972,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613e11adbe487b9a51d75d3"
+            "example": "661656200739da49670b4677"
           },
           {
             "in": "body",
@@ -1262,7 +1261,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613e11adbe487b9a51d75c9"
+            "example": "661656200739da49670b466d"
           }
         ],
         "responses": {
@@ -1334,7 +1333,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "6613e11adbe487b9a51d75c9"
+            "example": "661656200739da49670b466d"
           },
           {
             "in": "body",

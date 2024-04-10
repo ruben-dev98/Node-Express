@@ -8,16 +8,11 @@ import { mainRouter } from "./controllers/mainController";
 import { loginRouter } from "./controllers/loginController";
 import { authTokenMiddleware } from "./middleware/auth";
 import { parseResponse } from "./util/parseResponse";
-import mongoose from "mongoose";
+import { connection } from "./util/connection";
 
 dotenv.config();
 
-async function main() {
-    await mongoose.connect(`${process.env.SERVER}://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DB_NAME}`);
-  // use 'await mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DB_NAME}`);' if your database has auth enabled
-}
-
-main().catch(err => console.log(err));
+connection().catch(err => console.log(err));
 
 export const app: Express = express();
 
