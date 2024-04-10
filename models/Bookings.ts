@@ -8,6 +8,7 @@ const bookingSchema = new Schema<IBooking>({
     check_out: { type: String, required: true},
     special_request: { type: String, required: false},
     status: { type: String, required: true},
+    discount: { type: Number, required: true},
     phone: { type: String, required: true},
     email: { type: String, required: true},
     room: {type: Schema.Types.ObjectId, ref: 'rooms'}

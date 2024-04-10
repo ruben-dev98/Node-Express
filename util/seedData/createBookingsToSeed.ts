@@ -16,6 +16,7 @@ const createNewBooking = (aRooms: IRoom[]): IBooking => {
         full_name: faker.person.fullName(),
         special_request: faker.lorem.sentences(2),
         status: faker.helpers.arrayElement(['In Progress', 'Check In', 'Check Out']),
+        discount: faker.number.int({ min: 0, max: 100}),
         room: roomId
     });
 }

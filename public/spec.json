@@ -20,6 +20,10 @@
   ],
   "tags": [
     {
+      "name": "login",
+      "description": "Login to app"
+    },
+    {
       "name": "booking",
       "description": "Everything about Bookings"
     },
@@ -37,18 +41,38 @@
     }
   ],
   "securityDefinitions": {
-      "BearerAuth": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["login"],
+        "summary": "Login on app",
+        "description": "Login on app",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Login object to authenticate",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ]
       }
     },
-    "security": [
-      {
-        "BearerAuth": []
-      }
-    ],
-  "paths": {
     "/bookings": {
       "get": {
         "tags": ["booking"],
@@ -1477,6 +1501,21 @@
     }
   },
   "definitions": {
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "string",
+          "example": "Dalton.Thiel@yahoo.com"
+        },
+        "password": {
+          "type": "string",
+          "format": "string",
+          "example": "admin"
+        }
+      }
+    },
     "Bookings": {
       "type": "object",
       "properties": {
@@ -1524,7 +1563,6 @@
           "type": "string",
           "format": "string",
           "example": "661656200739da49670b4663"
-          
         }
       }
     },

@@ -22,7 +22,7 @@ const createNewRoom = (): IRoom => {
             "Shower",
             "Towels",
             "Smart Security"],
-        discount: faker.number.int({ min: 0, max: 50}),
+        discount: faker.number.int({ min: 0, max: 100}),
         status: faker.helpers.arrayElement(['Available', 'Booked'])
     });
 }

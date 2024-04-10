@@ -7,6 +7,7 @@ export interface IBooking {
     check_out: string,
     special_request: string,
     status: string,
+    discount: number,
     phone: string,
     email: string,
     room: Types.ObjectId
