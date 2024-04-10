@@ -569,7 +569,7 @@
             "required": true,
             "type": "string",
             "format": "string",
-            "example": "661656200739da49670b4663"
+            "example": "661695faf447c6e1705ed593"
           }
         ],
         "responses": {
@@ -1562,7 +1562,7 @@
         "room": {
           "type": "string",
           "format": "string",
-          "example": "661656200739da49670b4663"
+          "example": "661695faf447c6e1705ed593"
         }
       }
     },
