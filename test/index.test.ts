@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../app';
 import { generateAccessToken } from '../util/generateToken';
-import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, successMessage, unauthorizedError } from '../util/varToUse';
+import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeErrorNotFound, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, successMessage, unauthorizedError } from '../util/varToUse';
 import mongoose from 'mongoose';
 
 const token = `Bearer ${generateAccessToken('user', 'admin')}`;
@@ -322,7 +322,7 @@ describe('Booking Tests', () => {
         const res = await request(app)
             .get(`/bookings/${idCreatedBooking}`)
             .set({ authorization: token })
-        expect(res.statusCode).toEqual(404);
+        expect(res.statusCode).toEqual(statusCodeErrorNotFound);
         expect(res.body).toMatchObject({ data: dataNotFoundError });
     });
 
