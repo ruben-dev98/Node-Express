@@ -13,7 +13,7 @@ import mongoose from "mongoose";
 dotenv.config();
 
 async function main() {
-    await mongoose.connect(`mongodb://${process.env.HOST}/${process.env.DB_NAME}`);
+    await mongoose.connect(`${process.env.SERVER}://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DB_NAME}`);
   // use 'await mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DB_NAME}`);' if your database has auth enabled
 }
 

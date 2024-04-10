@@ -14,7 +14,7 @@ loginRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
         const employee = await getLoginUser(email);
         if(employee === null) {
             throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
-        } else if(comparePassword(employee.password, password)) {
+        } else if(!comparePassword(employee.password, password)) {
             throw new ApiError({status: statusCodeUnauthorized, message: unauthorizedError});
         }
         const token = generateAccessToken(email, employee.password);

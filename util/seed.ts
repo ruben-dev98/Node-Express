@@ -15,7 +15,7 @@ dotenv.config();
 type data = IMessage | IRoom | IEmployee | IBooking;
 
 const connect = async () => {
-    const uri = `mongodb://${process.env.HOST}`;
+    const uri = `${process.env.SERVER}://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}`;
     const client = new MongoClient(uri);
     try {
         await client.connect();
