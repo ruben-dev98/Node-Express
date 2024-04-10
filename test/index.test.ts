@@ -3,11 +3,17 @@ import { app } from '../app';
 import { generateAccessToken } from '../util/generateToken';
 import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeErrorNotFound, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, successMessage, unauthorizedError } from '../util/varToUse';
 import mongoose from 'mongoose';
+import { connection } from '../util/connection';
 
 const token = `Bearer ${generateAccessToken('user', 'admin')}`;
 const token_mal_formatted = 'Bearer AAA';
 
 describe('Booking Tests', () => {
+
+    beforeAll(async () => {
+        await mongoose.connection.close();
+        await connection(true).catch(err => console.log(err));
+    })
 
     let idCreatedBooking = '661656210739da49670b4647';
 
@@ -120,22 +126,22 @@ describe('Booking Tests', () => {
             special_request: "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo.",
             status: "In Progress",
             discount: 20,
-            room: '661695faf447c6e1705ed593'
+            room: '6614fc74e5fc8cdf34605b39'
         };
 
         const room = {
-            _id: "661695faf447c6e1705ed593",
+            _id: "6614fc74e5fc8cdf34605b39",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
             type: "Single Bed",
-            number: 74,
-            description: "Aperio vester campana totus. Super viriliter quae.",
+            number: 20,
+            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
             offer: true,
-            price: 293,
-            cancellation: "Ars vero cibo toties. Cur vindico testimonium circumvenio temptatio temeritas suscipio texo astrum subiungo.",
+            price: 1032,
+            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -143,7 +149,7 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 62,
+            discount: 4,
             status: "Available"
         };
 
@@ -175,18 +181,18 @@ describe('Booking Tests', () => {
         };
 
         const room = {
-            _id: "661695faf447c6e1705ed593",
+            _id: "6614fc74e5fc8cdf34605b39",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
             type: "Single Bed",
-            number: 74,
-            description: "Aperio vester campana totus. Super viriliter quae.",
+            number: 20,
+            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
             offer: true,
-            price: 293,
-            cancellation: "Ars vero cibo toties. Cur vindico testimonium circumvenio temptatio temeritas suscipio texo astrum subiungo.",
+            price: 1032,
+            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -194,7 +200,7 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 62,
+            discount: 4,
             status: "Available"
         };
 
@@ -224,18 +230,18 @@ describe('Booking Tests', () => {
         };
 
         const room = {
-            _id: "661695faf447c6e1705ed593",
+            _id: "6614fc74e5fc8cdf34605b39",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
             type: "Single Bed",
-            number: 74,
-            description: "Aperio vester campana totus. Super viriliter quae.",
+            number: 20,
+            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
             offer: true,
-            price: 293,
-            cancellation: "Ars vero cibo toties. Cur vindico testimonium circumvenio temptatio temeritas suscipio texo astrum subiungo.",
+            price: 1032,
+            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -243,9 +249,9 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 62,
+            discount: 4,
             status: "Available"
-        }
+        };
 
         const dataRetrieved = {
             ...editedBooking,
@@ -274,18 +280,18 @@ describe('Booking Tests', () => {
         };
 
         const room = {
-            _id: "661695faf447c6e1705ed593",
+            _id: "6614fc74e5fc8cdf34605b39",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
             type: "Single Bed",
-            number: 74,
-            description: "Aperio vester campana totus. Super viriliter quae.",
+            number: 20,
+            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
             offer: true,
-            price: 293,
-            cancellation: "Ars vero cibo toties. Cur vindico testimonium circumvenio temptatio temeritas suscipio texo astrum subiungo.",
+            price: 1032,
+            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -293,7 +299,7 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 62,
+            discount: 4,
             status: "Available"
         };
 
@@ -326,5 +332,5 @@ describe('Booking Tests', () => {
         expect(res.body).toMatchObject({ data: dataNotFoundError });
     });
 
-    afterAll(() => mongoose.connection.close())
+    afterAll(() => mongoose.connection.close());
 });
