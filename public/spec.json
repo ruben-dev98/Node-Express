@@ -1524,7 +1524,7 @@
         "room": {
           "type": "string",
           "format": "string",
-          "example": "6614fc74e5fc8cdf34605b39"
+          "example": "661656200739da49670b4663"
           
         }
       }
