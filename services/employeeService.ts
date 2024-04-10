@@ -19,7 +19,6 @@ export const getOneEmployee = async (id: any): Promise<IEmployee | null> => {
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }
-    return await Employee.findById(id);
 }
 
 export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
