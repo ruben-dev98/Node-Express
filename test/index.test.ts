@@ -15,6 +15,8 @@ describe('Booking Tests', () => {
         await connection(true).catch(err => console.log(err));
     })
 
+    afterAll(() => mongoose.connection.close());
+
     let idCreatedBooking = '661656210739da49670b4647';
 
     it('should not create a new booking and show a 401 Unauthorized error', async () => {
@@ -332,5 +334,5 @@ describe('Booking Tests', () => {
         expect(res.body).toMatchObject({ data: dataNotFoundError });
     });
 
-    afterAll(() => mongoose.connection.close());
+    
 });
