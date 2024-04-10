@@ -7,6 +7,7 @@
     "start": "node ./dist/server.js",
     "dev": "nodemon",
     "test": "jest",
+    "test-open": "jest --detectOpenHandles",
     "build": "tsc --build",
     "deploy": "npm run build && serverless deploy",
     "seed": "ts-node ./util/seed.ts"
@@ -39,6 +40,9 @@
     "testEnvironment": "node",
     "preset": "ts-jest",
     "verbose": true,
+    "testPathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ],
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ]

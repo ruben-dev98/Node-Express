@@ -14,7 +14,6 @@ export const authTokenMiddleware = (req: RequestUser, res: Response, next: NextF
     if (!token) return parseResponse(unauthorizedError, res, statusCodeUnauthorized);
     try {
         const tokenData = jwt.verify(token, SECRET_KEY);
-        console.log(tokenData);
         req.user = tokenData;
     } catch(error) {
         return parseResponse(forbiddenError, res, statusCodeForbidden);
