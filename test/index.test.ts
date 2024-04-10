@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../app';
 import { generateAccessToken } from '../util/generateToken';
 import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, successMessage, unauthorizedError } from '../util/varToUse';
+import mongoose from 'mongoose';
 
 const token = `Bearer ${generateAccessToken('user', 'admin')}`;
 const token_mal_formatted = 'Bearer AAA';
@@ -324,4 +325,6 @@ describe('Booking Tests', () => {
         expect(res.statusCode).toEqual(404);
         expect(res.body).toMatchObject({ data: dataNotFoundError });
     });
+
+    afterAll(() => mongoose.connection.close())
 });
