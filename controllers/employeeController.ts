@@ -39,9 +39,6 @@ employeeRouter.post('/', async (req: Request, res: Response, next: NextFunction)
 employeeRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const employee = await editEmployee(req.params.id, req.body);
-        if (employee === null) {
-            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-        }
         parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
