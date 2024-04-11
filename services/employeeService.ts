@@ -1,7 +1,7 @@
 import { ApiError } from "../class/ApiError";
 import { IEmployee } from "../interfaces/Employee";
 import { Employee } from "../models/Employees";
-import { hashPassword } from "../util/cryptPassword";
+import { comparePassword, hashPassword } from "../util/cryptPassword";
 import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
 
 export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
@@ -33,6 +33,11 @@ export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
 
 export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee | null> => {
     try {
+        const employee = await Employee.findById(id);
+        if(!comparePassword(employee?.password, data.password)) {
+            const passwordHashed = hashPassword(data.password);
+            return Employee.findByIdAndUpdate(id, {...data, password: passwordHashed}, {new: true});
+        }
         return await Employee.findByIdAndUpdate(id, data, {new: true});
     } catch(error) {
         throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
