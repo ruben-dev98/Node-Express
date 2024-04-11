@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../app';
 import { generateAccessToken } from '../util/generateToken';
-import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeErrorNotFound, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, successMessage, unauthorizedError } from '../util/varToUse';
+import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeErrorNotFound, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, unauthorizedError } from '../util/varToUse';
 import mongoose from 'mongoose';
 import { connection } from '../util/connection';
 
@@ -128,22 +128,22 @@ describe('Booking Tests', () => {
             special_request: "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo.",
             status: "In Progress",
             discount: 20,
-            room: '6614fc74e5fc8cdf34605b39'
+            room: '6618215116f13d21f841795e'
         };
 
         const room = {
-            _id: "6614fc74e5fc8cdf34605b39",
+            _id: "6618215116f13d21f841795e",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
-            type: "Single Bed",
-            number: 20,
-            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
+            type: "Double Bed",
+            number: 74,
+            description: "Aeternus usque comptus esse. Cometes crur volaticus undique demens nostrum canis sapiente aureus vulgivagus.",
             offer: true,
-            price: 1032,
-            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
+            price: 1367,
+            cancellation: "Adinventitias velociter sopor cernuus caelum ambitus. Stultus voluptatibus cultellus.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -151,8 +151,8 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 4,
-            status: "Available"
+            discount: 23,
+            status: "Booked"
         };
 
         const dataRetrieved = {
@@ -183,18 +183,18 @@ describe('Booking Tests', () => {
         };
 
         const room = {
-            _id: "6614fc74e5fc8cdf34605b39",
+            _id: "6618215116f13d21f841795e",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
-            type: "Single Bed",
-            number: 20,
-            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
+            type: "Double Bed",
+            number: 74,
+            description: "Aeternus usque comptus esse. Cometes crur volaticus undique demens nostrum canis sapiente aureus vulgivagus.",
             offer: true,
-            price: 1032,
-            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
+            price: 1367,
+            cancellation: "Adinventitias velociter sopor cernuus caelum ambitus. Stultus voluptatibus cultellus.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -202,8 +202,8 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 4,
-            status: "Available"
+            discount: 23,
+            status: "Booked"
         };
 
         const dataRetrieved = {
@@ -232,18 +232,18 @@ describe('Booking Tests', () => {
         };
 
         const room = {
-            _id: "6614fc74e5fc8cdf34605b39",
+            _id: "6618215116f13d21f841795e",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
-            type: "Single Bed",
-            number: 20,
-            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
+            type: "Double Bed",
+            number: 74,
+            description: "Aeternus usque comptus esse. Cometes crur volaticus undique demens nostrum canis sapiente aureus vulgivagus.",
             offer: true,
-            price: 1032,
-            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
+            price: 1367,
+            cancellation: "Adinventitias velociter sopor cernuus caelum ambitus. Stultus voluptatibus cultellus.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -251,8 +251,8 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 4,
-            status: "Available"
+            discount: 23,
+            status: "Booked"
         };
 
         const dataRetrieved = {
@@ -282,18 +282,18 @@ describe('Booking Tests', () => {
         };
 
         const room = {
-            _id: "6614fc74e5fc8cdf34605b39",
+            _id: "6618215116f13d21f841795e",
             photo: [
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200",
                 "https://images.unsplash.com/photo-1592229506151-845940174bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1Njg5ODJ8MHwxfHNlYXJjaHwxMnx8bHV4dXJ5JTIwcm9vbXxlbnwwfHx8fDE3MDk4MDU3MDF8MA&ixlib=rb-4.0.3&q=80&w=200"
             ],
-            type: "Single Bed",
-            number: 20,
-            description: "Deduco sui aggredior crux demergo crudelis degusto defleo substantia. Appello consuasor tertius.",
+            type: "Double Bed",
+            number: 74,
+            description: "Aeternus usque comptus esse. Cometes crur volaticus undique demens nostrum canis sapiente aureus vulgivagus.",
             offer: true,
-            price: 1032,
-            cancellation: "Assentator curo tamquam depereo. Curvo ait reprehenderit deprimo pecto.",
+            price: 1367,
+            cancellation: "Adinventitias velociter sopor cernuus caelum ambitus. Stultus voluptatibus cultellus.",
             amenities: [
                 "Shop near",
                 "Kitchen",
@@ -301,8 +301,8 @@ describe('Booking Tests', () => {
                 "Towels",
                 "Smart Security"
             ],
-            discount: 4,
-            status: "Available"
+            discount: 23,
+            status: "Booked"
         };
 
         const dataRetrieved = {
@@ -318,12 +318,23 @@ describe('Booking Tests', () => {
 
     });
 
-    it('should delete a booking and show a 200 status with a successfully message', async () => {
+    it('should delete a booking and show a 200 status with a match data', async () => {
+        const booking = {
+            _id: idCreatedBooking,
+            order_date: "17067889320",
+            check_in: "167710067900",
+            check_out: "168052091500",
+            email: "algo@gmail.com",
+            phone: "777888777",
+            full_name: "AAAA",
+            special_request: "Vestid ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat. In congue. Etiam justo.",
+            status: "Check Out",
+        };
         const res = await request(app)
             .delete(`/bookings/${idCreatedBooking}`)
             .set({ authorization: token });
         expect(res.statusCode).toEqual(statusCodeOk);
-        expect(res.body).toMatchObject({ data: successMessage });
+        expect(res.body).toMatchObject({ data: booking });
     });
 
     it('should not get a booking and show a 404 status with an error message', async () => {
@@ -334,5 +345,5 @@ describe('Booking Tests', () => {
         expect(res.body).toMatchObject({ data: dataNotFoundError });
     });
 
-    
+
 });

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addRoom, deleteRoom, editRoom, getAllRooms, getOneRoom } from "../services/roomService";
 import { parseResponse } from "../util/parseResponse";
-import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk, successMessage } from "../util/varToUse";
+import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
 import { ApiError } from "../class/ApiError";
 
 export const roomRouter = express.Router();
@@ -54,7 +54,7 @@ roomRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
         if (room === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
-        parseResponse(successMessage, res, statusCodeOk);
+        parseResponse(room, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }

@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { parseResponse } from "../util/parseResponse";
 import { addEmployee, deleteEmployee, editEmployee, getAllEmployees, getOneEmployee } from "../services/employeeService";
-import { dataNotFoundError, statusCodeErrorNotFound, statusCodeOk, successMessage } from "../util/varToUse";
+import { dataNotFoundError, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
 import { ApiError } from "../class/ApiError";
 
 export const employeeRouter = express.Router();
@@ -51,7 +51,7 @@ employeeRouter.delete('/:id', async (req: Request, res: Response, next: NextFunc
         if (employee === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
-        parseResponse(successMessage, res, statusCodeOk);
+        parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }

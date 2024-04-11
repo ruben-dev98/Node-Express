@@ -6,19 +6,22 @@ import { employeeRouter } from "./controllers/employeeController";
 import { messageRouter } from "./controllers/messageController";
 import { mainRouter } from "./controllers/mainController";
 import { loginRouter } from "./controllers/loginController";
+import cors from 'cors';
 import { authTokenMiddleware } from "./middleware/auth";
 import { parseResponse } from "./util/parseResponse";
 import { connection } from "./util/connection";
 
 dotenv.config();
 
-connection(true).catch(err => console.log(err));
+connection().catch(err => console.log(err));
 
 export const app: Express = express();
 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors({origin: '*'}));
 
 app.use("/login", loginRouter);
 app.use("/", mainRouter);

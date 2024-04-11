@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { addBooking, deleteBooking, editBooking, getAllBookings, getOneBooking } from "../services/bookingService";
 import { parseResponse } from "../util/parseResponse";
 import { ApiError } from "../class/ApiError";
-import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk, successMessage } from "../util/varToUse";
+import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
 
 export const bookingRouter = express.Router();
 
@@ -54,7 +54,7 @@ bookingRouter.delete('/:id', async (req: Request, res: Response, next: NextFunct
         if (booking === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
-        parseResponse(successMessage, res, statusCodeOk);
+        parseResponse(booking, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }

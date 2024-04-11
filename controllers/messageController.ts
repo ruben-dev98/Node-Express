@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addMessage, deleteMessage, editMessage, getAllMessages, getOneMessage } from "../services/messageService";
 import { parseResponse } from "../util/parseResponse";
-import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk, successMessage } from "../util/varToUse";
+import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
 import { ApiError } from "../class/ApiError";
 
 export const messageRouter = express.Router();
@@ -54,7 +54,7 @@ messageRouter.delete('/:id', async (req: Request, res: Response, next: NextFunct
         if (message === null) {
             throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
-        parseResponse(successMessage, res, statusCodeOk);
+        parseResponse(message, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
