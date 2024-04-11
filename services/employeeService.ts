@@ -1,53 +1,53 @@
 import { ApiError } from "../class/ApiError";
-import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { dataNotFoundError, employeeFile, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
-import { Employee } from './../interfaces/Employee';
+import { IEmployee } from "../interfaces/Employee";
+import { Employee } from "../models/Employees";
+import { comparePassword, hashPassword } from "../util/cryptPassword";
+import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
 
-const getAllDataFromFileEmployees = () => readFromDataFromFile(employeeFile) as Employee[];
-
-export const getAllEmployees = (): Employee[] => {
-    return getAllDataFromFileEmployees();
-}
-
-export const getOneEmployee = (id: number): Employee | undefined => {
-    return getAllDataFromFileEmployees().find(employee => employee.id === id);
-}
-
-export const addEmployee = (data: Employee): Employee => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const existEmployee = dataEmployee.findIndex(employee => employee.id === data.id);
-    if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    } else if (existEmployee > -1) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
+    try {
+        return await Employee.find({});
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }
-    dataEmployee.push(data);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return data;
-
-    throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+    
 }
 
-export const editEmployee = (id: number, data: Employee): Employee => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const employeeToEdit = dataEmployee.findIndex(employee => employee.id === id);
-    if (employeeToEdit === -1) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    } else if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+export const getOneEmployee = async (id: any): Promise<IEmployee | null> => {
+    try {
+        return await Employee.findById(id);
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }
-    dataEmployee.splice(employeeToEdit, 1, data);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return data;
 }
 
-export const deleteEmployee = (id: number): string => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const employeeToDelete = dataEmployee.findIndex(employee => employee.id === id);
-    if (employeeToDelete === -1) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
+    try {
+        const passwordHash = hashPassword(data.password);
+        return await Employee.create({...data, password: passwordHash});
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
     }
-    dataEmployee.splice(employeeToDelete, 1);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return 'Success';
+    
+}
+
+export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee | null> => {
+    try {
+        const employee = await Employee.findById(id);
+        if(!comparePassword(employee?.password, data.password)) {
+            const passwordHashed = hashPassword(data.password);
+            return Employee.findByIdAndUpdate(id, {...data, password: passwordHashed}, {new: true});
+        }
+        return await Employee.findByIdAndUpdate(id, data, {new: true});
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    }
+}
+
+export const deleteEmployee = async (id: any): Promise<IEmployee | null> => {
+    try {
+        return await Employee.findByIdAndDelete(id);
+    } catch(error) {
+        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    }
 }

@@ -8,8 +8,11 @@ import { mainRouter } from "./controllers/mainController";
 import { loginRouter } from "./controllers/loginController";
 import { authTokenMiddleware } from "./middleware/auth";
 import { parseResponse } from "./util/parseResponse";
+import { connection } from "./util/connection";
 
 dotenv.config();
+
+connection(true).catch(err => console.log(err));
 
 export const app: Express = express();
 

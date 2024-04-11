@@ -1,12 +1,11 @@
-export interface Employee {
-    foto: string,
+export interface IEmployee {
+    photo: string,
     full_name: string,
-    id: number,
     email: string,
     start_date: string,
     description: string,
     job: string,
     contact: string,
-    status: boolean | string,
+    status: boolean,
     password: string
 }

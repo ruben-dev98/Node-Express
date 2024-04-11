@@ -1,25 +1,25 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addRoom, deleteRoom, editRoom, getAllRooms, getOneRoom } from "../services/roomService";
 import { parseResponse } from "../util/parseResponse";
-import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
+import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk, successMessage } from "../util/varToUse";
 import { ApiError } from "../class/ApiError";
 
 export const roomRouter = express.Router();
 
-roomRouter.get('/', (_req: Request, res: Response, next: NextFunction) => {
+roomRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        const rooms = getAllRooms();
+        const rooms = await getAllRooms();
         parseResponse(rooms, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-roomRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+roomRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const room = getOneRoom(Number(req.params.id));
-        if (!room) {
-            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError })
+        const room = await getOneRoom(req.params.id);
+        if (room === null) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
         }
         parseResponse(room, res, statusCodeOk);
     } catch (error: any) {
@@ -27,28 +27,34 @@ roomRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-roomRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+roomRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const room = addRoom(req.body);
+        const room = await addRoom(req.body);
         parseResponse(room, res, statusCodeCreated);
     } catch (error: any) {
         next(error);
     }
 });
 
-roomRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+roomRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const room = editRoom(Number(req.params.id), req.body);
+        const room = await editRoom(req.params.id, req.body);
+        if (room === null) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        }
         parseResponse(room, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-roomRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+roomRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const message = deleteRoom(Number(req.params.id));
-        parseResponse(message, res, statusCodeOk);
+        const room = await deleteRoom(req.params.id);
+        if (room === null) {
+            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        }
+        parseResponse(successMessage, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }

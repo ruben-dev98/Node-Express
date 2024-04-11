@@ -8,9 +8,21 @@
       "email": "ruben.dopico.dev@gmail.com"
     }
   },
-  "host": "9fa3bmerkd.execute-api.eu-west-3.amazonaws.com/dev/",
-  "basePath": "/",
+  "servers": [
+    {
+      "url": "https://9fa3bmerkd.execute-api.eu-west-3.amazonaws.com/dev/",
+      "description": "Default server"
+    },
+    {
+      "url": "http://localhost:3000",
+      "description": "Local server"
+    }
+  ],
   "tags": [
+    {
+      "name": "login",
+      "description": "Login to app"
+    },
     {
       "name": "booking",
       "description": "Everything about Bookings"
@@ -28,22 +40,45 @@
       "description": "Everything about Messages"
     }
   ],
-  "schemes": ["https"],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
   "paths": {
+    "/login": {
+      "post": {
+        "tags": ["login"],
+        "summary": "Login on app",
+        "description": "Login on app",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Login object to authenticate",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ]
+      }
+    },
     "/bookings": {
       "get": {
         "tags": ["booking"],
         "summary": "Get all Bookings",
         "description": "Get all Bookings",
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Operation",
@@ -97,12 +132,6 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "body",
             "description": "Booking object that needs to be added to the dashboard",
@@ -121,7 +150,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Booking #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Bookings"
+                  }
                 }
               }
             }
@@ -177,19 +208,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "bookingId",
             "in": "path",
             "description": "ID of Booking to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656210739da49670b4681"
           }
         ],
         "responses": {
@@ -255,19 +280,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "bookingId",
             "in": "path",
             "description": "ID of Booking that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656210739da49670b4681"
           },
           {
             "in": "body",
@@ -288,7 +307,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Booking #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Bookings"
+                  }
                 }
               }
             }
@@ -342,19 +363,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "bookingId",
             "in": "path",
             "description": "Booking id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656210739da49670b4681"
           }
         ],
         "responses": {
@@ -366,7 +381,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Booking #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -419,14 +434,6 @@
         "summary": "Get all rooms",
         "description": "Get all rooms",
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Operation",
@@ -480,12 +487,6 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "body",
             "description": "Room object that needs to be added to the dashboard",
@@ -504,7 +505,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Room #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Rooms"
+                  }
                 }
               }
             }
@@ -560,19 +563,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "roomId",
             "in": "path",
             "description": "ID of Room to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661695faf447c6e1705ed593"
           }
         ],
         "responses": {
@@ -638,19 +635,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "roomId",
             "in": "path",
             "description": "ID of Room that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656200739da49670b4663"
           },
           {
             "in": "body",
@@ -671,7 +662,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Room #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Rooms"
+                  }
                 }
               }
             }
@@ -725,19 +718,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "roomId",
             "in": "path",
             "description": "Room id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6614fc74e5fc8cdf34605b39"
           }
         ],
         "responses": {
@@ -749,7 +736,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Room #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -803,14 +790,6 @@
         "description": "Get all Employees",
         "operationId": "getAllEmployees",
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Operation",
@@ -863,12 +842,6 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "body",
             "description": "employee object that needs to be added to the dashboard",
@@ -887,7 +860,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Employee #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Employees"
+                  }
                 }
               }
             }
@@ -943,19 +918,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "employeeId",
             "in": "path",
             "description": "ID of Employee to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656200739da49670b4677"
           }
         ],
         "responses": {
@@ -1021,19 +990,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "employeeId",
             "in": "path",
             "description": "ID of Employee that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656200739da49670b4677"
           },
           {
             "in": "body",
@@ -1054,7 +1017,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Employee #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Employees"
+                  }
                 }
               }
             }
@@ -1108,12 +1073,6 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "token",
             "in": "header",
             "required": false,
@@ -1124,9 +1083,9 @@
             "in": "path",
             "description": "Employee id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75d3"
           }
         ],
         "responses": {
@@ -1138,7 +1097,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Employee #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -1192,14 +1151,6 @@
         "description": "Get all Messages",
         "operationId": "getAllMessages",
         "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful Operation",
@@ -1252,12 +1203,6 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "in": "body",
             "name": "body",
             "description": "Message object that needs to be added to the dashboard",
@@ -1276,7 +1221,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Message #100 successfully added"
+                  "schema": {
+                    "$ref": "#/definitions/Messages"
+                  }
                 }
               }
             }
@@ -1332,19 +1279,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "messageId",
             "in": "path",
             "description": "ID of message to return",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656200739da49670b466d"
           }
         ],
         "responses": {
@@ -1410,19 +1351,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "messageId",
             "in": "path",
             "description": "ID of Message that needs to be updated",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "661656200739da49670b466d"
           },
           {
             "in": "body",
@@ -1443,7 +1378,9 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Message #100 successfully edited"
+                  "schema": {
+                    "$ref": "#/definitions/Messages"
+                  }
                 }
               }
             }
@@ -1497,19 +1434,13 @@
         "produces": ["application/json"],
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": false,
-            "type": "string"
-          },
-          {
             "name": "messageId",
             "in": "path",
             "description": "Message id to delete",
             "required": true,
-            "type": "integer",
-            "format": "int64",
-            "example": 100
+            "type": "string",
+            "format": "string",
+            "example": "6613e11adbe487b9a51d75c9"
           }
         ],
         "responses": {
@@ -1521,7 +1452,7 @@
                 "data": {
                   "type": "string",
                   "format": "string",
-                  "example": "Message #100 deleted successfully"
+                  "example": "Success"
                 }
               }
             }
@@ -1570,14 +1501,24 @@
     }
   },
   "definitions": {
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "string",
+          "example": "Dalton.Thiel@yahoo.com"
+        },
+        "password": {
+          "type": "string",
+          "format": "string",
+          "example": "admin"
+        }
+      }
+    },
     "Bookings": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
-        },
         "full_name": {
           "type": "string",
           "format": "string",
@@ -1603,39 +1544,10 @@
           "format": "string",
           "example": "LOREM_IPSUM"
         },
-        "number": {
-          "type": "integer",
-          "format": "int64",
-          "example": 133
-        },
-        "type": {
-          "type": "string",
-          "format": "string",
-          "example": "Single Bed"
-        },
         "status": {
           "type": "string",
           "format": "string",
           "example": "Check In"
-        },
-        "amenities": {
-          "type": "array",
-          "example": "[Expert Team]"
-        },
-        "room_status": {
-          "type": "string",
-          "format": "string",
-          "example": "Booked"
-        },
-        "foto": {
-          "type": "string",
-          "format": "string",
-          "example": "algun enlace de foto"
-        },
-        "description": {
-          "type": "string",
-          "format": "string",
-          "example": "LOREM_IPSUM"
         },
         "phone": {
           "type": "number",
@@ -1646,21 +1558,20 @@
           "type": "string",
           "format": "string",
           "example": "algo@gmail.com"
+        },
+        "room": {
+          "type": "string",
+          "format": "string",
+          "example": "661695faf447c6e1705ed593"
         }
       }
     },
     "Rooms": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
-        },
-        "foto": {
-          "type": "string",
-          "format": "string",
-          "example": "algun enlace de foto"
+        "photo": {
+          "type": "array",
+          "example": "[algun enlace de foto, otro enlace, el ultimo enlace]"
         },
         "type": {
           "type": "string",
@@ -1710,7 +1621,7 @@
     "Employees": {
       "type": "object",
       "properties": {
-        "foto": {
+        "photo": {
           "type": "string",
           "format": "string",
           "example": "algun enlace de foto"
@@ -1719,11 +1630,6 @@
           "type": "string",
           "format": "string",
           "example": "Jefferson Fernandez"
-        },
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
         },
         "email": {
           "type": "string",
@@ -1770,12 +1676,6 @@
     "Messages": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64",
-          "example": 100
-        },
-
         "full_name": {
           "type": "string",
           "format": "string",
@@ -1814,7 +1714,7 @@
           "type": "boolean",
           "example": true
         },
-        "foto": {
+        "photo": {
           "type": "string",
           "format": "string",
           "example": "algun enlace de foto"

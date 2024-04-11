@@ -1,51 +1,44 @@
 import { ApiError } from "../class/ApiError";
-import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { dataNotFoundError, invalidDataError, roomFile, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
-import { Room } from './../interfaces/Room';
+import { IRoom } from "../interfaces/Room";
+import { Room } from "../models/Rooms";
+import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
 
-const getAllDataFromFileRooms = () => readFromDataFromFile(roomFile) as Room[];
-
-export const getAllRooms = (): Room[] => {
-    return getAllDataFromFileRooms();
-}
-
-export const getOneRoom = (id: number): Room | undefined => {
-    return getAllDataFromFileRooms().find(room => room.id === id);
-}
-
-export const addRoom = (data: Room): Room => {
-    const dataRoom = getAllDataFromFileRooms();
-    const existRoom = dataRoom.findIndex(room => room.id === data.id);
-    if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    } else if (existRoom > -1) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+export const getAllRooms = async (): Promise<IRoom[]> => {
+    try {
+        return await Room.find({});
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
     }
-    dataRoom.push(data);
-    writeFromDataFromFile(roomFile, JSON.stringify(dataRoom));
-    return data;
 }
 
-export const editRoom = (id: number, data: Room): Room => {
-    const dataRoom = getAllDataFromFileRooms();
-    const roomToEdit = dataRoom.findIndex(room => room.id === id);
-    if (roomToEdit === -1) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    } else if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+export const getOneRoom = async (id: any): Promise<IRoom | null> => {
+    try {
+        return await Room.findById(id);
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
     }
-    dataRoom.splice(roomToEdit, 1, data);
-    writeFromDataFromFile(roomFile, JSON.stringify(dataRoom));
-    return data;
 }
 
-export const deleteRoom = (id: number): string => {
-    const dataRoom = getAllDataFromFileRooms();
-    const roomToDelete = dataRoom.findIndex(room => room.id === id);
-    if (roomToDelete === -1) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+export const addRoom = async (data: IRoom): Promise<IRoom> => {
+    try {
+        return await Room.create(data);
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
     }
-    dataRoom.splice(roomToDelete, 1);
-    writeFromDataFromFile(roomFile, JSON.stringify(dataRoom));
-    return 'Success';
+}
+
+export const editRoom = async (id: any, data: IRoom): Promise<IRoom | null> => {
+    try {
+        return await Room.findByIdAndUpdate(id, data, {new: true});
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
+    }
+}
+
+export const deleteRoom = async (id: any): Promise<IRoom | null> => {
+    try {
+        return await Room.findByIdAndDelete(id);
+    } catch (error) {
+        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
+    }
 }
