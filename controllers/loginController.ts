@@ -2,7 +2,7 @@ import { ApiError } from "../class/ApiError";
 import { getLoginUser } from "../services/loginService";
 import { generateAccessToken } from "../util/generateToken";
 import express, { NextFunction, Request, Response } from "express";
-import { dataNotFoundError, statusCodeErrorNotFound, statusCodeOk, statusCodeUnauthorized, unauthorizedError } from "../util/varToUse";
+import { dataNotFoundError, statusCodeErrorNotFound, statusCodeOk, statusCodeUnauthorized, unauthorizedError } from "../util/constants";
 import { comparePassword } from "../util/cryptPassword";
 import { parseResponse } from "../util/parseResponse";
 

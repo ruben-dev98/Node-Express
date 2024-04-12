@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../app';
 import { generateAccessToken } from '../util/generateToken';
-import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeErrorNotFound, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, unauthorizedError } from '../util/varToUse';
+import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeErrorNotFound, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, unauthorizedError } from '../util/constants';
 import mongoose from 'mongoose';
 import { connection } from '../util/connection';
 

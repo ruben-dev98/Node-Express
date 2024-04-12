@@ -1,8 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { addBooking, deleteBooking, editBooking, getAllBookings, getOneBooking } from "../services/bookingService";
 import { parseResponse } from "../util/parseResponse";
-import { ApiError } from "../class/ApiError";
-import { dataNotFoundError, statusCodeCreated, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
+import { statusCodeCreated, statusCodeOk } from "../util/constants";
 
 export const bookingRouter = express.Router();
 
@@ -18,9 +17,6 @@ bookingRouter.get('/', async (_req: Request, res: Response, next: NextFunction) 
 bookingRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const booking = await getOneBooking(req.params.id);
-        if (booking === null) {
-            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-        }
         parseResponse(booking, res, statusCodeOk);
     } catch (error: any) {
         next(error);
@@ -39,9 +35,6 @@ bookingRouter.post('/', async (req: Request, res: Response, next: NextFunction) 
 bookingRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const booking = await editBooking(req.params.id, req.body);
-        if (booking === null) {
-            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-        }
         parseResponse(booking, res, statusCodeOk);
     } catch (error: any) {
         next(error);
@@ -51,9 +44,6 @@ bookingRouter.put('/:id', async (req: Request, res: Response, next: NextFunction
 bookingRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const booking = await deleteBooking(req.params.id);
-        if (booking === null) {
-            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-        }
         parseResponse(booking, res, statusCodeOk);
     } catch (error: any) {
         next(error);

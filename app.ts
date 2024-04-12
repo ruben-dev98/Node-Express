@@ -10,6 +10,7 @@ import cors from 'cors';
 import { authTokenMiddleware } from "./middleware/auth";
 import { parseResponse } from "./util/parseResponse";
 import { connection } from "./util/connection";
+import { internalServerError, statusCodeErrorNotFound } from "./util/constants";
 
 dotenv.config();
 
@@ -34,5 +35,5 @@ app.use("/employees", employeeRouter);
 app.use("/messages", messageRouter);
 
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    parseResponse(err.message, res, err.status);
+    parseResponse(err.status ? err.message : internalServerError, res, err.status || statusCodeErrorNotFound);
 });

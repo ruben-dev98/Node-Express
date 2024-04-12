@@ -2,56 +2,45 @@ import { ApiError } from "../class/ApiError";
 import { IEmployee } from "../interfaces/Employee";
 import { Employee } from "../models/Employees";
 import { comparePassword, hashPassword } from "../util/cryptPassword";
-import { dataNotFoundError, internalServerError, statusCodeErrorNotFound, statusCodeInternalServerError } from "../util/varToUse";
+import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 
 export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
-    try {
-        return await Employee.find({});
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
-    
+    return await Employee.find({});
 }
 
-export const getOneEmployee = async (id: any): Promise<IEmployee | null> => {
-    try {
-        return await Employee.findById(id);
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
+export const getOneEmployee = async (id: any): Promise<IEmployee> => {
+    const employee = await Employee.findById(id);
+    if(employee === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return employee;
 }
 
 export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
-    try {
-        const passwordHash = hashPassword(data.password);
-        return await Employee.create({...data, password: passwordHash});
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
-    
+    const passwordHash = hashPassword(data.password);
+    const employee = await Employee.create({...data, password: passwordHash});
+    if(employee === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return employee;
 }
 
-export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee | null> => {
+export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee> => {
     const employee = await Employee.findById(id);
     if(employee === null) {
         throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
     }
-    try {
-        
-        if(!comparePassword(employee.password, data.password)) {
-            const passwordHashed = hashPassword(data.password);
-            return Employee.findByIdAndUpdate(id, {...data, password: passwordHashed}, {new: true});
-        }
-        return await Employee.findByIdAndUpdate(id, data, {new: true});
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
+    
+    if(!comparePassword(employee.password, data.password)) {
+        const passwordHashed = hashPassword(data.password);
+        const employeeEdited = await Employee.findByIdAndUpdate(id, {...data, password: passwordHashed}, {new: true});
+        if(employeeEdited === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+        return employeeEdited;
     }
+    
+    const employeeEdited = await Employee.findByIdAndUpdate(id, data, {new: true});
+    if(employeeEdited === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    return employeeEdited;
 }
 
-export const deleteEmployee = async (id: any): Promise<IEmployee | null> => {
-    try {
-        return await Employee.findByIdAndDelete(id);
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
+export const deleteEmployee = async (id: any): Promise<IEmployee> => {
+    const employee = await Employee.findByIdAndDelete(id);
+    if(employee === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    return employee;
 }

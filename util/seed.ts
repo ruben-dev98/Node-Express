@@ -4,7 +4,7 @@ import { IBooking } from "../interfaces/Booking";
 import { IRoom } from './../interfaces/Room';
 import { IMessage } from "../interfaces/Message";
 import { IEmployee } from "../interfaces/Employee";
-import { nameCollectionBookings, nameCollectionEmployees, nameCollectionMessages, nameCollectionRooms } from "./varToUse";
+import { nameCollectionBookings, nameCollectionEmployees, nameCollectionMessages, nameCollectionRooms } from "./constants";
 import { createRoomsToSeed } from "./seedData/createRoomsToSeed";
 import { createMessagesToSeed } from "./seedData/createMessagesToSeed";
 import { createEmployeesToSeed } from "./seedData/createEmployeesToSeed";
