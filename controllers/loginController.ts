@@ -18,7 +18,7 @@ loginRouter.post('/', async (req: Request, res: Response, next: NextFunction) =>
             throw new ApiError({status: statusCodeUnauthorized, message: unauthorizedError});
         }
         const token = generateAccessToken(email, employee._id);
-        parseResponse(token, res, statusCodeOk);
+        parseResponse({token: token, user: employee.full_name, email: employee.email}, res, statusCodeOk);
     } catch(error) {
         next(error);
     }
