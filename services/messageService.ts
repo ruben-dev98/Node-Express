@@ -1,47 +1,32 @@
 import { ApiError } from "../class/ApiError";
 import { IMessage } from "../interfaces/Message";
 import { Message } from "../models/Messages";
-import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
+import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 
 export const getAllMessages = async (): Promise<IMessage[]>  =>  {
-    try {
-        return await Message.find({});
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
+    return await Message.find({});
 }
 
-export const getOneMessage = async (id: any): Promise<IMessage | null> => {
-    try {
-        return await Message.findById(id);
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
+export const getOneMessage = async (id: any): Promise<IMessage> => {
+    const message = await Message.findById(id);
+    if(message === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return message;
 }
 
 export const addMessage = async (data: IMessage): Promise<IMessage> => {
-    try {
-        return await Message.create(data);
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
-    
+    const message = await Message.create(data);
+    if(message === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return message;
 }
 
-export const editMessage = async (id: any, data: IMessage): Promise<IMessage | null> => {
-    try {
-        return await Message.findByIdAndUpdate(id, data, {new: true});
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
-    
+export const editMessage = async (id: any, data: IMessage): Promise<IMessage> => {
+    const message = await Message.findByIdAndUpdate(id, data, {new: true});
+    if(message === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return message;
 }
 
-export const deleteMessage = async (id: any): Promise<IMessage | null> => {
-    try {
-        return await Message.findByIdAndDelete(id);
-    } catch(error) {
-        throw new ApiError({status: statusCodeInternalServerError, message: internalServerError})
-    }
-    
+export const deleteMessage = async (id: any): Promise<IMessage> => {
+    const message = await Message.findByIdAndDelete(id);
+    if(message === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return message;
 }

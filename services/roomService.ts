@@ -1,44 +1,32 @@
 import { ApiError } from "../class/ApiError";
 import { IRoom } from "../interfaces/Room";
 import { Room } from "../models/Rooms";
-import { internalServerError, statusCodeInternalServerError } from "../util/varToUse";
+import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 
 export const getAllRooms = async (): Promise<IRoom[]> => {
-    try {
-        return await Room.find({});
-    } catch (error) {
-        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
-    }
+    return await Room.find({});
 }
 
-export const getOneRoom = async (id: any): Promise<IRoom | null> => {
-    try {
-        return await Room.findById(id);
-    } catch (error) {
-        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
-    }
+export const getOneRoom = async (id: any): Promise<IRoom> => {
+    const room = await Room.findById(id);
+    if(room === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return room;
 }
 
 export const addRoom = async (data: IRoom): Promise<IRoom> => {
-    try {
-        return await Room.create(data);
-    } catch (error) {
-        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
-    }
+    const room = await Room.create(data);
+    if(room === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return room;
 }
 
-export const editRoom = async (id: any, data: IRoom): Promise<IRoom | null> => {
-    try {
-        return await Room.findByIdAndUpdate(id, data, {new: true});
-    } catch (error) {
-        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
-    }
+export const editRoom = async (id: any, data: IRoom): Promise<IRoom> => {
+    const room = await Room.findByIdAndUpdate(id, data, {new: true});
+    if(room === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return room;
 }
 
-export const deleteRoom = async (id: any): Promise<IRoom | null> => {
-    try {
-        return await Room.findByIdAndDelete(id);
-    } catch (error) {
-        throw new ApiError({ status: statusCodeInternalServerError, message: internalServerError })
-    }
+export const deleteRoom = async (id: any): Promise<IRoom> => {
+    const room = await Room.findByIdAndDelete(id);
+    if(room === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return room;
 }

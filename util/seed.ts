@@ -4,7 +4,7 @@ import { IBooking } from "../interfaces/Booking";
 import { IRoom } from './../interfaces/Room';
 import { IMessage } from "../interfaces/Message";
 import { IEmployee } from "../interfaces/Employee";
-import { nameCollectionBookings, nameCollectionEmployees, nameCollectionMessages, nameCollectionRooms } from "./varToUse";
+import { nameCollectionBookings, nameCollectionEmployees, nameCollectionMessages, nameCollectionRooms } from "./constants";
 import { createRoomsToSeed } from "./seedData/createRoomsToSeed";
 import { createMessagesToSeed } from "./seedData/createMessagesToSeed";
 import { createEmployeesToSeed } from "./seedData/createEmployeesToSeed";
@@ -14,8 +14,10 @@ dotenv.config();
 
 type data = IMessage | IRoom | IEmployee | IBooking;
 
-const connect = async () => {
-    const uri = `${process.env.SERVER}://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}`;
+const connect = async (test?: boolean) => {
+    let uri: string;
+    if(test) uri = `${process.env.SERVER_TEST}://${process.env.HOST_TEST}`;
+    else uri = `${process.env.SERVER}://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}`;
     const client = new MongoClient(uri);
     try {
         await client.connect();
@@ -40,7 +42,7 @@ const close = (client: MongoClient) => {
 }
 
 const main = async () => {
-    const client = await connect();
+    const client = await connect(true);
     try {
         const aRooms = createRoomsToSeed();
         await createCollection(client, nameCollectionRooms, aRooms);
