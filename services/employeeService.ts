@@ -26,7 +26,6 @@ export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee>
     if(employee === null) {
         throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
     }
-    
 
     let employeeEdited;
     if(!comparePassword(employee.password, data.password)) {
