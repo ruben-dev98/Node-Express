@@ -33,7 +33,7 @@ export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee>
         const passwordHashed = hashPassword(data.password);
         employeeEdited = await Employee.findByIdAndUpdate(id, {...data, password: passwordHashed}, {new: true});
     } else {
-        employeeEdited = await Employee.findByIdAndUpdate(id, data, {new: true});
+        employeeEdited = await Employee.findByIdAndUpdate(id, {...data, password: employee.password}, {new: true});
     }
     
     if(employeeEdited === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
