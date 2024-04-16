@@ -14,7 +14,7 @@ import { internalServerError, statusCodeInternalServerError } from "./util/const
 
 dotenv.config();
 
-connection().catch(err => console.log(err));
+connection(true).catch(err => console.log(err));
 
 export const app: Express = express();
 
