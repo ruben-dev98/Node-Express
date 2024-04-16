@@ -1,7 +1,7 @@
 import { ApiError } from "../class/ApiError";
 import { IEmployee } from "../interfaces/Employee";
 import { Employee } from "../models/Employees";
-import { comparePassword, hashPassword } from "../util/cryptPassword";
+import { comparePassword, hashPassword, isSaltExist } from "../util/cryptPassword";
 import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 
 export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
@@ -28,7 +28,8 @@ export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee>
     }
 
     let employeeEdited;
-    if(!comparePassword(employee.password, data.password)) {
+    if(!comparePassword(employee.password, data.password) && !isSaltExist(data.password)) {
+        console.log(employee.password, data.password);
         const passwordHashed = hashPassword(data.password);
         employeeEdited = await Employee.findByIdAndUpdate(id, {...data, password: passwordHashed}, {new: true});
     } else {
