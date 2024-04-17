@@ -10,7 +10,7 @@ import cors from 'cors';
 import { authTokenMiddleware } from "./middleware/auth";
 import { parseResponse } from "./util/parseResponse";
 import { connection } from "./util/connection";
-import { internalServerError, statusCodeInternalServerError } from "./util/constants";
+import { internalServerError, origins, statusCodeInternalServerError } from "./util/constants";
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({origin: '*'}));
+app.use(cors({origin: origins}));
 
 app.use("/login", loginRouter);
 app.use("/", mainRouter);
