@@ -6,7 +6,7 @@ const createNewMessage = (): IMessage => {
     return new Message({
         _id: faker.string.uuid(),
         full_name: faker.person.fullName(),
-        photo: faker.image.avatar(),
+        photo: faker.image.avatarGitHub(),
         email: faker.internet.email(),
         phone: faker.phone.number(),
         date: new Date().getTime(),

@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import { addBooking, deleteBooking, editBooking, getAllBookings, getOneBooking } from "../services/bookingService";
+import { addBooking, deleteBooking, editBooking, getAllBookings, getBookingByRoomId, getOneBooking } from "../services/bookingService";
 import { parseResponse } from "../util/parseResponse";
 import { statusCodeCreated, statusCodeOk } from "../util/constants";
 
@@ -23,6 +23,15 @@ bookingRouter.get('/:id', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+bookingRouter.get('/existBooking/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const booking = await getBookingByRoomId(req.params.id);
+        parseResponse(booking, res, statusCodeOk);
+    } catch (error: any) {
+        next(error);
+    }
+});
+
 bookingRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const booking = await addBooking(req.body);
@@ -40,6 +49,8 @@ bookingRouter.put('/:id', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+
 
 bookingRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -1,4 +1,4 @@
-import express, { Express, NextFunction, Request, Response} from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { bookingRouter } from "./controllers/bookingController";
 import { roomRouter } from "./controllers/roomController";
@@ -14,15 +14,20 @@ import { internalServerError, origins, statusCodeInternalServerError } from "./u
 
 dotenv.config();
 
-connection().catch(err => console.log(err));
+connection(true).catch(err => console.log(err));
 
 export const app: Express = express();
+
+app.use((req: Request, _res: Response, next: NextFunction) => {
+    console.log('REQUEST LOGGER', req.method, req.url);
+    next();
+});
 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors({origin: origins}));
+app.use(cors({ origin: origins }));
 
 app.use("/login", loginRouter);
 app.use("/", mainRouter);

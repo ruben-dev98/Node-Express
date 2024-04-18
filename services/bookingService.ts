@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ApiError } from "../class/ApiError";
 import { IBooking } from "../interfaces/Booking";
 import { Booking } from "../models/Bookings";
@@ -27,6 +28,12 @@ export const editBooking = async (id: any, data: IBooking): Promise<IBooking> =>
 
 export const deleteBooking = async (id: any): Promise<IBooking | null> => {
     const booking = await Booking.findByIdAndDelete(id);
+    if(booking === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    return booking;
+}
+
+export const getBookingByRoomId = async (id: any) => {
+    const booking = await Booking.findOne({room: Types.ObjectId.createFromHexString(id)});
     if(booking === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
     return booking;
 }
