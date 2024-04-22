@@ -1,9 +1,6 @@
 
 import mysql from 'mysql2/promise';
 import { Tables } from '../interfaces/Tables';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 export const createTable = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[]) => {
     const sqlQuery = createQueryCreate(tableName, fields);
@@ -20,16 +17,22 @@ export const createQueryCreate = (tableName: string, fields: Tables[]) => {
     return query;
 }
 
-export const createQueryInsert = (tableName: string, fields: Tables[]) => {
+export const createQueryInsert = (tableName: string, fields: Tables[], rows: number) => {
     let query = `INSERT INTO ${tableName} (`;
-    let values = ') values (';
+    let values = '(';
     for(let i = 0; i < fields.length; i++) {
         query += `${fields[i].name}, `;
-        values += `${fields[i].fakerType()}`
+        for(let j = 0; j < rows; j++) {
+            if(fields[i].type.includes('varchar')) {
+                values += `"${fields[i].fakerType()}", `;
+            } else {
+                values += `${fields[i].fakerType()}, `;
+            }
+        }
     }
     values += ');'
-    query += values;
-    return query;
+    query += ') values ';
+    return {query, values};
 }
 
 export const deleteTable = async (conn: mysql.PoolConnection, tableName: string) => {
@@ -37,8 +40,7 @@ export const deleteTable = async (conn: mysql.PoolConnection, tableName: string)
 }
 
 export const insertValues = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[], rows: number) => {
-    let sqlQuery = createQueryInsert(tableName, fields);
-    for(let i = 0; i < rows; i++) {
-        await conn.execute(sqlQuery);
-    }
+    let {query, values} = createQueryInsert(tableName, fields, rows);
+    const sqlQuery = query + values;
+    await conn.query(sqlQuery);
 }

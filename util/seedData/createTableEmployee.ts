@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { Tables } from "../../interfaces/Tables";
 import { tableEmployee } from "../constants";
-import { createTable, deleteTable } from "../createDatabase";
+import { createTable, deleteTable, insertValues } from "../createDatabase";
 import mysql from 'mysql2/promise';
 import { hashPassword } from "../cryptPassword";
 
@@ -23,4 +23,8 @@ export const createTableEmployee = (conn: mysql.PoolConnection) => {
 
 export const dropTableEmployee = (conn: mysql.PoolConnection) => {
     deleteTable(conn, tableEmployee);
+}
+
+export const insertValuesEmployee = (conn: mysql.PoolConnection, rows: number) => {
+    insertValues(conn, tableEmployee, EmployeeTable, rows);
 }

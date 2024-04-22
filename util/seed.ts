@@ -1,11 +1,11 @@
 import { close, connection } from "./connection";
-import { createTableAmenity, dropTableAmenity } from "./seedData/createTableAmenity";
-import { createTableAmenityRoom, dropTableAmenityRoom } from "./seedData/createTableAmenityRoom";
-import { createTableBooking, dropTableBooking } from "./seedData/createTableBooking";
-import { createTableRoom, dropTableRoom } from "./seedData/createTableRoom";
-import { createTableEmployee, dropTableEmployee } from "./seedData/createTableEmployee";
-import { createTableMessage, dropTableMessage } from "./seedData/createTableMessage";
-import { createTablePhoto, dropTablePhoto } from "./seedData/createTablePhoto";
+import { createTableAmenity, dropTableAmenity, insertValuesAmenity } from "./seedData/createTableAmenity";
+import { createTableAmenityRoom, dropTableAmenityRoom, insertValuesAmenityRoom } from "./seedData/createTableAmenityRoom";
+import { createTableBooking, dropTableBooking, insertValuesBooking } from "./seedData/createTableBooking";
+import { createTableRoom, dropTableRoom, insertValuesRoom } from "./seedData/createTableRoom";
+import { createTableEmployee, dropTableEmployee, insertValuesEmployee } from "./seedData/createTableEmployee";
+import { createTableMessage, dropTableMessage, insertValuesMessage } from "./seedData/createTableMessage";
+import { createTablePhoto, dropTablePhoto, insertValuesPhoto } from "./seedData/createTablePhoto";
 import mysql from 'mysql2/promise';
 import { exit } from "process";
 
@@ -31,11 +31,23 @@ const createTables = async (conn: mysql.PoolConnection) => {
     await conn.commit();
 }
 
+const insertValuesTable = async (conn: mysql.PoolConnection) => {
+    insertValuesAmenity(conn, 14);
+    insertValuesRoom(conn, 10);
+    insertValuesMessage(conn, 10);
+    insertValuesEmployee(conn, 10);
+    insertValuesBooking(conn, 10);
+    insertValuesAmenityRoom(conn, 10);
+    insertValuesPhoto(conn, 10);
+    await conn.commit();
+}
+
 const main = async () => {
     const conn = await connection();
     try {
         await dropTables(conn);
         await createTables(conn);
+        await insertValuesTable(conn);
         await close(conn);
         exit(1);
     } catch (error) {

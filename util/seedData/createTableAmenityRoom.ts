@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { Tables } from "../../interfaces/Tables";
 import { tableAmenityRoom } from "../constants";
-import { createTable, deleteTable } from "../createDatabase";
+import { createTable, deleteTable, insertValues } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
 export const AmenityRoomsTable: Tables[] = [
@@ -15,4 +15,8 @@ export const createTableAmenityRoom = (conn: mysql.PoolConnection) => {
 
 export const dropTableAmenityRoom = (conn: mysql.PoolConnection) => {
     deleteTable(conn, tableAmenityRoom);
+}
+
+export const insertValuesAmenityRoom = (conn: mysql.PoolConnection, rows: number) => {
+    insertValues(conn, tableAmenityRoom, AmenityRoomsTable, rows);
 }
