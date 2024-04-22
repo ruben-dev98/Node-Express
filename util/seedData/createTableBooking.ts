@@ -1,4 +1,7 @@
 import { Tables } from "../../interfaces/Tables";
+import { tableBooking } from "../constants";
+import { createFields, createTable } from "../createDatabase";
+import mysql from 'mysql2/promise';
 
 export const BookingTable: Tables[] = [
     { name: 'full_name', type: 'varchar(255)' },
@@ -13,7 +16,7 @@ export const BookingTable: Tables[] = [
     { name: 'room_id', type: 'int', foreign: 'FOREIGN KEY (room_id) REFERENCES room(id)' }
 ];
 
-
-
-
-
+export const createTableBooking = (conn: mysql.PoolConnection) => {
+    createTable(conn, tableBooking);
+    createFields(conn, tableBooking, BookingTable);
+}

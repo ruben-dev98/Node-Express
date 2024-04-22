@@ -21,8 +21,10 @@ export const statusCodeOk = 200;
 
 export const statusCodeInternalServerError = 500;
 
-export const nameCollectionRooms = 'rooms';
-export const nameCollectionBookings = 'bookings';
-export const nameCollectionEmployees = 'employees';
-export const nameCollectionMessages = 'messages';
-
+export const tableRoom = 'room';
+export const tableBooking = 'booking';
+export const tableEmployee = 'employee';
+export const tableMessage = 'message';
+export const tablePhoto = 'photo';
+export const tableAmenity = 'amenity';
+export const tableAmenityRoom = 'amenity_room';

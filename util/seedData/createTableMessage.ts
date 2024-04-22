@@ -1,6 +1,9 @@
 import { Tables } from "../../interfaces/Tables";
+import { tableMessage } from "../constants";
+import { createFields, createTable } from "../createDatabase";
+import mysql from 'mysql2/promise';
 
-export const MessagesTable: Tables[] = [
+export const MessageTable: Tables[] = [
     { name: 'full_name', type: 'varchar(255)' },
     { name: 'email', type: 'varchar(255)' },
     { name: 'phone', type: 'varchar(255)' },
@@ -12,3 +15,8 @@ export const MessagesTable: Tables[] = [
     { name: 'photo', type: 'varchar(255)' },
     { name: 'time_passed', type: 'varchar(255)' },
 ];
+
+export const createTableMessage = (conn: mysql.PoolConnection) => {
+    createTable(conn, tableMessage);
+    createFields(conn, tableMessage, MessageTable);
+}
