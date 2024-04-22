@@ -41,10 +41,10 @@ export const createQueryInsert = (tableName: string, fields: Tables[], rows: num
                 values += `${fields[j].fakerType()}`;
             }
         }
-        if(i === (rows - 1)) {
-            values += ');';
-        } else {
+        if(i !== (rows - 1)) {
             values += '),';
+        } else {
+            values += ');';
         }
     }
     return {query, values};
