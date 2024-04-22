@@ -1,15 +1,25 @@
 
 import mysql from 'mysql2/promise';
 import { Tables } from '../interfaces/Tables';
+import dotenv from 'dotenv';
 
-export const createTable = async (conn: mysql.PoolConnection, tableName: string) => {
-    await conn.execute(`DROP TABLE IF EXISTS ${tableName};`)
-    await conn.execute(`CREATE TABLE ${tableName} (id int NOT NULL AUTO_INCREMENT, PRIMARY KEY (id) );`);
-    await conn.commit();
+dotenv.config();
+
+export const createTable = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[]) => {
+    const sqlQuery = createQuery(tableName, fields);
+    await conn.execute(sqlQuery);
 }
 
-export const createFields = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[]) => {
+export const createQuery = (tableName: string, fields: Tables[]) => {
+    let query = `CREATE TABLE ${tableName} (id int NOT NULL AUTO_INCREMENT, `;
+    let primaryKeyDeclaration = ' PRIMARY KEY (id));';
     for(let i = 0; i < fields.length; i++) {
-        await conn.execute(`ALTER TABLE ${tableName} MODIFY ${fields[i].name} ${fields[i].type} ${fields[i].foreign ? fields[i].foreign : ''};`);
+        query += (`${fields[i].name} ${fields[i].type}, ${fields[i].foreign ? fields[i].foreign + ',' : ''}`);
     }
+    query += primaryKeyDeclaration;
+    return query;
+}
+
+export const deleteTable = async (conn: mysql.PoolConnection, tableName: string) => {
+    await conn.execute(`DROP TABLE IF EXISTS ${tableName}`);
 }

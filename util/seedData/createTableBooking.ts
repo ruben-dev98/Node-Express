@@ -1,6 +1,6 @@
 import { Tables } from "../../interfaces/Tables";
 import { tableBooking } from "../constants";
-import { createFields, createTable } from "../createDatabase";
+import { createTable, deleteTable } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
 export const BookingTable: Tables[] = [
@@ -13,10 +13,13 @@ export const BookingTable: Tables[] = [
     { name: 'discount', type: 'int' },
     { name: 'phone', type: 'varchar(255)' },
     { name: 'email', type: 'varchar(255)' },
-    { name: 'room_id', type: 'int', foreign: 'FOREIGN KEY (room_id) REFERENCES room(id)' }
+    { name: 'room_id', type: 'int NOT NULL', foreign: 'FOREIGN KEY (room_id) REFERENCES room(id)' }
 ];
 
 export const createTableBooking = (conn: mysql.PoolConnection) => {
-    createTable(conn, tableBooking);
-    createFields(conn, tableBooking, BookingTable);
+    createTable(conn, tableBooking, BookingTable);
+}
+
+export const dropTableBooking = (conn: mysql.PoolConnection) => {
+    deleteTable(conn, tableBooking);
 }

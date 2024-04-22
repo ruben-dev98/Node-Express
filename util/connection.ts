@@ -15,5 +15,5 @@ export async function connection() {
 }
 
 export async function close(conn: mysql.PoolConnection) {
-    return await pool.releaseConnection(conn);
+    await pool.releaseConnection(conn);
 }

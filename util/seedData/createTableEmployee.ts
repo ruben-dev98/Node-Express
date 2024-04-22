@@ -1,6 +1,6 @@
 import { Tables } from "../../interfaces/Tables";
 import { tableEmployee } from "../constants";
-import { createFields, createTable } from "../createDatabase";
+import { createTable, deleteTable } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
 export const EmployeeTable: Tables[] = [
@@ -16,6 +16,9 @@ export const EmployeeTable: Tables[] = [
 ];
 
 export const createTableEmployee = (conn: mysql.PoolConnection) => {
-    createTable(conn, tableEmployee);
-    createFields(conn, tableEmployee, EmployeeTable);
+    createTable(conn, tableEmployee, EmployeeTable);
+}
+
+export const dropTableEmployee = (conn: mysql.PoolConnection) => {
+    deleteTable(conn, tableEmployee);
 }

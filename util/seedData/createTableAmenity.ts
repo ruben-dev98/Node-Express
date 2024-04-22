@@ -1,6 +1,6 @@
 import { Tables } from "../../interfaces/Tables";
 import { tableAmenity } from "../constants";
-import { createFields, createTable } from "../createDatabase";
+import { createTable, deleteTable } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
 export const AmenityTable: Tables[] = [
@@ -8,6 +8,9 @@ export const AmenityTable: Tables[] = [
 ];
 
 export const createTableAmenity = (conn: mysql.PoolConnection) => {
-    createTable(conn, tableAmenity);
-    createFields(conn, tableAmenity, AmenityTable);
+    createTable(conn, tableAmenity, AmenityTable);
+}
+
+export const dropTableAmenity = (conn: mysql.PoolConnection) => {
+    deleteTable(conn, tableAmenity);
 }

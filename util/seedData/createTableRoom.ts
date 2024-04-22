@@ -1,6 +1,6 @@
 import { Tables } from "../../interfaces/Tables";
 import { tableRoom } from "../constants";
-import { createFields, createTable } from "../createDatabase";
+import { createTable, deleteTable } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
 export const RoomTable: Tables[] = [
@@ -15,6 +15,9 @@ export const RoomTable: Tables[] = [
 ];
 
 export const createTableRoom = (conn: mysql.PoolConnection) => {
-    createTable(conn, tableRoom);
-    createFields(conn, tableRoom, RoomTable);
+    createTable(conn, tableRoom, RoomTable);
+}
+
+export const dropTableRoom = (conn: mysql.PoolConnection) => {
+    deleteTable(conn, tableRoom);
 }
