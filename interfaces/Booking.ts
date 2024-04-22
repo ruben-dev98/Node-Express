@@ -1,7 +1,7 @@
 import { IRoom } from "./Room";
 
 export interface IBooking {
-    id: number
+    _id: number
     full_name: string,
     order_date: string,
     check_in: string,

@@ -1,5 +1,5 @@
 export interface IRoom {
-    id: number,
+    _id: number,
     photo: Array<string>,
     type: string,
     number: number,

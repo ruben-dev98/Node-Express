@@ -1,19 +1,20 @@
+import { faker } from "@faker-js/faker";
 import { Tables } from "../../interfaces/Tables";
 import { tableMessage } from "../constants";
 import { createTable, deleteTable } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
 export const MessageTable: Tables[] = [
-    { name: 'full_name', type: 'varchar(255)' },
-    { name: 'email', type: 'varchar(255)' },
-    { name: 'phone', type: 'varchar(255)' },
-    { name: 'subject', type: 'varchar(255)' },
-    { name: 'messages', type: 'varchar(3000)' },
-    { name: 'date', type: 'varchar(255)' },
-    { name: 'isRead', type: 'boolean' },
-    { name: 'archived', type: 'boolean' },
-    { name: 'photo', type: 'varchar(255)' },
-    { name: 'time_passed', type: 'varchar(255)' },
+    { name: 'full_name', type: 'varchar(255)', fakerType: () => faker.person.fullName() },
+    { name: 'email', type: 'varchar(255)', fakerType: () => faker.internet.email() },
+    { name: 'phone', type: 'varchar(255)', fakerType: () => faker.phone.number() },
+    { name: 'subject', type: 'varchar(255)', fakerType: () => faker.lorem.sentences({min: 1, max: 2}) },
+    { name: 'messages', type: 'varchar(3000)', fakerType: () => faker.lorem.sentences({min: 1, max: 5}) },
+    { name: 'date', type: 'varchar(255)', fakerType: () => faker.date.recent().getTime() },
+    { name: 'isRead', type: 'boolean', fakerType: () => faker.helpers.arrayElement([true, false]) },
+    { name: 'archived', type: 'boolean', fakerType: () => faker.helpers.arrayElement([true, false]) },
+    { name: 'photo', type: 'varchar(255)', fakerType: () => faker.image.avatarGitHub()},
+    { name: 'time_passed', type: 'varchar(255)', fakerType: () => '4 mins ago' },
 ];
 
 export const createTableMessage = (conn: mysql.PoolConnection) => {

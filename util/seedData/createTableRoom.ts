@@ -1,17 +1,18 @@
+import { faker } from "@faker-js/faker";
 import { Tables } from "../../interfaces/Tables";
 import { tableRoom } from "../constants";
 import { createTable, deleteTable } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
 export const RoomTable: Tables[] = [
-    { name: 'type', type: 'varchar(255)' },
-    { name: 'number', type: 'int' },
-    { name: 'description', type: 'varchar(3000)' },
-    { name: 'offer', type: 'boolean' },
-    { name: 'price', type: 'int' },
-    { name: 'cancellation', type: 'varchar(3000)' },
-    { name: 'discount', type: 'int' },
-    { name: 'status', type: 'varchar(3000)' }
+    { name: 'type', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(['Single Bed', 'Double Bed', 'Double Superior', 'Suite'])},
+    { name: 'number', type: 'int', fakerType: () => faker.number.int({min: 1, max: 100}) },
+    { name: 'description', type: 'varchar(3000)', fakerType: () => faker.lorem.sentences({min: 1, max: 5})},
+    { name: 'offer', type: 'boolean', fakerType: () => faker.helpers.arrayElement([true, false])},
+    { name: 'price', type: 'int', fakerType: () => faker.number.int({min: 20000, max: 100000})},
+    { name: 'cancellation', type: 'varchar(3000)', fakerType: () => faker.lorem.sentences({min: 1, max: 5})},
+    { name: 'discount', type: 'int', fakerType: () => faker.number.int({min: 0, max: 100})},
+    { name: 'status', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(['Available', 'Booked'])}
 ];
 
 export const createTableRoom = (conn: mysql.PoolConnection) => {
