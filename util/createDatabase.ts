@@ -2,12 +2,7 @@
 import mysql from 'mysql2/promise';
 import { Tables } from '../interfaces/Tables';
 
-export const createTable = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[]) => {
-    const sqlQuery = createQueryCreate(tableName, fields);
-    await conn.execute(sqlQuery);
-}
-
-export const createQueryCreate = (tableName: string, fields: Tables[]) => {
+const createQueryCreate = (tableName: string, fields: Tables[]) => {
     let query = `CREATE TABLE ${tableName} (id int NOT NULL AUTO_INCREMENT, `;
     let primaryKeyDeclaration = ' PRIMARY KEY (id));';
     for(let i = 0; i < fields.length; i++) {
@@ -17,7 +12,7 @@ export const createQueryCreate = (tableName: string, fields: Tables[]) => {
     return query;
 }
 
-export const createQueryInsert = (tableName: string, fields: Tables[], rows: number) => {
+const createQueryInsert = (tableName: string, fields: Tables[], rows: number) => {
     let query = `INSERT INTO ${tableName} (`;
     let values = ' values ';
     for(let i = 0; i < fields.length; i++) {
@@ -48,6 +43,11 @@ export const createQueryInsert = (tableName: string, fields: Tables[], rows: num
         }
     }
     return {query, values};
+}
+
+export const createTable = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[]) => {
+    const sqlQuery = createQueryCreate(tableName, fields);
+    await conn.execute(sqlQuery);
 }
 
 export const deleteTable = async (conn: mysql.PoolConnection, tableName: string) => {
