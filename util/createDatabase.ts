@@ -19,19 +19,34 @@ export const createQueryCreate = (tableName: string, fields: Tables[]) => {
 
 export const createQueryInsert = (tableName: string, fields: Tables[], rows: number) => {
     let query = `INSERT INTO ${tableName} (`;
-    let values = '(';
+    let values = ' values ';
     for(let i = 0; i < fields.length; i++) {
-        query += `${fields[i].name}, `;
-        for(let j = 0; j < rows; j++) {
-            if(fields[i].type.includes('varchar')) {
-                values += `"${fields[i].fakerType()}", `;
-            } else {
-                values += `${fields[i].fakerType()}, `;
-            }
+        if(i !== (fields.length - 1)) {
+            query += `${fields[i].name}, `;
+        } else {
+            query += `${fields[i].name})`;
         }
     }
-    values += ');'
-    query += ') values ';
+
+    for(let i = 0; i < rows; i++) {
+        values += '('
+        for(let j = 0; j < fields.length; j++) {
+            if(fields[j].type.includes('varchar') && j !== (fields.length - 1)) {
+                values += `"${fields[j].fakerType()}", `;
+            } else if(!fields[j].type.includes('varchar') && j !== (fields.length - 1)) {
+                values += `${fields[j].fakerType()}, `;
+            } else if(fields[j].type.includes('varchar') && j === (fields.length - 1)) {
+                values += `"${fields[j].fakerType()}" `;
+            } else {
+                values += `${fields[j].fakerType()}`;
+            }
+        }
+        if(i === (rows - 1)) {
+            values += ');';
+        } else {
+            values += '),';
+        }
+    }
     return {query, values};
 }
 
