@@ -14,14 +14,10 @@ import { internalServerError, origins, statusCodeInternalServerError } from "./u
 
 dotenv.config();
 
-connection(true).catch(err => console.log(err));
+connection().catch(err => console.log(err));
 
 export const app: Express = express();
 
-app.use((req: Request, _res: Response, next: NextFunction) => {
-    console.log('REQUEST LOGGER', req.method, req.url);
-    next();
-});
 
 app.use(express.static('public'));
 app.use(express.json());
