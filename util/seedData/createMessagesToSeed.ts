@@ -1,27 +1,14 @@
-import { faker } from "@faker-js/faker";
-import { Message } from "../../models/Messages";
-import { IMessage } from "../../interfaces/Message";
+import { Tables } from "../../interfaces/Tables";
 
-const createNewMessage = (): IMessage => {
-    return new Message({
-        _id: faker.string.uuid(),
-        full_name: faker.person.fullName(),
-        photo: faker.image.avatarGitHub(),
-        email: faker.internet.email(),
-        phone: faker.phone.number(),
-        date: new Date().getTime(),
-        subject: faker.lorem.sentences(2),
-        messages: faker.lorem.sentences(2),
-        read: faker.helpers.arrayElement([true, false]),
-        archived: faker.helpers.arrayElement([true, false]),
-        time_passed: '4 mins ago',
-    });
-}
-
-export const createMessagesToSeed = () => {
-    const aData = [];
-    for (let i = 0; i < 10; i++) {
-        aData.push(createNewMessage());
-    }
-    return aData;
-}
+export const MessagesTable: Tables[] = [
+    { name: 'full_name', type: 'varchar(255)' },
+    { name: 'email', type: 'varchar(255)' },
+    { name: 'phone', type: 'varchar(255)' },
+    { name: 'subject', type: 'varchar(255)' },
+    { name: 'messages', type: 'varchar(3000)' },
+    { name: 'date', type: 'varchar(255)' },
+    { name: 'isRead', type: 'boolean' },
+    { name: 'archived', type: 'boolean' },
+    { name: 'photo', type: 'varchar(255)' },
+    { name: 'time_passed', type: 'varchar(255)' },
+];

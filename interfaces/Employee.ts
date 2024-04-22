@@ -1,4 +1,5 @@
 export interface IEmployee {
+    id: number,
     photo: string,
     full_name: string,
     email: string,

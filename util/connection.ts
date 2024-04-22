@@ -1,6 +1,16 @@
-import mongoose from "mongoose";
+import mysql from 'mysql2/promise';
 
-export async function connection(test?: boolean) {
-    if(test) await mongoose.connect(`${process.env.SERVER_TEST}://${process.env.HOST_TEST}/${process.env.DB_NAME}`);
-    else await mongoose.connect(`${process.env.SERVER}://${process.env.USER}:${process.env.PASSWORD}@${process.env.HOST}/${process.env.DB_NAME}`);
+const pool = mysql.createPool({
+    host: process.env.HOST,
+    user: process.env.USER,
+    database: process.env.DB_NAME,
+    password: process.env.PASSWORD
+});
+
+export async function connection() {
+    return await pool.getConnection();
+}
+
+export async function close(conn: mysql.PoolConnection) {
+    return await pool.releaseConnection(conn);
 }

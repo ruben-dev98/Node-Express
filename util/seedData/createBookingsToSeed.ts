@@ -1,33 +1,17 @@
-import { faker } from "@faker-js/faker";
-import { IBooking } from "../../interfaces/Booking";
-import { IRoom } from "../../interfaces/Room";
-import { Booking } from "../../models/Bookings";
-import { randomRoomId } from "../getRandomIdFromRoom";
+import { Tables } from "../../interfaces/Tables";
 
-const createNewBooking = (aRooms: IRoom[]): IBooking => {
-    const roomId = randomRoomId(aRooms);
-    return new Booking({
-        _id: faker.string.uuid(),
-        order_date: faker.date.past().getTime(),
-        check_in: faker.date.past().getTime(),
-        check_out: faker.date.past().getTime(),
-        email: faker.internet.email(),
-        phone: faker.phone.number(),
-        full_name: faker.person.fullName(),
-        special_request: faker.lorem.sentences(2),
-        status: faker.helpers.arrayElement(['In Progress', 'Check In', 'Check Out']),
-        discount: faker.number.int({ min: 0, max: 100}),
-        room: roomId
-    });
-}
-
-export const createBookingsToSeed = (aRooms: IRoom[]) => {
-    const aData = [];
-    for (let i = 0; i < 10; i++) {
-        aData.push(createNewBooking(aRooms));
-    }
-    return aData;
-}
+export const BookingTable: Tables[] = [
+    { name: 'full_name', type: 'varchar(255)' },
+    { name: 'order_date', type: 'varchar(255)' },
+    { name: 'check_in', type: 'varchar(255)' },
+    { name: 'check_out', type: 'varchar(255)' },
+    { name: 'special_request', type: 'varchar(3000)' },
+    { name: 'status', type: 'varchar(255)' },
+    { name: 'discount', type: 'int' },
+    { name: 'phone', type: 'varchar(255)' },
+    { name: 'email', type: 'varchar(255)' },
+    { name: 'room_id', type: 'int', foreign: 'FOREIGN KEY (room_id) REFERENCES room(id)' }
+];
 
 
 
