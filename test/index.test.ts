@@ -2,10 +2,10 @@ import request from 'supertest';
 import { app } from '../app';
 import { generateAccessToken } from '../util/generateToken';
 import { dataNotFoundError, forbiddenError, statusCodeCreated, statusCodeErrorNotFound, statusCodeForbidden, statusCodeOk, statusCodeUnauthorized, unauthorizedError } from '../util/constants';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { connection } from '../util/connection';
 
-const token = `Bearer ${generateAccessToken('user', 'admin')}`;
+const token = `Bearer ${generateAccessToken('user', new Types.ObjectId('6618215216f13d21f8417973'))}`;
 const token_mal_formatted = 'Bearer AAA';
 
 describe('Booking Tests', () => {

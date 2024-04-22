@@ -8,3 +8,12 @@ export const hashPassword = (password: string): string => {
 export const comparePassword = (userPassword: string, password: string): boolean => {
     return bcrypt.compareSync(password, userPassword);
 }
+
+export const isSaltExist = (hash: string) => {
+    try {
+        bcrypt.getSalt(hash);
+        return true;
+    } catch(error) {
+        return false;
+    }
+}
