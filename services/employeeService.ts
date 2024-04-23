@@ -1,33 +1,43 @@
 import { ApiError } from "../class/ApiError";
 import { IEmployee } from "../interfaces/Employee";
-import { Employee } from "../models/Employees";
 import { comparePassword, hashPassword } from "../util/cryptPassword";
-import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
+import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData, tableEmployee } from "../util/constants";
+import { close, connection } from "../util/connection";
+import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
+import { QueryResult } from "mysql2";
+import { EmployeeTable } from "../util/seedData/createTableEmployee";
 
-export const getAllEmployees = async (): Promise<IEmployee[]> => {
-    return await Employee.find({});
+export const getAllEmployees = async (): Promise<QueryResult>  =>  {
+    const conn = await connection();
+    const result = await find(conn, tableEmployee);
+    close(conn);
+    return result;
 }
 
-export const getOneEmployee = async (id: any): Promise<IEmployee> => {
-    const employee = await Employee.findById(id);
-    if (employee === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    return employee;
+export const getOneEmployee = async (id: any): Promise<QueryResult> => {
+    const conn = await connection();
+    const result = await findOne(conn, tableEmployee, id);
+    close(conn);
+    if(!result) {
+        throw new ApiError({status: 400, message: 'error'})
+    }
+    return result;
 }
 
 export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
-    const passwordHash = hashPassword(data.password);
-    const employee = await Employee.create({ ...data, password: passwordHash });
-    if (employee === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    return employee;
+    const conn = await connection();
+    const passwordHashed = hashPassword(data.password);
+    const {resultHeaders, newData} = await addData(conn, tableEmployee, EmployeeTable, {...data, password: passwordHashed});
+    close(conn);
+    if(resultHeaders.affectedRows === 0) {
+        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
+    }
+    return newData;
 }
 
-export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee> => {
-    const employee = await Employee.findById(id);
-    if (employee === null) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    }
-
-    let employeeEdited;
+export const editEmployee = async (id: any, data: IEmployee): Promise<QueryResult> => {
+    const conn = await connection();
+    const employee = await getOneEmployee(id);
     if (!comparePassword(employee.password, data.password) && data.password !== '') {
         console.log(employee.password, data.password);
         const passwordHashed = hashPassword(data.password);
@@ -35,13 +45,20 @@ export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee>
     } else {
         employeeEdited = await Employee.findByIdAndUpdate(id, { ...data, password: employee.password }, { new: true });
     }
-
-    if (employeeEdited === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    return employeeEdited;
+    const {resultHeaders, newData} = await editData(conn, tableEmployee, EmployeeTable, data, parseInt(id));
+    close(conn);
+    if(resultHeaders.affectedRows === 0) {
+        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
+    }
+    return newData;
 }
 
-export const deleteEmployee = async (id: any): Promise<IEmployee> => {
-    const employee = await Employee.findByIdAndDelete(id);
-    if (employee === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    return employee;
+export const deleteEmployee = async (id: any): Promise<QueryResult | null> => {
+    const conn = await connection();
+    const result = await deleteData(conn, tableEmployee, id);
+    close(conn);
+    if(result.affectedRows === 0) {
+        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
+    }
+    return result;
 }

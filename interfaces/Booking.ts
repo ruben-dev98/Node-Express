@@ -1,6 +1,7 @@
+import { RowDataPacket } from "mysql2";
 import { IRoom } from "./Room";
 
-export interface IBooking {
+export interface IBooking extends RowDataPacket {
     _id: number
     full_name: string,
     order_date: string,
