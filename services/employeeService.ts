@@ -4,24 +4,22 @@ import { comparePassword, hashPassword } from "../util/cryptPassword";
 import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData, tableEmployee } from "../util/constants";
 import { close, connection } from "../util/connection";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
-import { QueryResult } from "mysql2";
 import { EmployeeTable } from "../util/seedData/createTableEmployee";
 
-export const getAllEmployees = async (): Promise<QueryResult>  =>  {
+export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
     const conn = await connection();
-    const result = await find(conn, tableEmployee);
+    const sqlQuery = `SELECT * FROM ${tableEmployee}`;
+    const result = await find(conn, sqlQuery) as IEmployee[];
     close(conn);
     return result;
 }
 
-export const getOneEmployee = async (id: any): Promise<QueryResult> => {
+export const getOneEmployee = async (id: any): Promise<IEmployee> => {
     const conn = await connection();
-    const result = await findOne(conn, tableEmployee, id);
+    const sqlQuery = `SELECT * FROM ${tableEmployee} WHERE _id = ?`;
+    const result = await findOne(conn, sqlQuery, id);
     close(conn);
-    if(!result) {
-        throw new ApiError({status: 400, message: 'error'})
-    }
-    return result;
+    return result as IEmployee;
 }
 
 export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
@@ -32,33 +30,37 @@ export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
     if(resultHeaders.affectedRows === 0) {
         throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
     }
-    return newData;
+    return newData as IEmployee;
 }
 
-export const editEmployee = async (id: any, data: IEmployee): Promise<QueryResult> => {
+export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee> => {
     const conn = await connection();
-    const employee = await getOneEmployee(id);
+    const employee = await getOneEmployee(id) as IEmployee;
+    let headerResults, editedEmployee;
     if (!comparePassword(employee.password, data.password) && data.password !== '') {
-        console.log(employee.password, data.password);
         const passwordHashed = hashPassword(data.password);
-        employeeEdited = await Employee.findByIdAndUpdate(id, { ...data, password: passwordHashed }, { new: true });
+        const{resultHeaders, newData} = await editData(conn, tableEmployee, EmployeeTable, {...data, password: passwordHashed}, parseInt(id));
+        headerResults = resultHeaders;
+        editedEmployee = newData as IEmployee;
     } else {
-        employeeEdited = await Employee.findByIdAndUpdate(id, { ...data, password: employee.password }, { new: true });
+        const{resultHeaders, newData} = await editData(conn, tableEmployee, EmployeeTable, {...data, password: employee.password}, parseInt(id));
+        headerResults = resultHeaders;
+        editedEmployee = newData as IEmployee;
     }
-    const {resultHeaders, newData} = await editData(conn, tableEmployee, EmployeeTable, data, parseInt(id));
     close(conn);
-    if(resultHeaders.affectedRows === 0) {
+    if(headerResults.affectedRows === 0) {
         throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
     }
-    return newData;
+    return editedEmployee;
 }
 
-export const deleteEmployee = async (id: any): Promise<QueryResult | null> => {
+export const deleteEmployee = async (id: any): Promise<IEmployee> => {
     const conn = await connection();
+    const employeeDeleted = await getOneEmployee(id);
     const result = await deleteData(conn, tableEmployee, id);
     close(conn);
     if(result.affectedRows === 0) {
         throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
     }
-    return result;
+    return employeeDeleted;
 }

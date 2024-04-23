@@ -1,9 +1,10 @@
-import { ApiError } from '../class/ApiError';
-import { dataNotFoundError, statusCodeErrorNotFound } from '../util/constants';
-import { Employee } from './../models/Employees';
+import { connection } from '../util/connection';
+import { tableEmployee } from '../util/constants';
+import { findOne } from '../util/mySqlQueries';
 
 export const getUserByEmail = async (email: string) => {
-    const employee = await Employee.findOne({email: email})
-    if(employee === null) throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError});
+    const conn = await connection();
+    const sqlQuery = `SELECT * FROM ${tableEmployee} WHERE email = ?`;
+    const employee = await findOne(conn, sqlQuery, email);
     return employee;
 }

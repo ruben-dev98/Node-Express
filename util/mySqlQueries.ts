@@ -1,26 +1,33 @@
 
-import mysql, { ResultSetHeader } from 'mysql2/promise';
+import mysql, { PreparedStatementInfo, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { Tables } from '../interfaces/Tables';
 import { IBooking } from '../interfaces/Booking';
 import { IMessage } from '../interfaces/Message';
 import { IRoom } from '../interfaces/Room';
 import { IEmployee } from '../interfaces/Employee';
+import { ApiError } from '../class/ApiError';
+import { dataNotFoundError, statusCodeErrorNotFound } from './constants';
+import { close } from './connection';
 
 type data = IBooking | IMessage | IRoom | IEmployee;
 
-export const find = async (conn: mysql.PoolConnection, tableName: string) => {
-    const sqlQuery = `SELECT * FROM ${tableName}`;
-    const [results] = await conn.execute(sqlQuery);
-    return results;
+export const find = async (conn: mysql.PoolConnection, sqlQuery: string) => {
+    const results = await conn.execute(sqlQuery) as RowDataPacket;
+    const data = results as data[];
+    return data;
 }
 
-export const findOne = async (conn: mysql.PoolConnection, tableName: string, id: number) => {
-    const sqlQuery = `SELECT * FROM ${tableName} where id = ?`;
+export const findOne = async (conn: mysql.PoolConnection, sqlQuery: string, value: any) => {
     const preparedStatement = await conn.prepare(sqlQuery);
-    const [result] = await preparedStatement.execute([id]);
-    preparedStatement.close();
-    conn.unprepare(sqlQuery);
-    return result;
+    const result = await preparedStatement.execute([value]) as RowDataPacket[];
+    if(result.length === 0) {
+        clearPreparedStatements(conn, preparedStatement, sqlQuery);
+        close(conn);
+        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
+    }
+    const data = result[0] as data;
+    clearPreparedStatements(conn, preparedStatement, sqlQuery);
+    return data;
 }
 
 export const addData = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[], data: data) => {
@@ -84,17 +91,22 @@ const createQueryUpdate = (tableName: string, fields: Tables[], data: data) => {
 const findEditedAddedOne = async (conn: mysql.PoolConnection, tableName: string, id: any) => {
     const query = `SELECT * FROM ${tableName} WHERE id = ?`;
     const preparedStatement = await conn.prepare(query);
-    const [result] = await preparedStatement.execute([id]);
+    const result = await preparedStatement.execute([id]) as RowDataPacket;
+    const res = result[0] as data;
     preparedStatement.close();
     conn.unprepare(query);
-    return result;
+    return res;
 }
 
 const getResultHeaders = async (conn: mysql.PoolConnection, sqlQuery: string, values: any[]) => {
     const preparedStatement = await conn.prepare(sqlQuery);
     const [result] = await preparedStatement.execute(values);
     const resultHeaders = result as ResultSetHeader;
+    clearPreparedStatements(conn, preparedStatement, sqlQuery);
+    return resultHeaders;
+}
+
+const clearPreparedStatements = (conn: mysql.PoolConnection, preparedStatement: PreparedStatementInfo, sqlQuery: string) => {
     preparedStatement.close();
     conn.unprepare(sqlQuery);
-    return resultHeaders;
 }

@@ -1,4 +1,6 @@
-export interface IRoom {
+import { RowDataPacket } from "mysql2";
+
+export interface IRoom extends RowDataPacket {
     _id: number,
     photo: Array<string>,
     type: string,

@@ -1,4 +1,6 @@
-export interface IMessage {
+import { RowDataPacket } from "mysql2";
+
+export interface IMessage extends RowDataPacket {
     _id: number,
     full_name: string,
     email: string,
