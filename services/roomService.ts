@@ -7,7 +7,18 @@ import { RoomTable } from "../util/seedData/createTableRoom";
 
 export const getAllRooms = async (): Promise<IRoom[]>  =>  {
     const conn = await connection();
-    const sqlQuery = '';
+    const sqlQuery = `SELECT room._id, 
+    room.type,
+    photos.urls 'photo',
+    room.number,
+    room.description, room.offer, room.price,
+    json_arrayagg(amenity.name) as amenities,
+    room.cancellation, room.discount, room.status
+    FROM amenity
+    LEFT JOIN amenity_room on amenity_id = amenity._id
+    RIGHT JOIN room on amenity_room.room_id = room._id
+    LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
+    GROUP BY room._id;`;
     const result = await find(conn, sqlQuery) as IRoom[];
     close(conn);
     return result;
@@ -15,7 +26,19 @@ export const getAllRooms = async (): Promise<IRoom[]>  =>  {
 
 export const getOneRoom = async (id: any): Promise<IRoom> => {
     const conn = await connection();
-    const sqlQuery = ''
+    const sqlQuery = `SELECT room._id, 
+    room.type,
+    photos.urls 'photo',
+    room.number,
+    room.description, room.offer, room.price,
+    json_arrayagg(amenity.name) as amenities,
+    room.cancellation, room.discount, room.status
+    FROM amenity
+    LEFT JOIN amenity_room on amenity_id = amenity._id
+    RIGHT JOIN room on amenity_room.room_id = room._id
+    LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
+    WHERE room._id = ?
+    GROUP BY room._id;`;
     const result = await findOne(conn, sqlQuery, id) as IRoom;
     close(conn);
     return result;
@@ -54,7 +77,19 @@ export const deleteRoom = async (id: any): Promise<IRoom> => {
 
 export const getOneRoomWithNumber = async (number: any): Promise<IRoom> => {
     const conn = await connection();
-    const sqlQuery = ''
+    const sqlQuery = `SELECT room._id, 
+    room.type,
+    photos.urls 'photo',
+    room.number,
+    room.description, room.offer, room.price,
+    json_arrayagg(amenity.name) as amenities,
+    room.cancellation, room.discount, room.status
+    FROM amenity
+    LEFT JOIN amenity_room on amenity_id = amenity._id
+    RIGHT JOIN room on amenity_room.room_id = room._id
+    LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
+    WHERE room.number = ?
+    GROUP BY room._id;`;
     const result = await findOne(conn, sqlQuery, number) as IRoom;
     close(conn);
     return result;
