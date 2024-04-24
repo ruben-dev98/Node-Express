@@ -42,6 +42,7 @@ const createQueryInsert = (tableName: string, fields: Tables[], rows: number) =>
             values += ');';
         }
     }
+    
     return {query, values};
 }
 

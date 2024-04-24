@@ -6,7 +6,7 @@ import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueri
 import { BookingTable } from './../util/seedData/createTableBooking';
 import { statusCodeInvalidData } from './../util/constants';
 
-export const getAllBookings = async (): Promise<IBooking[]>  =>  {
+export const getAllBookings = async (): Promise<IBooking>  =>  {
     const conn = await connection();
     const sqlQuery = `SELECT booking._id,
     booking.full_name,
@@ -30,7 +30,7 @@ export const getAllBookings = async (): Promise<IBooking[]>  =>  {
     INNER JOIN booking on booking.room_id = room._id
     LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
     GROUP BY booking._id;`
-    const result = await find(conn, sqlQuery) as IBooking[];
+    const result = await find(conn, sqlQuery) as IBooking;
     close(conn);
     return result;
 }

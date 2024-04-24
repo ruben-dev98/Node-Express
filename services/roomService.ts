@@ -5,7 +5,7 @@ import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCod
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
 import { RoomTable } from "../util/seedData/createTableRoom";
 
-export const getAllRooms = async (): Promise<IRoom[]>  =>  {
+export const getAllRooms = async (): Promise<IRoom>  =>  {
     const conn = await connection();
     const sqlQuery = `SELECT room._id, 
     room.type,
@@ -19,7 +19,7 @@ export const getAllRooms = async (): Promise<IRoom[]>  =>  {
     RIGHT JOIN room on amenity_room.room_id = room._id
     LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
     GROUP BY room._id;`;
-    const result = await find(conn, sqlQuery) as IRoom[];
+    const result = await find(conn, sqlQuery) as IRoom;
     close(conn);
     return result;
 }

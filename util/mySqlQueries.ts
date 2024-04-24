@@ -13,21 +13,21 @@ type data = IBooking | IMessage | IRoom | IEmployee;
 
 export const find = async (conn: mysql.PoolConnection, sqlQuery: string) => {
     const results = await conn.execute(sqlQuery) as RowDataPacket;
-    const data = results as data[];
-    return data;
+    const data = results as data;
+    return data[0];
 }
 
 export const findOne = async (conn: mysql.PoolConnection, sqlQuery: string, value: any) => {
     const preparedStatement = await conn.prepare(sqlQuery);
-    const result = await preparedStatement.execute([value]) as RowDataPacket[];
-    if(result.length === 0) {
+    const result = await preparedStatement.execute([value]) as RowDataPacket;
+    if(result[0].length === 0) {
         clearPreparedStatements(conn, preparedStatement, sqlQuery);
         close(conn);
         throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
     }
     const data = result[0] as data;
     clearPreparedStatements(conn, preparedStatement, sqlQuery);
-    return data;
+    return data[0];
 }
 
 export const addData = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[], data: data) => {

@@ -5,12 +5,12 @@ import { statusCodeCreated, statusCodeOk } from "../util/constants";
 
 export const roomRouter = express.Router();
 
-roomRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+roomRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        let exist = req.query.available;
+        /*let exist = req.query.available;
         let filter: boolean = true;
-        if(!exist) filter = false;
-        const rooms = await getAllRooms(filter);
+        if(!exist) filter = false;*/
+        const rooms = await getAllRooms();
         parseResponse(rooms, res, statusCodeOk);
     } catch (error: any) {
         next(error);
