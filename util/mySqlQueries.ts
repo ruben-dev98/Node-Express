@@ -6,8 +6,9 @@ import { IMessage } from '../interfaces/Message';
 import { IRoom } from '../interfaces/Room';
 import { IEmployee } from '../interfaces/Employee';
 import { ApiError } from '../class/ApiError';
-import { dataNotFoundError, statusCodeErrorNotFound } from './constants';
+import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInternalServerError, statusCodeInvalidData, tableRoom } from './constants';
 import { close } from './connection';
+import { queryOneRoom } from './queries';
 
 type data = IBooking | IMessage | IRoom | IEmployee;
 
@@ -111,3 +112,42 @@ const clearPreparedStatements = (conn: mysql.PoolConnection, preparedStatement: 
     preparedStatement.close();
     conn.unprepare(sqlQuery);
 }
+
+export const addRoomDatabase = async (conn: mysql.PoolConnection, data: IRoom) => {
+    const photos = data.photo;
+    const amenities = data.amenities;
+    const values = [data.type, data.number, data.description, data.offer, data.price, data.cancellation, data.description, data.status];
+    const sqlQueryRoom = `INSERT INTO room 
+    (type, number, description, offer, price, cancellation, discount, status) 
+    VALUES (?,?,?,?,?,?,?,?)`;
+    const resultsHeadersRoom = await getResultHeaders(conn, sqlQueryRoom, values);
+    if(resultsHeadersRoom.affectedRows === 0) {
+        await conn.rollback();
+        await close(conn);
+        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
+    }
+    const insertedId = resultsHeadersRoom.insertId;
+    const sqlQueryPhotos = `INSERT INTO photo (url, room_id) VALUES (?,?)`;
+    for(let photo in photos) {
+        const resultHeadersPhoto = await getResultHeaders(conn, sqlQueryPhotos, [photo, insertedId]);
+        if(resultHeadersPhoto.affectedRows === 0) {
+            await conn.rollback();
+            await close(conn);
+            throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
+        }
+    }
+    const sqlQueryAmenity = `INSERT INTO amenity_room (amenity_id, room_id) VALUES (?,?)`;
+    for(let amenity in amenities) {
+        const sqlQueryAmenityId = `SELECT id from amenity WHERE name = ?`;
+        const currentAmenity = await findOne(conn, sqlQueryAmenityId, amenity);
+        const resultHeadersAmenity = await getResultHeaders(conn, sqlQueryAmenity, [currentAmenity._id, insertedId]);
+        if(resultHeadersAmenity.affectedRows === 0) {
+            await conn.rollback();
+            await close(conn);
+            throw new ApiError({status: statusCodeInvalidData, message: invalidDataError});
+        }
+    }
+    const newRoom = await findOne(conn, queryOneRoom, insertedId);
+
+    return newRoom as IRoom;
+};

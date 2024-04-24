@@ -2,23 +2,13 @@ import { ApiError } from "../class/ApiError";
 import { IRoom } from "../interfaces/Room";
 import { close, connection } from "../util/connection";
 import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData, tableRoom } from "../util/constants";
-import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
+import { addData, addRoomDatabase, deleteData, editData, find, findOne } from "../util/mySqlQueries";
+import { queryAllRoom, queryOneRoom } from "../util/queries";
 import { RoomTable } from "../util/seedData/createTableRoom";
 
 export const getAllRooms = async (): Promise<IRoom[]>  =>  {
     const conn = await connection();
-    const sqlQuery = `SELECT room._id, 
-    room.type,
-    photos.urls 'photo',
-    room.number,
-    room.description, room.offer, room.price,
-    json_arrayagg(amenity.name) as amenities,
-    room.cancellation, room.discount, room.status
-    FROM amenity
-    LEFT JOIN amenity_room on amenity_id = amenity._id
-    RIGHT JOIN room on amenity_room.room_id = room._id
-    LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
-    GROUP BY room._id;`;
+    const sqlQuery = queryAllRoom;
     const result = await find(conn, sqlQuery) as IRoom[];
     close(conn);
     return result;
@@ -26,19 +16,7 @@ export const getAllRooms = async (): Promise<IRoom[]>  =>  {
 
 export const getOneRoom = async (id: any): Promise<IRoom> => {
     const conn = await connection();
-    const sqlQuery = `SELECT room._id, 
-    room.type,
-    photos.urls 'photo',
-    room.number,
-    room.description, room.offer, room.price,
-    json_arrayagg(amenity.name) as amenities,
-    room.cancellation, room.discount, room.status
-    FROM amenity
-    LEFT JOIN amenity_room on amenity_id = amenity._id
-    RIGHT JOIN room on amenity_room.room_id = room._id
-    LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
-    WHERE room._id = ?
-    GROUP BY room._id;`;
+    const sqlQuery = queryOneRoom;
     const result = await findOne(conn, sqlQuery, id) as IRoom;
     close(conn);
     return result;
@@ -46,22 +24,19 @@ export const getOneRoom = async (id: any): Promise<IRoom> => {
 
 export const addRoom = async (data: IRoom): Promise<IRoom> => {
     const conn = await connection();
-    const {resultHeaders, newData} = await addData(conn, tableRoom, RoomTable, data);
+    const room = await addRoomDatabase(conn, data);
     close(conn);
-    if(resultHeaders.affectedRows === 0) {
-        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
-    }
-    return newData as IRoom;
+    return room;
 }
 
 export const editRoom = async (id: any, data: IRoom): Promise<IRoom> => {
     const conn = await connection();
-    const {resultHeaders, newData} = await editData(conn, tableRoom, RoomTable, data, parseInt(id));
+    //const {resultHeaders, newData} = await editData(conn, tableRoom, RoomTable, data, parseInt(id));
     close(conn);
-    if(resultHeaders.affectedRows === 0) {
+    /*if(resultHeaders.affectedRows === 0) {
         throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }
-    return newData as IRoom;
+    }*/
+    return {} as IRoom;
 }
 
 export const deleteRoom = async (id: any): Promise<IRoom> => {
