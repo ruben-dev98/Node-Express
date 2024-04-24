@@ -6,7 +6,7 @@ import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueri
 import { BookingTable } from './../util/seedData/createTableBooking';
 import { statusCodeInvalidData } from './../util/constants';
 
-export const getAllBookings = async (): Promise<IBooking>  =>  {
+export const getAllBookings = async (): Promise<IBooking[]>  =>  {
     const conn = await connection();
     const sqlQuery = `SELECT booking._id,
     booking.full_name,
@@ -30,7 +30,7 @@ export const getAllBookings = async (): Promise<IBooking>  =>  {
     INNER JOIN booking on booking.room_id = room._id
     LEFT JOIN (SELECT json_arrayagg(url) as urls, room_id as id_room FROM mirandahotel.photo group by room_id) as photos on photos.id_room = room._id
     GROUP BY booking._id;`
-    const result = await find(conn, sqlQuery) as IBooking;
+    const result = await find(conn, sqlQuery) as IBooking[];
     close(conn);
     return result;
 }
@@ -68,20 +68,26 @@ export const getOneBooking = async (id: any): Promise<IBooking> => {
 export const addBooking = async (data: IBooking): Promise<IBooking> => {
     const conn = await connection();
     const {resultHeaders, newData} = await addData(conn, tableBooking, BookingTable, data);
-    close(conn);
     if(resultHeaders.affectedRows === 0) {
+        await conn.rollback();
+        close(conn);
         throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
     }
+    await conn.commit();
+    close(conn);
     return newData as IBooking;
 }
 
 export const editBooking = async (id: any, data: IBooking): Promise<IBooking> => {
     const conn = await connection();
     const {resultHeaders, newData} = await editData(conn, tableBooking, BookingTable, data, parseInt(id));
-    close(conn);
     if(resultHeaders.affectedRows === 0) {
+        await conn.rollback();
+        close(conn);
         throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
     }
+    await conn.commit();
+    close(conn);
     return newData as IBooking;
 }
 
@@ -89,10 +95,13 @@ export const deleteBooking = async (id: any): Promise<IBooking> => {
     const conn = await connection();
     const bookingDeleted = await getOneBooking(id);
     const result = await deleteData(conn, tableBooking, id);
-    close(conn);
     if(result.affectedRows === 0) {
+        await conn.rollback();
+        close(conn);
         throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
     }
+    await conn.commit();
+    close(conn);
     return bookingDeleted;
 }
 

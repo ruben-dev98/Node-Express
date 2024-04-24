@@ -5,10 +5,10 @@ import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCod
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
 import { MessageTable } from "../util/seedData/createTableMessage";
 
-export const getAllMessages = async (): Promise<IMessage>  =>  {
+export const getAllMessages = async (): Promise<IMessage[]>  =>  {
     const conn = await connection();
     const sqlQuery = `SELECT * FROM ${tableMessage}`;
-    const result = await find(conn, sqlQuery) as IMessage;
+    const result = await find(conn, sqlQuery) as IMessage[];
     close(conn);
     return result;
 }

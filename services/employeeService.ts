@@ -6,10 +6,10 @@ import { close, connection } from "../util/connection";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
 import { EmployeeTable } from "../util/seedData/createTableEmployee";
 
-export const getAllEmployees = async (): Promise<IEmployee>  =>  {
+export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
     const conn = await connection();
     const sqlQuery = `SELECT * FROM ${tableEmployee}`;
-    const result = await find(conn, sqlQuery) as IEmployee;
+    const result = await find(conn, sqlQuery) as IEmployee[];
     close(conn);
     return result;
 }

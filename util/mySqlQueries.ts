@@ -12,22 +12,23 @@ import { close } from './connection';
 type data = IBooking | IMessage | IRoom | IEmployee;
 
 export const find = async (conn: mysql.PoolConnection, sqlQuery: string) => {
-    const results = await conn.execute(sqlQuery) as RowDataPacket;
-    const data = results as data;
-    return data[0];
+    const [results, _fields] = await conn.execute(sqlQuery);
+    const data = results as data[];
+    return data;
 }
 
 export const findOne = async (conn: mysql.PoolConnection, sqlQuery: string, value: any) => {
     const preparedStatement = await conn.prepare(sqlQuery);
-    const result = await preparedStatement.execute([value]) as RowDataPacket;
-    if(result[0].length === 0) {
+    const [results, _fields] = await preparedStatement.execute([value]);
+    const result = results as RowDataPacket[];
+    if(result.length === 0) {
         clearPreparedStatements(conn, preparedStatement, sqlQuery);
         close(conn);
         throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
     }
     const data = result[0] as data;
     clearPreparedStatements(conn, preparedStatement, sqlQuery);
-    return data[0];
+    return data;
 }
 
 export const addData = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[], data: data) => {
@@ -47,7 +48,7 @@ export const editData = async (conn: mysql.PoolConnection, tableName: string, fi
 }
 
 export const deleteData = async (conn: mysql.PoolConnection, tableName: string, id: number) => {
-    const sqlQuery = `DELETE FROM ${tableName} WHERE id = ?`;
+    const sqlQuery = `DELETE FROM ${tableName} WHERE _id = ?`;
     const resultHeaders = await getResultHeaders(conn, sqlQuery, [id]);
     return resultHeaders;
 }
@@ -84,12 +85,12 @@ const createQueryUpdate = (tableName: string, fields: Tables[], data: data) => {
         }
         values.push(data[key]);
     }
-    const sqlQuery = query + ' WHERE id = ?';
+    const sqlQuery = query + ' WHERE _id = ?';
     return {sqlQuery, values};
 }
 
 const findEditedAddedOne = async (conn: mysql.PoolConnection, tableName: string, id: any) => {
-    const query = `SELECT * FROM ${tableName} WHERE id = ?`;
+    const query = `SELECT * FROM ${tableName} WHERE _id = ?`;
     const preparedStatement = await conn.prepare(query);
     const result = await preparedStatement.execute([id]) as RowDataPacket;
     const res = result[0] as data;
