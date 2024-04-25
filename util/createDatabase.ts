@@ -12,6 +12,15 @@ const createQueryCreate = (tableName: string, fields: Tables[]) => {
     return query;
 }
 
+const getValuesToInsert = (fields: Tables[]) => {
+    const values = [];
+    for(let field of fields) {
+        values.push(field.fakerType());
+    }
+    return values;
+}
+
+/*
 const createQueryInsert = (tableName: string, fields: Tables[], rows: number) => {
     let query = `INSERT INTO ${tableName} (`;
     let values = ' values ';
@@ -44,7 +53,7 @@ const createQueryInsert = (tableName: string, fields: Tables[], rows: number) =>
     }
     
     return {query, values};
-}
+}*/
 
 export const createTable = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[]) => {
     const sqlQuery = createQueryCreate(tableName, fields);
@@ -55,8 +64,12 @@ export const deleteTable = async (conn: mysql.PoolConnection, tableName: string)
     await conn.execute(`DROP TABLE IF EXISTS ${tableName}`);
 }
 
-export const insertValues = async (conn: mysql.PoolConnection, tableName: string, fields: Tables[], rows: number) => {
-    let {query, values} = createQueryInsert(tableName, fields, rows);
-    const sqlQuery = query + values;
-    await conn.query(sqlQuery);
+export const insertValues = async (conn: mysql.PoolConnection, sqlQuery: string, fields: Tables[], rows: number) => {
+    const preparedStatement = await conn.prepare(sqlQuery);
+    for(let i = 0; i < rows; i++) {
+        const values = getValuesToInsert(fields);
+        preparedStatement.execute(values);
+    }
+    preparedStatement.close();
+    conn.unprepare(sqlQuery);
 }

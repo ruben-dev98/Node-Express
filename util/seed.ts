@@ -32,13 +32,13 @@ const createTables = async (conn: mysql.PoolConnection) => {
 }
 
 const insertValuesTable = async (conn: mysql.PoolConnection) => {
-    insertValuesAmenity(conn, 14);
-    insertValuesRoom(conn, 10);
-    insertValuesMessage(conn, 10);
-    insertValuesEmployee(conn, 10);
-    insertValuesBooking(conn, 10);
-    insertValuesAmenityRoom(conn, 10);
-    insertValuesPhoto(conn, 10);
+    await insertValuesAmenity(conn, 14);
+    await insertValuesRoom(conn, 10);
+    await insertValuesMessage(conn, 10);
+    await insertValuesEmployee(conn, 10);
+    await insertValuesBooking(conn, 10);
+    await insertValuesAmenityRoom(conn, 20);
+    await insertValuesPhoto(conn, 20);
     await conn.commit();
 }
 

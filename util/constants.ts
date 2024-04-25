@@ -15,6 +15,7 @@ export const ONE_HUNDRED = 100;
 export const FOURTEEN = 14;
 export const FIVE = 5;
 export const THREE = 3;
+export const ONE = 1;
 export const ZERO = 0;
 
 export const amenities: string[] = ['Breakfast', 'Smart Security', 'Strong Locker', 'Shower', '24/7 Online Support', 'Kitchen', 'Cleaning', 'Expert Team', 'High Speed Wifi', 'Air Conditioner', 'Towels', 'Grocery', 'Single Bed', 'Shop Near'];

@@ -4,6 +4,7 @@ import { employeeJobs, tableEmployee } from "../constants";
 import { createTable, deleteTable, insertValues } from "../createDatabase";
 import mysql from 'mysql2/promise';
 import { hashPassword } from "../cryptPassword";
+import { queryInsertIntoEmployee } from "../queries";
 
 export const EmployeeTable: Tables[] = [
     { name: 'photo', type: 'varchar(255)', fakerType: () => faker.image.avatarGitHub()},
@@ -25,6 +26,6 @@ export const dropTableEmployee = (conn: mysql.PoolConnection) => {
     deleteTable(conn, tableEmployee);
 }
 
-export const insertValuesEmployee = (conn: mysql.PoolConnection, rows: number) => {
-    insertValues(conn, tableEmployee, EmployeeTable, rows);
+export const insertValuesEmployee = async (conn: mysql.PoolConnection, rows: number) => {
+    await insertValues(conn, queryInsertIntoEmployee, EmployeeTable, rows);
 }

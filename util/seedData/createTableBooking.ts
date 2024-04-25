@@ -3,6 +3,7 @@ import { Tables } from "../../interfaces/Tables";
 import { bookingStatus, tableBooking } from "../constants";
 import { createTable, deleteTable, insertValues } from "../createDatabase";
 import mysql from 'mysql2/promise';
+import { queryInsertIntoBooking } from "../queries";
 
 export const BookingTable: Tables[] = [
     { name: 'full_name', type: 'varchar(255)' , fakerType: () => faker.person.fullName()},
@@ -14,7 +15,7 @@ export const BookingTable: Tables[] = [
     { name: 'discount', type: 'int', fakerType: () =>  faker.number.int({min: 0, max: 50}) },
     { name: 'phone', type: 'varchar(255)', fakerType: () => faker.phone.number() },
     { name: 'email', type: 'varchar(255)', fakerType: () => faker.internet.email() },
-    { name: 'room_id', type: 'int NOT NULL', foreign: 'FOREIGN KEY (room_id) REFERENCES room(_id) ON DELETE CASCADE', fakerType: () => faker.number.int({min: 1, max: 10}) }
+    { name: 'room_id', type: 'INT UNSIGNED NOT NULL', foreign: 'FOREIGN KEY (room_id) REFERENCES room(_id) ON DELETE CASCADE', fakerType: () => faker.number.int({min: 1, max: 10}) }
 ];
 
 export const createTableBooking = (conn: mysql.PoolConnection) => {
@@ -25,6 +26,6 @@ export const dropTableBooking = (conn: mysql.PoolConnection) => {
     deleteTable(conn, tableBooking);
 }
 
-export const insertValuesBooking = (conn: mysql.PoolConnection, rows: number) => {
-    insertValues(conn, tableBooking, BookingTable, rows);
+export const insertValuesBooking = async (conn: mysql.PoolConnection, rows: number) => {
+    await insertValues(conn, queryInsertIntoBooking, BookingTable, rows);
 }

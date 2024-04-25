@@ -3,6 +3,7 @@ import { Tables } from "../../interfaces/Tables";
 import { tableMessage } from "../constants";
 import { createTable, deleteTable, insertValues } from "../createDatabase";
 import mysql from 'mysql2/promise';
+import { queryInsertIntoMessage } from "../queries";
 
 export const MessageTable: Tables[] = [
     { name: 'full_name', type: 'varchar(255)', fakerType: () => faker.person.fullName() },
@@ -25,6 +26,6 @@ export const dropTableMessage = (conn: mysql.PoolConnection) => {
     deleteTable(conn, tableMessage);
 }
 
-export const insertValuesMessage = (conn: mysql.PoolConnection, rows: number) => {
-    insertValues(conn, tableMessage, MessageTable, rows);
+export const insertValuesMessage = async (conn: mysql.PoolConnection, rows: number) => {
+    await insertValues(conn, queryInsertIntoMessage, MessageTable, rows);
 }

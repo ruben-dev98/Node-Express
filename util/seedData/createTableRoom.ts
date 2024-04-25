@@ -3,6 +3,7 @@ import { Tables } from "../../interfaces/Tables";
 import { roomStatus, roomTypes, tableRoom } from "../constants";
 import { createTable, deleteTable, insertValues } from "../createDatabase";
 import mysql from 'mysql2/promise';
+import { queryInsertIntoRoom } from "../queries";
 
 export const RoomTable: Tables[] = [
     { name: 'type', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(roomTypes)},
@@ -23,6 +24,6 @@ export const dropTableRoom = (conn: mysql.PoolConnection) => {
     deleteTable(conn, tableRoom);
 }
 
-export const insertValuesRoom = (conn: mysql.PoolConnection, rows: number) => {
-    insertValues(conn, tableRoom, RoomTable, rows);
+export const insertValuesRoom = async (conn: mysql.PoolConnection, rows: number) => {
+    await insertValues(conn, queryInsertIntoRoom, RoomTable, rows);
 }

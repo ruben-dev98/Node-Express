@@ -1,53 +1,42 @@
-import { ApiError } from "../class/ApiError";
 import { IMessage } from "../interfaces/Message";
 import { close, connection } from "../util/connection";
-import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData, tableMessage } from "../util/constants";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
-import { MessageTable } from "../util/seedData/createTableMessage";
+import { queryAllMessage, queryDeleteMessage, queryInsertIntoMessage, queryOneMessage } from "../util/queries";
+import { validateMessage } from "../validators/messageValidator";
 
 export const getAllMessages = async (): Promise<IMessage[]>  =>  {
     const conn = await connection();
-    const sqlQuery = `SELECT * FROM ${tableMessage}`;
-    const result = await find(conn, sqlQuery) as IMessage[];
+    const result = await find(conn, queryAllMessage) as IMessage[];
     close(conn);
     return result;
 }
 
 export const getOneMessage = async (id: any): Promise<IMessage> => {
     const conn = await connection();
-    const sqlQuery = `SELECT * FROM ${tableMessage} WHERE _id = ?`;
-    const result = await findOne(conn, sqlQuery, id);
+    const result = await findOne(conn, queryOneMessage, id);
     close(conn);
     return result as IMessage;
 }
 
 export const addMessage = async (data: IMessage): Promise<IMessage> => {
     const conn = await connection();
-    const {resultHeaders, newData} = await addData(conn, tableMessage, MessageTable, data);
+    const newMessage = validateMessage(data);
+    const newData = await addData(conn, queryInsertIntoMessage, queryOneMessage, newMessage);
     close(conn);
-    if(resultHeaders.affectedRows === 0) {
-        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
-    }
     return newData as IMessage;
 }
 
 export const editMessage = async (id: any, data: IMessage): Promise<IMessage> => {
     const conn = await connection();
-    const {resultHeaders, newData} = await editData(conn, tableMessage, MessageTable, data, parseInt(id));
+    const editedMessage = validateMessage(data);
+    const editedData = await editData(conn, queryInsertIntoMessage, queryOneMessage, editedMessage, id);
     close(conn);
-    if(resultHeaders.affectedRows === 0) {
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }
-    return newData as IMessage;
+    return editedData as IMessage;
 }
 
 export const deleteMessage = async (id: any): Promise<IMessage> => {
     const conn = await connection();
-    const MessageDeleted = await getOneMessage(id);
-    const result = await deleteData(conn, tableMessage, id);
+    const result = await deleteData(conn, queryDeleteMessage, queryOneMessage, id);
     close(conn);
-    if(result.affectedRows === 0) {
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }
-    return MessageDeleted;
+    return result as IMessage;
 }

@@ -1,11 +1,8 @@
-import { ApiError } from "../class/ApiError";
 import { IBooking } from "../interfaces/Booking";
 import { close, connection } from "../util/connection";
-import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, tableBooking } from "../util/constants";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
-import { BookingTable } from './../util/seedData/createTableBooking';
-import { statusCodeInvalidData } from './../util/constants';
-import { queryAllBookings, queryOneBooking } from "../util/queries";
+import { queryAllBookings, queryDeleteBooking, queryInsertIntoBooking, queryOneBooking, queryUpdateBooking } from "../util/queries";
+import { validateBooking } from "../validators/bookingValidator";
 
 export const getAllBookings = async (): Promise<IBooking[]>  =>  {
     const conn = await connection();
@@ -25,42 +22,25 @@ export const getOneBooking = async (id: any): Promise<IBooking> => {
 
 export const addBooking = async (data: IBooking): Promise<IBooking> => {
     const conn = await connection();
-    const {resultHeaders, newData} = await addData(conn, tableBooking, BookingTable, data);
-    if(resultHeaders.affectedRows === 0) {
-        await conn.rollback();
-        close(conn);
-        throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
-    }
-    await conn.commit();
+    const newBooking = validateBooking(data);
+    const newData = await addData(conn, queryInsertIntoBooking, queryOneBooking, newBooking);
     close(conn);
     return newData as IBooking;
 }
 
 export const editBooking = async (id: any, data: IBooking): Promise<IBooking> => {
     const conn = await connection();
-    const {resultHeaders, newData} = await editData(conn, tableBooking, BookingTable, data, parseInt(id));
-    if(resultHeaders.affectedRows === 0) {
-        await conn.rollback();
-        close(conn);
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }
-    await conn.commit();
+    const editedBooking = validateBooking(data);
+    const editedData = await editData(conn, queryUpdateBooking, queryOneBooking, editedBooking, id);
     close(conn);
-    return newData as IBooking;
+    return editedData as IBooking;
 }
 
 export const deleteBooking = async (id: any): Promise<IBooking> => {
     const conn = await connection();
-    const bookingDeleted = await getOneBooking(id);
-    const result = await deleteData(conn, tableBooking, id);
-    if(result.affectedRows === 0) {
-        await conn.rollback();
-        close(conn);
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }
-    await conn.commit();
+    const deletedData = await deleteData(conn, queryDeleteBooking, queryOneBooking, id);
     close(conn);
-    return bookingDeleted;
+    return deletedData as IBooking;
 }
 
 export const getBookingByRoomId = async (id: any) => {
