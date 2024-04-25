@@ -3,7 +3,7 @@ import mysql from 'mysql2/promise';
 import { Tables } from '../interfaces/Tables';
 
 const createQueryCreate = (tableName: string, fields: Tables[]) => {
-    let query = `CREATE TABLE ${tableName} (_id int NOT NULL AUTO_INCREMENT, `;
+    let query = `CREATE TABLE ${tableName} (_id INT UNSIGNED NOT NULL AUTO_INCREMENT, `;
     let primaryKeyDeclaration = ' PRIMARY KEY (_id));';
     for(let i = 0; i < fields.length; i++) {
         query += (`${fields[i].name} ${fields[i].type}, ${fields[i].foreign ? fields[i].foreign + ',' : ''}`);
