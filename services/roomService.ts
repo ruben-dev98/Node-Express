@@ -1,10 +1,9 @@
 import { ApiError } from "../class/ApiError";
 import { IRoom } from "../interfaces/Room";
 import { close, connection } from "../util/connection";
-import { dataNotFoundError, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData, tableRoom } from "../util/constants";
-import { addData, addRoomDatabase, deleteData, editData, find, findOne } from "../util/mySqlQueries";
+import { dataNotFoundError, statusCodeErrorNotFound, tableRoom } from "../util/constants";
+import { addRoomDatabase, deleteData, editRoomDatabase, find, findOne } from "../util/mySqlQueries";
 import { queryAllRoom, queryOneRoom } from "../util/queries";
-import { RoomTable } from "../util/seedData/createTableRoom";
 
 export const getAllRooms = async (): Promise<IRoom[]>  =>  {
     const conn = await connection();
@@ -31,12 +30,9 @@ export const addRoom = async (data: IRoom): Promise<IRoom> => {
 
 export const editRoom = async (id: any, data: IRoom): Promise<IRoom> => {
     const conn = await connection();
-    //const {resultHeaders, newData} = await editData(conn, tableRoom, RoomTable, data, parseInt(id));
+    const result = await editRoomDatabase(conn, data, id);
     close(conn);
-    /*if(resultHeaders.affectedRows === 0) {
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }*/
-    return {} as IRoom;
+    return result;
 }
 
 export const deleteRoom = async (id: any): Promise<IRoom> => {
