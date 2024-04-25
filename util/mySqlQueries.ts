@@ -17,10 +17,9 @@ export const find = async (conn: mysql.PoolConnection, sqlQuery: string) => {
     return data;
 }
 
-export const findOne = async (conn: mysql.PoolConnection, sqlQuery: string, value: any[]) => {
-    const result = await getResults(conn, sqlQuery, value) as RowDataPacket[];
+export const findOne = async (conn: mysql.PoolConnection, sqlQuery: string, value: any) => {
+    const result = await getResults(conn, sqlQuery, [value]) as RowDataPacket[];
     if (result.length === 0) {
-        close(conn);
         throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError })
     }
     const data = result[0] as data;
@@ -30,7 +29,6 @@ export const findOne = async (conn: mysql.PoolConnection, sqlQuery: string, valu
 export const addData = async (conn: mysql.PoolConnection, sqlQuery: string, searchQuery: string, values: any[]) => {
     const resultHeaders = await getResults(conn, sqlQuery, values) as ResultSetHeader;
     if (resultHeaders.affectedRows === 0) {
-        close(conn);
         throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError })
     }
     const insertedId: number = resultHeaders.insertId;
@@ -39,11 +37,11 @@ export const addData = async (conn: mysql.PoolConnection, sqlQuery: string, sear
 }
 
 export const editData = async (conn: mysql.PoolConnection, sqlQuery: string, searchQuery: string, values: any[], id: number) => {
-    const resultHeaders = await getResults(conn, sqlQuery, values) as ResultSetHeader;
+    const resultHeaders = await getResults(conn, sqlQuery, [...values, id]) as ResultSetHeader;
     if(resultHeaders.affectedRows === 0) {
-        close(conn);
         throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
+    await conn.commit();
     const editedData = await findOne(conn, searchQuery, [id]);
     return editedData;
 }
@@ -52,7 +50,6 @@ export const deleteData = async (conn: mysql.PoolConnection, sqlQuery: string, s
     const deletedData = await findOne(conn, searchQuery, [id]);
     const resultHeaders = await getResults(conn, sqlQuery, [id]) as ResultSetHeader;
     if (resultHeaders.affectedRows === 0) {
-        close(conn);
         throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
     return deletedData;
@@ -66,7 +63,6 @@ export const addRoomDatabase = async (conn: mysql.PoolConnection, data: IRoom) =
     const resultsHeadersRoom = await getResults(conn, sqlQueryRoom, values) as ResultSetHeader;
     if (resultsHeadersRoom.affectedRows === 0) {
         await conn.rollback();
-        await close(conn);
         throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
     const insertedId = resultsHeadersRoom.insertId;
@@ -85,7 +81,6 @@ export const editRoomDatabase = async (conn: mysql.PoolConnection, data: IRoom, 
     const resultsHeadersRoom = await getResults(conn, sqlQueryRoom, values) as ResultSetHeader;
     if (resultsHeadersRoom.affectedRows === 0) {
         await conn.rollback();
-        await close(conn);
         throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
     }
     await deleteDataRelatedToRoom(conn, id, tablePhoto);

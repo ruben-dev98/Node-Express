@@ -1,7 +1,7 @@
 import { IMessage } from "../interfaces/Message";
 import { close, connection } from "../util/connection";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
-import { queryAllMessage, queryDeleteMessage, queryInsertIntoMessage, queryOneMessage } from "../util/queries";
+import { queryAllMessage, queryDeleteMessage, queryInsertIntoMessage, queryOneMessage, queryUpdateMessage } from "../util/queries";
 import { validateMessage } from "../validators/messageValidator";
 
 export const getAllMessages = async (): Promise<IMessage[]>  =>  {
@@ -29,7 +29,7 @@ export const addMessage = async (data: IMessage): Promise<IMessage> => {
 export const editMessage = async (id: any, data: IMessage): Promise<IMessage> => {
     const conn = await connection();
     const editedMessage = validateMessage(data);
-    const editedData = await editData(conn, queryInsertIntoMessage, queryOneMessage, editedMessage, id);
+    const editedData = await editData(conn, queryUpdateMessage, queryOneMessage, editedMessage, id);
     close(conn);
     return editedData as IMessage;
 }

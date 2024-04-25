@@ -22,6 +22,6 @@ export const validateBooking = (data: IBooking) => {
         console.error(error);
         throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
     }
-    const values = [value.full_name, value.order_date, value.check_in, value.check_out, value.special_request, value.status, value.discount, value.email, value.room];
+    const values = [value.full_name, new Date(value.order_date).getTime(), new Date(value.check_in).getTime(), new Date(value.check_out).getTime(), value.special_request, value.status, value.discount, value.email, value.room];
     return values;
 }

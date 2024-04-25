@@ -26,6 +26,6 @@ export const validateEmployee = (data: IEmployee) => {
     if(value.password !== '') {
         passwordHashed = hashPassword(value.password);
     } 
-    const values = [value.photo, value.full_name, value.email, value.start_date, value.description, value.job, value.contact, value.status, passwordHashed];
+    const values = [value.photo, value.full_name, value.email, new Date(value.start_date).getTime(), value.description, value.job, value.contact, value.status, passwordHashed];
     return values;
 }

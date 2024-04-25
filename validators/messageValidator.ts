@@ -22,6 +22,6 @@ export const validateMessage = (data: IMessage) => {
         console.error(error);
         throw new ApiError({status: statusCodeInvalidData, message: invalidDataError})
     }
-    const values = [value.full_name, value.email, value.phone, value.subject, value.messages, value.date, value.is_read, value.archived, value.photo, value.time_passed];
+    const values = [value.full_name, value.email, value.phone, value.subject, value.messages, new Date(value.date).getTime(), value.is_read, value.archived, value.photo, value.time_passed];
     return values;
 }

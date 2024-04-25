@@ -1,7 +1,5 @@
-import { ApiError } from "../class/ApiError";
 import { IRoom } from "../interfaces/Room";
 import { close, connection } from "../util/connection";
-import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 import { addRoomDatabase, deleteData, editRoomDatabase, find, findOne } from "../util/mySqlQueries";
 import { queryAllRoom, queryDeleteRoom, queryOneRoom, queryOneRoomByNumber } from "../util/queries";
 import { validateRoom } from "../validators/roomValidator";
@@ -40,9 +38,6 @@ export const deleteRoom = async (id: any): Promise<IRoom> => {
     const conn = await connection();
     const result = await deleteData(conn, queryDeleteRoom, queryOneRoom, id);
     close(conn);
-    if(result.affectedRows === 0) {
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }
     return result as IRoom;
 }
 
