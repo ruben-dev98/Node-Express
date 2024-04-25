@@ -47,12 +47,12 @@ export const editData = async (conn: mysql.PoolConnection, sqlQuery: string, sea
 }
 
 export const deleteData = async (conn: mysql.PoolConnection, sqlQuery: string, searchQuery: string, id: number) => {
-    const deletedData = await findOne(conn, searchQuery, [id]);
+    const deldata = await findOne(conn, searchQuery, id);
     const resultHeaders = await getResults(conn, sqlQuery, [id]) as ResultSetHeader;
     if (resultHeaders.affectedRows === 0) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
     }
-    return deletedData;
+    return deldata;
 }
 
 export const addRoomDatabase = async (conn: mysql.PoolConnection, data: IRoom) => {
