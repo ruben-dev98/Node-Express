@@ -1,9 +1,8 @@
 import { Tables } from "../../interfaces/Tables";
-import { tableAmenity } from "../constants";
+import { amenities, tableAmenity } from "../constants";
 import { createTable, deleteTable } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
-const amenities: string[] = ['Breakfast', 'Smart Security', 'Strong Locker', 'Shower', '24/7 Online Support', 'Kitchen', 'Cleaning', 'Expert Team', 'High Speed Wifi', 'Air Conditioner', 'Towels', 'Grocery', 'Single Bed', 'Shop Near'];
 
 export const AmenityTable: Tables[] = [
     {name: 'name', type: 'varchar(255)', fakerType: (i) => amenities[i || 0]}

@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { Tables } from "../../interfaces/Tables";
-import { tableBooking } from "../constants";
+import { bookingStatus, tableBooking } from "../constants";
 import { createTable, deleteTable, insertValues } from "../createDatabase";
 import mysql from 'mysql2/promise';
 
@@ -10,7 +10,7 @@ export const BookingTable: Tables[] = [
     { name: 'check_in', type: 'varchar(255)', fakerType: () => faker.date.past().getTime() },
     { name: 'check_out', type: 'varchar(255)', fakerType: () => faker.date.recent().getTime() },
     { name: 'special_request', type: 'varchar(3000)', fakerType: () => faker.lorem.sentences({min: 1, max: 3}) },
-    { name: 'status', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(['Check In', 'Check Out', 'In Progress']) },
+    { name: 'status', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(bookingStatus) },
     { name: 'discount', type: 'int', fakerType: () =>  faker.number.int({min: 0, max: 50}) },
     { name: 'phone', type: 'varchar(255)', fakerType: () => faker.phone.number() },
     { name: 'email', type: 'varchar(255)', fakerType: () => faker.internet.email() },
