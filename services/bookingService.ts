@@ -1,7 +1,7 @@
 import { IBooking } from "../interfaces/Booking";
 import { close, connection } from "../util/connection";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
-import { queryAllBookings, queryDeleteBooking, queryInsertIntoBooking, queryOneBooking, queryUpdateBooking } from "../util/queries";
+import { queryAllBookings, queryDeleteBooking, queryInsertIntoBooking, queryOneBooking, queryOneBookingByRoomNumber, queryUpdateBooking } from "../util/queries";
 import { validateBooking } from "../validators/bookingValidator";
 
 export const getAllBookings = async (): Promise<IBooking[]>  =>  {
@@ -45,20 +45,7 @@ export const deleteBooking = async (id: any): Promise<IBooking> => {
 
 export const getBookingByRoomId = async (id: any) => {
     const conn = await connection();
-    const sqlQuery = `SELECT booking._id,
-    booking.full_name,
-    booking.order_date, 
-    booking.check_in, booking.check_out,
-    booking.special_request,
-    booking.status,
-    booking.discount,
-    booking.phone,
-    booking.email,
-    JSON_OBJECT('_id', room._id, 'type', room.type, 'number', room.number, 
-    'description', room.description, 'offer', room.offer, 'price', room.price, 
-    'cancellation', room.cancellation, 'discount', room.discount, 'status', room.status) 'room' FROM mirandahotel.booking INNER JOIN room on room_id = room._id WHERE room.number = ?;
-    `
-    const result = await findOne(conn, sqlQuery, id) as IBooking;
+    const result = await findOne(conn, queryOneBookingByRoomNumber, id) as IBooking;
     close(conn);
     return result;
 }

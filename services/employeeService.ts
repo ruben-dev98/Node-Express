@@ -1,24 +1,22 @@
 import { ApiError } from "../class/ApiError";
 import { IEmployee } from "../interfaces/Employee";
 import { comparePassword } from "../util/cryptPassword";
-import { dataNotFoundError, statusCodeErrorNotFound, tableEmployee } from "../util/constants";
+import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 import { close, connection } from "../util/connection";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
 import { validateEmployee } from "../validators/employeeValidator";
-import { queryDeleteEmployee, queryInsertIntoEmployee, queryOneEmployee, queryUpdateEmployee } from "../util/queries";
+import { queryAllEmployee, queryDeleteEmployee, queryInsertIntoEmployee, queryOneEmployee, queryUpdateEmployee } from "../util/queries";
 
 export const getAllEmployees = async (): Promise<IEmployee[]>  =>  {
     const conn = await connection();
-    const sqlQuery = `SELECT * FROM ${tableEmployee}`;
-    const result = await find(conn, sqlQuery) as IEmployee[];
+    const result = await find(conn, queryAllEmployee) as IEmployee[];
     close(conn);
     return result;
 }
 
 export const getOneEmployee = async (id: any): Promise<IEmployee> => {
     const conn = await connection();
-    const sqlQuery = `SELECT * FROM ${tableEmployee} WHERE _id = ?`;
-    const result = await findOne(conn, sqlQuery, id);
+    const result = await findOne(conn, queryOneEmployee, id);
     close(conn);
     return result as IEmployee;
 }

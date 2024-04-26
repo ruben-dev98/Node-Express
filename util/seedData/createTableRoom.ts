@@ -6,14 +6,14 @@ import mysql from 'mysql2/promise';
 import { queryInsertIntoRoom } from "../queries";
 
 export const RoomTable: Tables[] = [
-    { name: 'type', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(roomTypes)},
-    { name: 'number', type: 'int', fakerType: () => faker.number.int({min: 1, max: 100}) },
-    { name: 'description', type: 'varchar(3000)', fakerType: () => faker.lorem.sentences({min: 1, max: 3})},
-    { name: 'offer', type: 'boolean', fakerType: () => faker.helpers.arrayElement([true, false])},
-    { name: 'price', type: 'int', fakerType: () => faker.number.int({min: 20000, max: 100000})},
-    { name: 'cancellation', type: 'varchar(3000)', fakerType: () => faker.lorem.sentences({min: 1, max: 3})},
-    { name: 'discount', type: 'int', fakerType: () => faker.number.int({min: 0, max: 100})},
-    { name: 'status', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(roomStatus)}
+    { name: 'type', type: 'varchar(255)', setValue: () => faker.helpers.arrayElement(roomTypes)},
+    { name: 'number', type: 'int', setValue: () => faker.number.int({min: 1, max: 100}) },
+    { name: 'description', type: 'varchar(3000)', setValue: () => faker.lorem.sentences({min: 1, max: 3})},
+    { name: 'offer', type: 'boolean', setValue: () => faker.helpers.arrayElement([true, false])},
+    { name: 'price', type: 'int', setValue: () => faker.number.int({min: 20000, max: 100000})},
+    { name: 'cancellation', type: 'varchar(3000)', setValue: () => faker.lorem.sentences({min: 1, max: 3})},
+    { name: 'discount', type: 'int', setValue: () => faker.number.int({min: 0, max: 100})},
+    { name: 'status', type: 'varchar(255)', setValue: () => faker.helpers.arrayElement(roomStatus)}
 ];
 
 export const createTableRoom = (conn: mysql.PoolConnection) => {

@@ -7,15 +7,15 @@ import { hashPassword } from "../cryptPassword";
 import { queryInsertIntoEmployee } from "../queries";
 
 export const EmployeeTable: Tables[] = [
-    { name: 'photo', type: 'varchar(255)', fakerType: () => faker.image.avatarGitHub()},
-    { name: 'full_name', type: 'varchar(255)', fakerType: () => faker.person.fullName() },
-    { name: 'email', type: 'varchar(255)', fakerType: () => faker.internet.email() },
-    { name: 'start_date', type: 'varchar(255)', fakerType: () => Date.now() },
-    { name: 'description', type: 'varchar(255)', fakerType: () => faker.lorem.sentences({min: 1, max: 3}) },
-    { name: 'job', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement(employeeJobs) },
-    { name: 'contact', type: 'varchar(255)', fakerType: () => faker.phone.number() },
-    { name: 'status', type: 'varchar(255)', fakerType: () => faker.helpers.arrayElement([true, false]) },
-    { name: 'password', type: 'varchar(255)', fakerType: () => hashPassword('admin') },
+    { name: 'photo', type: 'varchar(255)', setValue: () => faker.image.avatarGitHub()},
+    { name: 'full_name', type: 'varchar(255)', setValue: () => faker.person.fullName() },
+    { name: 'email', type: 'varchar(255)', setValue: () => faker.internet.email() },
+    { name: 'start_date', type: 'varchar(255)', setValue: () => Date.now() },
+    { name: 'description', type: 'varchar(255)', setValue: () => faker.lorem.sentences({min: 1, max: 3}) },
+    { name: 'job', type: 'varchar(255)', setValue: () => faker.helpers.arrayElement(employeeJobs) },
+    { name: 'contact', type: 'varchar(255)', setValue: () => faker.phone.number() },
+    { name: 'status', type: 'varchar(255)', setValue: () => faker.helpers.arrayElement([true, false]) },
+    { name: 'password', type: 'varchar(255)', setValue: () => hashPassword('admin') },
 ];
 
 export const createTableEmployee = (conn: mysql.PoolConnection) => {

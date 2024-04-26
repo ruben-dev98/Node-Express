@@ -6,7 +6,7 @@ import { queryInsertIntoAmenity } from "../queries";
 
 
 export const AmenityTable: Tables[] = [
-    {name: 'name', type: 'varchar(255)', fakerType: (i) => amenities[i || 0]}
+    {name: 'name', type: 'varchar(255)', setValue: (i) => amenities[i || 0]}
 ];
 
 export const createTableAmenity = (conn: mysql.PoolConnection) => {
@@ -21,7 +21,7 @@ export const insertValuesAmenity = async (conn: mysql.PoolConnection, rows: numb
     let sqlQuery = queryInsertIntoAmenity;
     const preparedStatement = await conn.prepare(sqlQuery);
     for(let i = 0; i < rows; i++) {
-        preparedStatement.execute([AmenityTable[0].fakerType(i)]);
+        preparedStatement.execute([AmenityTable[0].setValue(i)]);
     }
     preparedStatement.close();
     conn.unprepare(sqlQuery);

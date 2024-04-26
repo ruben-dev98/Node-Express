@@ -15,7 +15,7 @@ const createQueryCreate = (tableName: string, fields: Tables[]) => {
 const getValuesToInsert = (fields: Tables[]) => {
     const values = [];
     for(let field of fields) {
-        values.push(field.fakerType());
+        values.push(field.setValue());
     }
     return values;
 }
