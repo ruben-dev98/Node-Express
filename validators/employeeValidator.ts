@@ -5,14 +5,14 @@ import { ApiError } from '../class/ApiError';
 import { hashPassword } from '../util/cryptPassword';
 
 const schema = joi.object<IEmployee>({
-    photo: joi.string().uri(),
-    full_name: joi.string(),
-    email: joi.string().email(),
-    start_date: joi.date().timestamp(),
+    photo: joi.string().uri().required(),
+    full_name: joi.string().required(),
+    email: joi.string().email().required(),
+    start_date: joi.date().timestamp().required(),
     description: joi.string(),
-    job: joi.string().equal(employeeJobs.join(',')),
-    contact: joi.string(),
-    status: joi.boolean(),
+    job: joi.string().equal(employeeJobs.join(',')).required(),
+    contact: joi.string().required(),
+    status: joi.boolean().required(),
     password: joi.string() || ''
 });
 

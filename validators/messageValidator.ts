@@ -4,14 +4,14 @@ import { ApiError } from '../class/ApiError';
 import { ONE, ZERO, invalidDataError, statusCodeInvalidData } from '../util/constants';
 
 const schema = joi.object<IMessage>({
-    full_name: joi.string(),
-    email: joi.string().email(),
-    phone: joi.string(),
-    subject: joi.string(),
-    messages: joi.string(),
-    date: joi.date().timestamp(),
-    is_read: joi.boolean().truthy(ONE).falsy(ZERO),
-    archived: joi.boolean().truthy(ONE).falsy(ZERO),
+    full_name: joi.string().required(),
+    email: joi.string().email().required(),
+    phone: joi.string().required(),
+    subject: joi.string().required(),
+    messages: joi.string().required(),
+    date: joi.date().timestamp().required(),
+    is_read: joi.boolean().truthy(ONE).falsy(ZERO).required(),
+    archived: joi.boolean().truthy(ONE).falsy(ZERO).required(),
     photo: joi.string().uri(),
     time_passed: joi.string()
 });
