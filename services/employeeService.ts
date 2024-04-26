@@ -1,7 +1,5 @@
-import { ApiError } from "../class/ApiError";
 import { IEmployee } from "../interfaces/Employee";
 import { comparePassword } from "../util/cryptPassword";
-import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 import { close, connection } from "../util/connection";
 import { addData, deleteData, editData, find, findOne } from "../util/mySqlQueries";
 import { validateEmployee } from "../validators/employeeValidator";
@@ -48,11 +46,7 @@ export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee>
 
 export const deleteEmployee = async (id: any): Promise<IEmployee> => {
     const conn = await connection();
-    const employeeDeleted = await getOneEmployee(id);
-    const result = await deleteData(conn, queryDeleteEmployee, queryOneEmployee, id);
+    const dataDeleted = await deleteData(conn, queryDeleteEmployee, queryOneEmployee, id);
     close(conn);
-    if(result.affectedRows === 0) {
-        throw new ApiError({status: statusCodeErrorNotFound, message: dataNotFoundError})
-    }
-    return employeeDeleted;
+    return dataDeleted as IEmployee;
 }

@@ -6,16 +6,14 @@ import { validateBooking } from "../validators/bookingValidator";
 
 export const getAllBookings = async (): Promise<IBooking[]>  =>  {
     const conn = await connection();
-    const sqlQuery = queryAllBookings;
-    const result = await find(conn, sqlQuery) as IBooking[];
+    const result = await find(conn, queryAllBookings) as IBooking[];
     close(conn);
     return result;
 }
 
 export const getOneBooking = async (id: any): Promise<IBooking> => {
     const conn = await connection();
-    const sqlQuery = queryOneBooking;
-    const result = await findOne(conn, sqlQuery, id) as IBooking;
+    const result = await findOne(conn, queryOneBooking, id) as IBooking;
     close(conn);
     return result;
 }
