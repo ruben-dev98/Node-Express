@@ -47,4 +47,3 @@ export const getOneRoomWithNumber = async (number: any): Promise<IRoom> => {
     close(conn);
     return result;
 }
-

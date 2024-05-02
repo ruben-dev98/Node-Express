@@ -7,9 +7,9 @@ import { queryInsertIntoBooking } from "../queries";
 
 export const BookingTable: Tables[] = [
     { name: 'full_name', type: 'varchar(255)' , setValue: () => faker.person.fullName()},
-    { name: 'order_date', type: 'varchar(255)', setValue: () => faker.date.recent().getTime() },
-    { name: 'check_in', type: 'varchar(255)', setValue: () => faker.date.past().getTime() },
-    { name: 'check_out', type: 'varchar(255)', setValue: () => faker.date.recent().getTime() },
+    { name: 'order_date', type: 'datetime', setValue: () => faker.date.recent() },
+    { name: 'check_in', type: 'datetime', setValue: () => faker.date.past() },
+    { name: 'check_out', type: 'datetime', setValue: () => faker.date.recent() },
     { name: 'special_request', type: 'varchar(3000)', setValue: () => faker.lorem.sentences({min: 1, max: 3}) },
     { name: 'status', type: 'varchar(255)', setValue: () => faker.helpers.arrayElement(bookingStatus) },
     { name: 'discount', type: 'int', setValue: () =>  faker.number.int({min: 0, max: 50}) },
