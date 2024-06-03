@@ -2,7 +2,7 @@ import { NextFunction, Response, Request } from 'express';
 import jwt from 'jsonwebtoken';
 import { parseResponse } from '../util/parseResponse';
 import { SECRET_KEY } from '../util/getSecretKey';
-import { forbiddenError, statusCodeForbidden, statusCodeUnauthorized, unauthorizedError } from '../util/varToUse';
+import { forbiddenError, statusCodeForbidden, statusCodeUnauthorized, unauthorizedError } from '../util/constants';
 
 export interface RequestUser extends Request {
     user?: any

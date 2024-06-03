@@ -1,5 +1,4 @@
-export interface Message {
-    id: number,
+export interface IMessage {
     full_name: string,
     email: string,
     phone: string,
@@ -8,6 +7,6 @@ export interface Message {
     date: string,
     read: boolean,
     archived: boolean,
-    foto: string,
+    photo: string,
     time_passed: string
 }

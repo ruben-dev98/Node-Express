@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { SECRET_KEY } from './getSecretKey';
+import { Types } from 'mongoose';
 
-export const generateAccessToken = (username: string, password: string) => {
-    
-    return jwt.sign({username, password}, SECRET_KEY, { expiresIn: '10y' });
+export const generateAccessToken = (email: string, id: Types.ObjectId) => {
+    return jwt.sign({id, email}, SECRET_KEY, { expiresIn: '10y' });
 }

@@ -1,54 +1,62 @@
 import express, { Request, Response, NextFunction } from "express";
 import { parseResponse } from "../util/parseResponse";
 import { addEmployee, deleteEmployee, editEmployee, getAllEmployees, getOneEmployee } from "../services/employeeService";
-import { dataNotFoundError, statusCodeErrorNotFound, statusCodeOk } from "../util/varToUse";
-import { ApiError } from "../class/ApiError";
+import { statusCodeCreated, statusCodeOk } from "../util/constants";
+import { getUserByEmail } from "../services/loginService";
 
 export const employeeRouter = express.Router();
 
-employeeRouter.get('/', (_req: Request, res: Response, next: NextFunction) => {
+employeeRouter.get('/', async (_req: Request, res: Response, next: NextFunction) => {
     try {
-        const employees = getAllEmployees();
+        const employees = await getAllEmployees();
         parseResponse(employees, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-employeeRouter.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+employeeRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = getOneEmployee(Number(req.params.id));
-        if (!employee) {
-            throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-        }
+        const employee = await getOneEmployee(req.params.id);
         parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-employeeRouter.post('/', (req: Request, res: Response, next: NextFunction) => {
+employeeRouter.get('/existUser/:email', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = addEmployee(req.body);
+        const employee = await getUserByEmail(req.params.email);
         parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-employeeRouter.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+
+
+employeeRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const employee = editEmployee(Number(req.params.id), req.body);
+        const employee = await addEmployee(req.body);
+        parseResponse(employee, res, statusCodeCreated);
+    } catch (error: any) {
+        next(error);
+    }
+});
+
+employeeRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const employee = await editEmployee(req.params.id, req.body);
         parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }
 });
 
-employeeRouter.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+employeeRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const message = deleteEmployee(Number(req.params.id));
-        parseResponse(message, res, statusCodeOk);
+        const employee = await deleteEmployee(req.params.id);
+        parseResponse(employee, res, statusCodeOk);
     } catch (error: any) {
         next(error);
     }

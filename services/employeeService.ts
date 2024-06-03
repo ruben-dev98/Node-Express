@@ -1,53 +1,47 @@
 import { ApiError } from "../class/ApiError";
-import { readFromDataFromFile, writeFromDataFromFile } from "../util/dataFromFile";
-import { dataNotFoundError, employeeFile, invalidDataError, statusCodeErrorNotFound, statusCodeInvalidData } from "../util/varToUse";
-import { Employee } from './../interfaces/Employee';
+import { IEmployee } from "../interfaces/Employee";
+import { Employee } from "../models/Employees";
+import { comparePassword, hashPassword } from "../util/cryptPassword";
+import { dataNotFoundError, statusCodeErrorNotFound } from "../util/constants";
 
-const getAllDataFromFileEmployees = () => readFromDataFromFile(employeeFile) as Employee[];
-
-export const getAllEmployees = (): Employee[] => {
-    return getAllDataFromFileEmployees();
+export const getAllEmployees = async (): Promise<IEmployee[]> => {
+    return await Employee.find({});
 }
 
-export const getOneEmployee = (id: number): Employee | undefined => {
-    return getAllDataFromFileEmployees().find(employee => employee.id === id);
+export const getOneEmployee = async (id: any): Promise<IEmployee> => {
+    const employee = await Employee.findById(id);
+    if (employee === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    return employee;
 }
 
-export const addEmployee = (data: Employee): Employee => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const existEmployee = dataEmployee.findIndex(employee => employee.id === data.id);
-    if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    } else if (existEmployee > -1) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    }
-    dataEmployee.push(data);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return data;
-
-    throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
+export const addEmployee = async (data: IEmployee): Promise<IEmployee> => {
+    const passwordHash = hashPassword(data.password);
+    const employee = await Employee.create({ ...data, password: passwordHash });
+    if (employee === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    return employee;
 }
 
-export const editEmployee = (id: number, data: Employee): Employee => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const employeeToEdit = dataEmployee.findIndex(employee => employee.id === id);
-    if (employeeToEdit === -1) {
-        throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
-    } else if (!data) {
-        throw new ApiError({ status: statusCodeInvalidData, message: invalidDataError });
-    }
-    dataEmployee.splice(employeeToEdit, 1, data);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return data;
-}
-
-export const deleteEmployee = (id: number): string => {
-    const dataEmployee = getAllDataFromFileEmployees();
-    const employeeToDelete = dataEmployee.findIndex(employee => employee.id === id);
-    if (employeeToDelete === -1) {
+export const editEmployee = async (id: any, data: IEmployee): Promise<IEmployee> => {
+    const employee = await Employee.findById(id);
+    if (employee === null) {
         throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
     }
-    dataEmployee.splice(employeeToDelete, 1);
-    writeFromDataFromFile(employeeFile, JSON.stringify(dataEmployee));
-    return 'Success';
+
+    let employeeEdited;
+    if (!comparePassword(employee.password, data.password) && data.password !== '') {
+        console.log(employee.password, data.password);
+        const passwordHashed = hashPassword(data.password);
+        employeeEdited = await Employee.findByIdAndUpdate(id, { ...data, password: passwordHashed }, { new: true });
+    } else {
+        employeeEdited = await Employee.findByIdAndUpdate(id, { ...data, password: employee.password }, { new: true });
+    }
+
+    if (employeeEdited === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    return employeeEdited;
+}
+
+export const deleteEmployee = async (id: any): Promise<IEmployee> => {
+    const employee = await Employee.findByIdAndDelete(id);
+    if (employee === null) throw new ApiError({ status: statusCodeErrorNotFound, message: dataNotFoundError });
+    return employee;
 }
