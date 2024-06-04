@@ -9,7 +9,7 @@ export const internalServerError = 'Internal Server Error';
 export const unauthorizedError = 'Unauthorized. The request lacks basic authentication';
 export const forbiddenError = 'Forbidden. The server understood the request but refused to authorize it.';
 export const successMessage = 'Success';
-export const origins = ['http://localhost:5173', 'http://dashboard-miranda-hotel.s3-website.eu-west-3.amazonaws.com', 'http://172.21.80.1:5173/', 'http://192.168.1.129:5173/'];
+export const origins = ['http://localhost:5173', 'http://dashboard-miranda-hotel.s3-website.eu-west-3.amazonaws.com', 'http://172.21.80.1:5173', 'http://192.168.1.129:5173'];
 
 export const statusCodeErrorNotFound = 404;
 export const statusCodeUnauthorized = 401;
